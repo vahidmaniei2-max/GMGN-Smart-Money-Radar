@@ -1,0 +1,1093 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GMGN Smart Money Radar</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background:
+        radial-gradient(circle at top, #10283d 0%, #07111f 45%, #040b14 100%);
+    color: white;
+    font-family: Tahoma, Arial, sans-serif;
+    min-height: 100vh;
+}
+
+
+/* =========================
+   LOGIN
+   ========================= */
+
+#loginScreen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(circle at center, #12384c 0%, #07111f 55%, #030912 100%);
+    z-index: 9999;
+}
+
+.loginBox {
+    width: 360px;
+    max-width: 90%;
+    padding: 35px 28px;
+    border: 1px solid #164f65;
+    border-radius: 20px;
+    background: rgba(7, 17, 31, 0.94);
+    box-shadow:
+        0 0 35px rgba(0, 190, 210, 0.18),
+        inset 0 0 25px rgba(0, 180, 200, 0.04);
+    text-align: center;
+}
+
+font-family: Arial, Helvetica, sans-serif;
+font-size: 32px;
+font-style: normal;
+font-weight: 700;
+letter-spacing: 2px;
+color: #19c7c9;}
+.loginSubtitle {
+    color: #8ba8b9;
+    font-size: 13px;
+    margin-bottom: 28px;
+}
+
+.loginBox input {
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0;
+    border-radius: 10px;
+    border: 1px solid #23465b;
+    background: #091827;
+    color: white;
+    outline: none;
+    text-align: left;
+    direction: ltr;
+    font-size: 14px;
+}
+
+.loginBox input:focus {
+    border-color: #19c7c9;
+    box-shadow: 0 0 10px rgba(25, 199, 201, 0.2);
+}
+
+.loginButton {
+    width: 100%;
+    padding: 13px;
+    margin-top: 14px;
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #087f91, #19c7c9);
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.loginButton:hover {
+    filter: brightness(1.15);
+}
+
+.loginError {
+    min-height: 20px;
+    margin-top: 12px;
+    color: #ff5577;
+    font-size: 13px;
+}
+
+
+/* =========================
+   RADAR
+   ========================= */
+
+#appScreen {
+    display: none;
+}
+
+.header {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #19304a;
+}
+
+.header h1 {
+    margin: 0;
+    color: #00d9ff;
+    font-size: 25px;
+}
+
+.header p {
+    margin: 7px 0 0;
+    color: #9fb4c9;
+}
+
+.topSignature {
+    margin-top: 8px;
+    font-family: "Segoe Script", "Brush Script MT", cursive;
+    font-size: 23px;
+    font-style: italic;
+    font-weight: bold;
+    color: #19c7c9;
+    direction: ltr;
+}
+
+.status {
+    text-align: center;
+    margin: 12px;
+    color: #00d9ff;
+}
+
+.container {
+    width: 98%;
+    margin: 20px auto;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 1200px;
+    border-collapse: collapse;
+    background: #0b1727;
+}
+
+th {
+    background: #10243a;
+    color: #00d9ff;
+    padding: 12px 8px;
+    border: 1px solid #1b3854;
+    white-space: nowrap;
+}
+
+td {
+    padding: 10px 7px;
+    border: 1px solid #172d43;
+    text-align: center;
+    white-space: nowrap;
+}
+
+tr:hover {
+    background: #10243a;
+}
+
+.green {
+    color: #20e090;
+    font-weight: bold;
+}
+
+.red {
+    color: #ff5577;
+    font-weight: bold;
+}
+
+.score {
+    font-weight: bold;
+    font-size: 15px;
+    color: #ffd166;
+}
+
+.watch {
+    color: #20e090;
+    font-weight: bold;
+}
+
+.weak {
+    color: #ff5577;
+    font-weight: bold;
+}
+/* =========================
+   PUMP ALARM
+   ========================= */
+
+.alarm-watch {
+    color: #ffd166;
+    font-weight: bold;
+}
+
+.alarm-pump {
+    color: #ff9f1c;
+    font-weight: bold;
+    animation: alarmPulse 1s infinite;
+}
+
+.alarm-strong {
+    color: #ff3355;
+    font-weight: bold;
+    animation: alarmPulse 0.6s infinite;
+}
+
+.alarm-none {
+    color: #71869b;
+}
+
+@keyframes alarmPulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.35;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.pump-score {
+    font-weight: bold;
+    color: #ff9f1c;
+}
+
+.alarm-reason {
+    font-size: 11px;
+    color: #9fb4c9;
+    max-width: 180px;
+    white-space: normal;
+}
+.copy-btn {
+    border: 0;
+    border-radius: 5px;
+    padding: 4px 7px;
+    margin-right: 5px;
+    cursor: pointer;
+    background: #173653;
+    color: white;
+}
+
+.copy-btn:hover {
+    background: #235579;
+}
+
+.contract {
+    direction: ltr;
+    font-size: 12px;
+}
+
+.signature {
+    position: fixed;
+    left: 12px;
+    bottom: 8px;
+    color: #71869b;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     LOGIN SCREEN
+     ========================= -->
+
+<div id="loginScreen">
+
+    <div class="loginBox">
+
+        <div class="signatureLogin">
+            Vahid Moniei
+        </div>
+
+        <div class="loginSubtitle">
+            GMGN Smart Money Radar
+        </div>
+
+        <input
+            type="text"
+            id="username"
+            placeholder="Username"
+            autocomplete="off"
+        >
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            autocomplete="off"
+        >
+
+        <button
+            class="loginButton"
+            onclick="login()"
+        >
+            🔐 LOGIN
+        </button>
+
+        <div
+            class="loginError"
+            id="loginError"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MAIN APP
+     ========================= -->
+
+<div id="appScreen">
+
+    <div class="header">
+
+        <h1>
+            🚀 GMGN Smart Money Radar
+        </h1>
+
+        <p>
+            تحلیل هوشمند توکن‌های سولانا
+        </p>
+
+        <div class="topSignature">
+            Vahid Moniei
+        </div>
+
+    </div>
+
+
+    <div
+        class="status"
+        id="status"
+    >
+        در حال دریافت اطلاعات زنده از GMGN...
+    </div>
+
+
+    <div class="container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>#</th>
+                    <th>ارز</th>
+                   <th>Score</th>
+<th>Status</th>
+<th>🚨 Alarm</th>
+<th>Pump Score</th>
+<th>Alarm Reason</th>
+<th>قیمت</th>
+                    <th>1m</th>
+                    <th>5m</th>
+                    <th>1h</th>
+                    <th>Market Cap</th>
+                    <th>Liquidity</th>
+                    <th>Holders</th>
+<th>First Seen</th>
+<th>Radar Time</th>
+<th>Snapshots</th>
+<th>Contract</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="coins">
+
+                <tr>
+                    <td colspan="12">
+                        در حال دریافت...
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <div class="signature">
+        وحید منیعی
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* =========================
+   LOGIN
+   ========================= */
+
+function login() {
+
+    var username =
+        document.getElementById("username").value.trim();
+
+    var password =
+        document.getElementById("password").value;
+
+    var error =
+        document.getElementById("loginError");
+
+
+    if (
+        username === "vahid_2026" &&
+        password === "V@8225088m"
+    ) {
+
+        document.getElementById("loginScreen").style.display =
+            "none";
+
+        document.getElementById("appScreen").style.display =
+            "block";
+
+        loadData();
+
+    }
+    else {
+
+        error.textContent =
+            "❌ Username یا Password اشتباه است";
+
+    }
+
+}
+
+
+/* Enter برای ورود */
+
+document.getElementById("password")
+    .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+            login();
+        }
+
+    });
+
+
+/* =========================
+   NUMBER FORMAT
+   ========================= */
+function formatRadarTime(firstSeen) {
+
+    var start = Number(firstSeen);
+
+    if (!isFinite(start) || start <= 0) {
+        return "-";
+    }
+
+    var now = Math.floor(Date.now() / 1000);
+
+    var diff = now - start;
+
+    if (diff < 0) {
+        return "0m";
+    }
+
+    var days = Math.floor(diff / 86400);
+
+    diff %= 86400;
+
+    var hours = Math.floor(diff / 3600);
+
+    diff %= 3600;
+
+    var minutes = Math.floor(diff / 60);
+
+    if (days > 0) {
+        return days + "d " +
+               hours + "h";
+    }
+
+    if (hours > 0) {
+        return hours + "h " +
+               minutes + "m";
+    }
+
+    return minutes + "m";
+}
+function numberFormat(value) {
+
+    var n = Number(value);
+
+    if (!isFinite(n) || n === 0) {
+        return "-";
+    }
+
+    if (n >= 1000000) {
+        return (n / 1000000).toFixed(2) + "M";
+    }
+
+    if (n >= 1000) {
+        return (n / 1000).toFixed(2) + "K";
+    }
+
+    return n.toLocaleString();
+
+}
+
+
+/* =========================
+   PERCENTAGE
+   ========================= */
+
+function percentage(value) {
+
+    var n = Number(value);
+
+    if (!isFinite(n)) {
+        return "-";
+    }
+
+    if (n >= 0) {
+
+        return '<span class="green">+' +
+            n.toFixed(2) +
+            '%</span>';
+
+    }
+
+    return '<span class="red">' +
+        n.toFixed(2) +
+        '%</span>';
+
+}
+
+
+/* =========================
+   SMART SCORE
+   ========================= */
+
+function calculateScore(coin) {
+
+    var score = 50;
+
+    var change1m =
+        Number(coin.price_change_percent1m || 0);
+
+    var change5m =
+        Number(coin.price_change_percent5m || 0);
+
+    var change1h =
+        Number(coin.price_change_percent1h || 0);
+
+    var holders =
+        Number(coin.holder_count || 0);
+
+    var liquidity =
+        Number(coin.liquidity || 0);
+
+    var bundler =
+        Number(coin.bundler_rate || 0);
+
+    var rug =
+        Number(coin.rug_ratio || 0);
+
+    var smart =
+        Number(coin.smart_degen_count || 0);
+
+
+    if (change1m > 5) {
+        score += 5;
+    }
+
+    if (change5m > 10) {
+        score += 10;
+    }
+
+    if (change1h > 20) {
+        score += 10;
+    }
+
+
+    if (holders >= 500) {
+        score += 5;
+    }
+
+    if (holders >= 1000) {
+        score += 5;
+    }
+
+
+    if (liquidity >= 20000) {
+        score += 5;
+    }
+
+    if (liquidity >= 50000) {
+        score += 5;
+    }
+
+
+    if (bundler > 0.40) {
+        score -= 15;
+    }
+    else if (bundler > 0.25) {
+        score -= 8;
+    }
+
+
+    if (rug > 0.10) {
+        score -= 15;
+    }
+    else if (rug > 0.05) {
+        score -= 8;
+    }
+
+
+    if (smart >= 20) {
+        score += 5;
+    }
+
+    if (smart >= 50) {
+        score += 5;
+    }
+
+
+    if (score > 100) {
+        score = 100;
+    }
+
+    if (score < 0) {
+        score = 0;
+    }
+
+    return score;
+
+}
+
+
+/* =========================
+   STATUS
+   ========================= */
+
+function getStatus(score) {
+
+    if (score >= 70) {
+
+        return '<span class="watch">🟢 WATCH</span>';
+
+    }
+
+    if (score >= 50) {
+
+        return '<span class="watch">🟡 WATCH</span>';
+
+    }
+
+    return '<span class="weak">🔴 WEAK</span>';
+
+}
+
+
+/* =========================
+   COPY CONTRACT
+   ========================= */
+
+function copyContract(address, button) {
+
+    navigator.clipboard
+        .writeText(address)
+        .then(function() {
+
+            button.innerText = "✅";
+
+            setTimeout(function() {
+
+                button.innerText = "📋";
+
+            }, 1500);
+
+        })
+        .catch(function() {
+
+            alert("کپی انجام نشد");
+
+        });
+
+}
+
+
+/* =========================
+   LOAD GMGN
+   ========================= */
+
+async function loadData() {
+
+    var status =
+        document.getElementById("status");
+
+    var coins =
+        document.getElementById("coins");
+
+
+    status.textContent =
+        "در حال دریافت اطلاعات زنده از GMGN...";
+
+
+    try {
+
+var response =
+   await fetch("/api/pump");
+
+var result =
+    await response.json();
+
+var historyResponse =
+   await fetch("/api/history");
+
+var historyResult =
+    await historyResponse.json();
+
+var history =
+    historyResult.success
+        ? historyResult.data
+        : { tokens: {} };
+        if (!result.success) {
+
+            throw new Error(
+                result.error || "GMGN error"
+            );
+
+        }
+
+
+        var parsed =
+            result.data;
+
+
+        if (typeof parsed === "string") {
+
+            parsed =
+                JSON.parse(parsed);
+
+        }
+
+
+        var list = [];
+
+
+        if (
+            parsed &&
+            parsed.data &&
+            Array.isArray(parsed.data.rank)
+        ) {
+
+            list =
+                parsed.data.rank;
+
+        }
+
+
+        if (list.length === 0) {
+
+            coins.innerHTML =
+                '<tr><td colspan="12">' +
+                'ارزی دریافت نشد' +
+                '</td></tr>';
+
+            status.textContent =
+                "داده‌ای دریافت نشد";
+
+            return;
+
+        }
+
+
+        coins.innerHTML = "";
+
+
+        list.forEach(function(coin, index) {
+
+
+            var symbol =
+                coin.symbol ||
+                coin.name ||
+                "-";
+
+
+            var address =
+                coin.address ||
+                "-";
+var tokenHistory =
+    history.tokens && history.tokens[address]
+        ? history.tokens[address]
+        : null;
+
+var firstSeen =
+    tokenHistory
+        ? Number(tokenHistory.firstSeen || 0)
+        : 0;
+
+var snapshots =
+    tokenHistory &&
+    Array.isArray(tokenHistory.snapshots)
+        ? tokenHistory.snapshots
+        : [];
+
+var snapshotsCount =
+    snapshots.length;
+
+            var score =
+                calculateScore(coin);
+
+
+            var statusText =
+                getStatus(score);
+
+var pumpAlarm =
+    coin.pumpAlarm || "NONE";
+
+var pumpScore =
+    Number(coin.pumpScore || 0);
+
+var pumpReasons =
+    Array.isArray(coin.pumpReasons)
+        ? coin.pumpReasons.join(" | ")
+        : "-";
+
+var alarmHtml = "";
+
+if (pumpAlarm === "STRONG_PUMP") {
+
+    alarmHtml =
+        '<span class="alarm-strong">🚨 STRONG PUMP</span>';
+
+}
+else if (pumpAlarm === "PUMP_ALERT") {
+
+    alarmHtml =
+        '<span class="alarm-pump">🔥 PUMP ALERT</span>';
+
+}
+else if (pumpAlarm === "WATCH") {
+
+    alarmHtml =
+        '<span class="alarm-watch">👀 WATCH</span>';
+
+}
+else {
+
+    alarmHtml =
+        '<span class="alarm-none">—</span>';
+
+}
+            var row =
+                document.createElement("tr");
+
+
+            row.innerHTML =
+
+                "<td>" +
+                    (index + 1) +
+                "</td>" +
+
+
+                "<td><b>" +
+                    symbol +
+                "</b></td>" +
+
+
+                "<td class='score'>" +
+                    score +
+                    "/100" +
+                "</td>" +
+
+
+                "<td>" +
+                    statusText +
+                "</td>" +
+"<td>" +
+    alarmHtml +
+"</td>" +
+
+"<td class='pump-score'>" +
+    pumpScore +
+    "/100" +
+"</td>" +
+
+"<td class='alarm-reason'>" +
+    pumpReasons +
+"</td>" +
+
+                "<td>" +
+
+                    (
+                        coin.price !== undefined
+                        ?
+                        Number(
+                            coin.price).toPrecision(6)
+                        :
+                        "-"
+                    ) +
+
+                "</td>" +
+
+
+                "<td>" +
+                    percentage(
+                        coin.price_change_percent1m
+                    ) +
+                "</td>" +
+
+
+                "<td>" +
+                    percentage(
+                        coin.price_change_percent5m
+                    ) +
+                "</td>" +
+
+
+                "<td>" +
+                    percentage(
+                        coin.price_change_percent1h
+                    ) +
+                "</td>" +
+
+
+                "<td>" +
+                    numberFormat(
+                        coin.market_cap
+                    ) +
+                "</td>" +
+
+
+                "<td>" +
+                    numberFormat(
+                        coin.liquidity
+                    ) +
+                "</td>" +
+
+
+              "<td>" +
+    numberFormat(
+        coin.holder_count
+    ) +
+"</td>" +
+
+"<td>" +
+    (
+       firstSeen
+            ? new Date(
+               Number(firstSeen) * 1000
+            ).toLocaleString("fa-IR")
+            : "-"
+    ) +
+"</td>" +
+"<td>" +
+    (
+       firstSeen
+            ? formatRadarTime(
+                firstSeen
+            )
+            : "-"
+    ) +
+"</td>" +
+
+
+"<td>" +
+    (
+       snapshotsCount !== undefined
+            ? snapshotsCount
+            : "-"
+    ) +
+"</td>" +
+
+
+
+
+
+
+"<td class='contract'>" +
+                    address +
+
+                    " <button " +
+                    "class='copy-btn' " +
+                    "onclick='copyContract(\"" +
+                    address +
+                    "\", this)'>" +
+
+                    "📋" +
+
+                    "</button>" +
+
+                "</td>";
+
+
+            coins.appendChild(row);
+
+        });
+
+
+        status.textContent =
+            list.length +
+            " ارز زنده از GMGN دریافت شد";
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+
+        status.textContent =
+            "خطا در دریافت اطلاعات GMGN";
+
+
+        coins.innerHTML =
+
+            "<tr>" +
+
+            "<td colspan='12'>" +
+
+            error.message +
+
+            "</td>" +
+
+            "</tr>";
+
+    }
+
+}
+
+
+/* بروزرسانی هر 30 ثانیه */
+
+setInterval(
+    function() {
+
+        var app =
+            document.getElementById("appScreen");
+
+        if (
+            app.style.display === "block"
+        ) {
+
+            loadData();
+
+        }
+
+    },
+    30000
+);
+
+
+</script>
+
+</body>
+</html>
+
+
+
+
