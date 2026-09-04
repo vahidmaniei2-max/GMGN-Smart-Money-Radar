@@ -1,5 +1,5 @@
 ﻿const http = require("http");
-const { exec } = require("child_process");
+const { execFile } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
@@ -604,13 +604,7 @@ console.log(
 
     if (req.url === "/api/pump") {
 
-        exec(
-            'node node_modules/gmgn-cli/dist/index.js market trending --chain sol --interval 5m --limit 100',
-            {
-                windowsHide: true,
-                timeout: 30000,
-                env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY }
-            },
+        execFile("node", ["node_modules/gmgn-cli/dist/index.js", "market", "trending", "--chain", "sol", "--interval", "5m", "--limit", "100"], { timeout: 30000, env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY } },
             (error, stdout, stderr) => {
 
                 res.writeHead(200, {
@@ -855,13 +849,7 @@ res.end(
 );function takeSnapshot() {
     console.log("Taking automatic GMGN snapshot...");
 
-    exec(
-        'node node_modules/gmgn-cli/dist/index.js market trending --chain sol --interval 5m --limit 100',
-        {
-            windowsHide: true,
-            timeout: 30000,
-            env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY }
-        },
+    execFile("node", ["node_modules/gmgn-cli/dist/index.js", "market", "trending", "--chain", "sol", "--interval", "5m", "--limit", "100"], { timeout: 30000, env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY } },
         (error, stdout, stderr) => {
 
             if (error) {
@@ -1060,6 +1048,7 @@ setInterval(
 );
 
 takeSnapshot();
+
 
 
 
