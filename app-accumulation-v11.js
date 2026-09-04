@@ -609,7 +609,7 @@ console.log(
             {
                 windowsHide: true,
                 timeout: 30000,
-                env: process.env
+                env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY }
             },
             (error, stdout, stderr) => {
 
@@ -860,7 +860,7 @@ res.end(
         {
             windowsHide: true,
             timeout: 30000,
-            env: process.env
+            env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY }
         },
         (error, stdout, stderr) => {
 
@@ -1060,6 +1060,7 @@ setInterval(
 );
 
 takeSnapshot();
+
 
 
 
