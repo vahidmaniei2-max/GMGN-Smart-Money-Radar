@@ -1,9 +1,9 @@
-const http = require("http");
+ï»¿const http = require("http");
 const { exec } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const HISTORY_FILE =
     path.join(__dirname, "radar-history.json");
@@ -281,7 +281,7 @@ function calculateAccumulationScore(coin, historyToken) {
         Number(coin.sells || 0);
 
     // ===============================
-    // HOLDER GROWTH — 20 POINTS
+    // HOLDER GROWTH â€” 20 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -315,7 +315,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // MARKET CAP GROWTH — 15 POINTS
+    // MARKET CAP GROWTH â€” 15 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -349,7 +349,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // BUY / SELL PRESSURE — 15 POINTS
+    // BUY / SELL PRESSURE â€” 15 POINTS
     // ===============================
 
     if (currentBuys > 0) {
@@ -375,7 +375,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // VOLUME GROWTH — 10 POINTS
+    // VOLUME GROWTH â€” 10 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -409,7 +409,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // SMART DEGEN — 10 POINTS
+    // SMART DEGEN â€” 10 POINTS
     // ===============================
 
     const smartDegen =
@@ -429,7 +429,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // RADAR TIME — 5 POINTS
+    // RADAR TIME â€” 5 POINTS
     // ===============================
 
     if (
@@ -605,7 +605,7 @@ console.log(
     if (req.url === "/api/pump") {
 
         exec(
-            'gmgn-cli.cmd market trending --chain sol --interval 5m --limit 100',
+            'node node_modules/gmgn-cli/dist/index.js market trending --chain sol --interval 5m --limit 100',
             {
                 windowsHide: true,
                 timeout: 30000,
@@ -856,7 +856,7 @@ res.end(
     console.log("Taking automatic GMGN snapshot...");
 
     exec(
-        'gmgn-cli.cmd market trending --chain sol --interval 5m --limit 100',
+        'node node_modules/gmgn-cli/dist/index.js market trending --chain sol --interval 5m --limit 100',
         {
             windowsHide: true,
             timeout: 30000,
@@ -1060,6 +1060,8 @@ setInterval(
 );
 
 takeSnapshot();
+
+
 
 
 

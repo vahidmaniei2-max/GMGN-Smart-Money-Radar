@@ -1,7 +1,10 @@
-*
+﻿*
 !.gitignore
 !app-accumulation-v11.js
 !index-v11.html
 !package.json
 !package-lock.json
-!radar-history.json
+!.env.example
+
+.env
+radar-history.json
