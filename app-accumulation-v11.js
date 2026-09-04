@@ -845,11 +845,11 @@ res.end(
     () => {
 
         console.log(
-            "GMGN Accumulation V11 running on port 3000"
+            "GMGN Accumulation V11 running on port " + PORT
         );
 
         console.log(
-            "Open: http://localhost:3000"
+            "Open: http://localhost:" + PORT
         );
     }
 );function takeSnapshot() {
@@ -1060,6 +1060,7 @@ setInterval(
 );
 
 takeSnapshot();
+
 
 
 
