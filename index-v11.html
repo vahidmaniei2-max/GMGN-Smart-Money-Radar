@@ -268,20 +268,77 @@ tr:hover {
     background: #235579;
 }
 
+.watch-btn {
+    border: 1px solid #35556f;
+    border-radius: 7px;
+    padding: 5px 9px;
+    cursor: pointer;
+    background: #10243a;
+    color: #71869b;
+    font-size: 14px;
+}
+
+.watch-btn.active {
+    background: #5b4a08;
+    border-color: #ffd166;
+    color: #ffd166;
+    box-shadow: 0 0 8px rgba(255, 209, 102, 0.25);
+}
+
+.watch-controls {
+    text-align: center;
+    margin: 12px;
+}
+
+.watch-filter-btn {
+    border: 1px solid #19c7c9;
+    border-radius: 9px;
+    padding: 8px 16px;
+    cursor: pointer;
+    background: #10243a;
+    color: #19c7c9;
+    font-weight: bold;
+}
+
+.watch-filter-btn.active {
+    background: #087f91;
+    color: white;
+}
+</style>
+<style>
+</style>
+<style>
 .contract {
     direction: ltr;
+    white-space: nowrap;
     font-size: 12px;
 }
 
-.signature {
-    position: fixed;
-    left: 12px;
-    bottom: 8px;
-    color: #71869b;
-    font-size: 12px;
-    opacity: 0.8;
+.contract-number {
+    display: inline-block;
+    width: 30px;
+    margin-right: 8px;
+    padding: 3px 0;
+    border: 1px solid #19c7c9;
+    border-radius: 5px;
+    background: linear-gradient(135deg, #12384c, #087f91);
+    color: #ffffff;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
 }
 
+.contract-address {
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.contract .copy-btn {
+    display: inline-block;
+    vertical-align: middle;
+}
 </style>
 </head>
 
@@ -366,6 +423,16 @@ tr:hover {
         در حال دریافت اطلاعات زنده از GMGN...
     </div>
 
+    <div class="watch-controls">
+        <button
+            id="watchFilterBtn"
+            class="watch-filter-btn"
+            onclick="toggleWatchFilter()"
+        >
+            ⭐ نمایش Watch List
+        </button>
+    </div>
+
 
     <div class="container">
 
@@ -375,7 +442,7 @@ tr:hover {
 
                 <tr>
 
-                    <th>#</th>
+                    <th>#</th>`r`n                    <th>⭐ Watch</th>
                     <th>ارز</th>
                    <th>Score</th>
 <th>Status</th>
@@ -722,6 +789,195 @@ function copyContract(address, button) {
    LOAD GMGN
    ========================= */
 
+var watchOnly = false;
+var currentWatchList = {};
+
+/* =========================
+   WATCH LIST
+   ========================= */
+
+async function loadWatchList() {
+
+    try {
+
+        var response =
+            await fetch("/api/watchlist");
+
+        var result =
+            await response.json();
+
+        if (
+            result.success &&
+            result.data &&
+            result.data.tokens
+        ) {
+
+            currentWatchList =
+                result.data.tokens;
+
+        } else {
+
+            currentWatchList = {};
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Watch List error:",
+            error
+        );
+
+        currentWatchList = {};
+    }
+}
+
+
+async function toggleWatch(address, button) {
+
+    if (!address || address === "-") {
+        return;
+    }
+
+    try {
+
+        var response =
+            await fetch(
+                "/api/watchlist/toggle",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body: JSON.stringify({
+                        address: address
+                    })
+                }
+            );
+
+        var result =
+            await response.json();
+
+        if (!result.success) {
+            throw new Error(
+                result.error ||
+                "Watch List error"
+            );
+        }
+
+        currentWatchList =
+            result.data.tokens || {};
+
+        var active =
+            !!currentWatchList[address];
+
+        button.classList.toggle(
+            "active",
+            active
+        );
+
+        button.innerText =
+            active ? "⭐" : "☆";
+
+        var row =
+            button.closest("tr");
+
+        if (row) {
+
+            row.dataset.watch =
+                active ? "1" : "0";
+
+            if (
+                watchOnly &&
+                !active
+            ) {
+
+                row.style.display =
+                    "none";
+            }
+        }
+
+        updateWatchFilterButton();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "خطا در ذخیره Watch List"
+        );
+    }
+}
+
+
+function toggleWatchFilter() {
+
+    watchOnly =
+        !watchOnly;
+
+    var rows =
+        document.querySelectorAll(
+            "#coins tr"
+        );
+
+    rows.forEach(function(row) {
+
+        if (!watchOnly) {
+
+            row.style.display = "";
+
+            return;
+        }
+
+        row.style.display =
+            row.dataset.watch === "1"
+                ? ""
+                : "none";
+
+    });
+
+    updateWatchFilterButton();
+}
+
+
+function updateWatchFilterButton() {
+
+    var button =
+        document.getElementById(
+            "watchFilterBtn"
+        );
+
+    if (!button) {
+        return;
+    }
+
+    var count =
+        Object.keys(
+            currentWatchList || {}
+        ).length;
+
+    if (watchOnly) {
+
+        button.classList.add("active");
+
+        button.innerText =
+            "⭐ فقط Watch List (" +
+            count +
+            ")";
+
+    } else {
+
+        button.classList.remove("active");
+
+        button.innerText =
+            "⭐ نمایش Watch List (" +
+            count +
+            ")";
+
+    }
+}
+
 async function loadData() {
 
     var status =
@@ -753,6 +1009,9 @@ var history =
     historyResult.success
         ? historyResult.data
         : { tokens: {} };
+
+await loadWatchList();
+updateWatchFilterButton();
         if (!result.success) {
 
             throw new Error(
@@ -892,6 +1151,26 @@ else {
                     (index + 1) +
                 "</td>" +
 
+                "<td>" +
+                    "<button " +
+                    "class='watch-btn " +
+                    (
+                        currentWatchList[address]
+                            ? "active"
+                            : ""
+                    ) +
+                    "' " +
+                    "onclick='toggleWatch(\"" +
+                    address +
+                    "\", this)'>" +
+                    (
+                        currentWatchList[address]
+                            ? "⭐"
+                            : "☆"
+                    ) +
+                    "</button>" +
+                "</td>" +
+
 
                 "<td><b>" +
                     symbol +
@@ -1009,7 +1288,12 @@ else {
 
 
 "<td class='contract'>" +
+                    "<span class='contract-number'>" +
+                    (index + 1) +
+                    "</span>" +
+                    "<span class='contract-address'>" +
                     address +
+                    "</span>" +
 
                     " <button " +
                     "class='copy-btn' " +
@@ -1024,9 +1308,26 @@ else {
                 "</td>";
 
 
+            row.dataset.watch =
+                currentWatchList[address]
+                    ? "1"
+                    : "0";
+
+            if (
+                watchOnly &&
+                row.dataset.watch !== "1"
+            ) {
+
+                row.style.display =
+                    "none";
+
+            }
+
             coins.appendChild(row);
 
         });
+
+        updateWatchFilterButton();
 
 
         status.textContent =
@@ -1087,7 +1388,4 @@ setInterval(
 
 </body>
 </html>
-
-
-
 

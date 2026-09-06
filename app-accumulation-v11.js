@@ -3,7 +3,7 @@ const { execFile } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 
 const HISTORY_FILE =
     path.join(__dirname, "radar-history.json");
@@ -18,6 +18,146 @@ const MIN_HOLDERS = 300;
 const MAX_HOLDERS = 10000;
 
 const MIN_AGE_DAYS = 7;
+const WATCHLIST_FILE =
+    path.join(__dirname, "radar-watchlist.json");
+
+const SCORE80_FILE =
+    path.join(__dirname, "radar-score80.json");
+
+const SCORE80_THRESHOLD = 80;
+
+
+// ===============================
+// WATCH LIST + SCORE80 STORAGE
+// ===============================
+
+function loadJsonFile(file, fallback) {
+
+    try {
+
+        return JSON.parse(
+            fs.readFileSync(file, "utf8")
+        );
+
+    } catch (e) {
+
+        return fallback;
+    }
+}
+
+
+function saveJsonFile(file, data) {
+
+    fs.writeFileSync(
+        file,
+        JSON.stringify(
+            data,
+            null,
+            2
+        ),
+        "utf8"
+    );
+}
+
+
+function loadWatchList() {
+
+    return loadJsonFile(
+        WATCHLIST_FILE,
+        { tokens: {} }
+    );
+}
+
+
+function saveWatchList(data) {
+
+    saveJsonFile(
+        WATCHLIST_FILE,
+        data
+    );
+}
+
+
+function loadScore80() {
+
+    return loadJsonFile(
+        SCORE80_FILE,
+        { tokens: {} }
+    );
+}
+
+
+function saveScore80(data) {
+
+    saveJsonFile(
+        SCORE80_FILE,
+        data
+    );
+}
+
+
+function recordScore80(coin, score, status) {
+
+    if (
+        !coin ||
+        !coin.address ||
+        Number(score || 0) < SCORE80_THRESHOLD
+    ) {
+        return;
+    }
+
+    const score80 =
+        loadScore80();
+
+    const address =
+        coin.address;
+
+    const now =
+        Math.floor(Date.now() / 1000);
+
+    const existing =
+        score80.tokens[address] || null;
+
+    score80.tokens[address] = {
+
+        address: address,
+
+        symbol:
+            coin.symbol ||
+            coin.name ||
+            "-",
+
+        name:
+            coin.name ||
+            coin.symbol ||
+            "-",
+
+        firstSaved:
+            existing
+                ? existing.firstSaved
+                : now,
+
+        lastSeen:
+            now,
+
+        score:
+            Number(score),
+
+        maxScore:
+            Math.max(
+                Number(existing?.maxScore || 0),
+                Number(score)
+            ),
+
+        status:
+            status || "STRONG"
+
+    };
+
+    saveScore80(score80);
+}
+
+
 // ===============================
 // PUMP + ALARM ENGINE
 // ===============================
@@ -585,8 +725,108 @@ loadApiKey();
 
 console.log(
     "Accumulation test engine loaded"
-);const server = http.createServer((req, res) => {
+);const server = http.createServer(async (req, res) => {
 
+    // ===============================
+    // WATCH LIST
+    // ===============================
+
+    if (req.url === "/api/watchlist" && req.method === "GET") {
+
+        const watchlist =
+            loadWatchList();
+
+        watchListResponse(
+            res,
+            watchlist
+        );
+
+        return;
+    }
+
+    if (
+        req.url === "/api/watchlist/toggle" &&
+        req.method === "POST"
+    ) {
+
+        const body =
+            await readRequestBody(req);
+
+        const address =
+            String(body.address || "").trim();
+
+        if (!address) {
+
+            res.writeHead(400, {
+                "Content-Type": "application/json; charset=utf-8",
+                "Access-Control-Allow-Origin": "*"
+            });
+
+            res.end(JSON.stringify({
+                success: false,
+                error: "Contract address is required"
+            }));
+
+            return;
+        }
+
+        const watchlist =
+            loadWatchList();
+
+        if (!watchlist.tokens) {
+            watchlist.tokens = {};
+        }
+
+        if (watchlist.tokens[address]) {
+
+            delete watchlist.tokens[address];
+
+            saveWatchList(
+                watchlist
+            );
+
+            watchListResponse(
+                res,
+                watchlist
+            );
+
+            return;
+        }
+
+        const now =
+            Math.floor(
+                Date.now() / 1000
+            );
+
+        watchlist.tokens[address] = {
+
+            address: address,
+
+            symbol:
+                body.symbol ||
+                body.name ||
+                "-",
+
+            name:
+                body.name ||
+                body.symbol ||
+                "-",
+
+            addedAt: now
+
+        };
+
+        saveWatchList(
+            watchlist
+        );
+
+        watchListResponse(
+            res,
+            watchlist
+        );
+
+        return;
+    }
     if (req.url === "/api/history") {
 
         res.writeHead(200, {
@@ -1048,29 +1288,4 @@ setInterval(
 );
 
 takeSnapshot();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
