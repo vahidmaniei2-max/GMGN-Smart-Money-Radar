@@ -304,8 +304,174 @@ tr:hover {
     background: #087f91;
     color: white;
 }
+    
+/* ===============================
+   SETTINGS UI
+   =============================== */
+
+.settings-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 0;
+}
+
+.settings-btn {
+    background: rgba(30, 41, 59, 0.9);
+    color: #e2e8f0;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-radius: 10px;
+    padding: 9px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.settings-btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(148, 163, 184, 0.7);
+}
+
+.settings-panel {
+    max-width: 420px;
+    margin: 12px 0 18px auto;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.96);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.settings-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.settings-subtitle {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.settings-panel input {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 6px 0;
+    padding: 11px 12px;
+    border-radius: 9px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    background: rgba(2, 6, 23, 0.75);
+    color: #fff;
+    outline: none;
+}
+
+.settings-panel input:focus {
+    border-color: rgba(96, 165, 250, 0.8);
+}
+
+.change-password-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 11px;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.password-message {
+    margin-top: 10px;
+    min-height: 20px;
+    font-size: 13px;
+    text-align: center;
+}
+
 </style>
 <style>
+    
+/* ===============================
+   SETTINGS UI
+   =============================== */
+
+.settings-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 0;
+}
+
+.settings-btn {
+    background: rgba(30, 41, 59, 0.9);
+    color: #e2e8f0;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-radius: 10px;
+    padding: 9px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.settings-btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(148, 163, 184, 0.7);
+}
+
+.settings-panel {
+    max-width: 420px;
+    margin: 12px 0 18px auto;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.96);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.settings-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.settings-subtitle {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.settings-panel input {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 6px 0;
+    padding: 11px 12px;
+    border-radius: 9px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    background: rgba(2, 6, 23, 0.75);
+    color: #fff;
+    outline: none;
+}
+
+.settings-panel input:focus {
+    border-color: rgba(96, 165, 250, 0.8);
+}
+
+.change-password-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 11px;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.password-message {
+    margin-top: 10px;
+    min-height: 20px;
+    font-size: 13px;
+    text-align: center;
+}
+
 </style>
 <style>
 .contract {
@@ -339,6 +505,89 @@ tr:hover {
     display: inline-block;
     vertical-align: middle;
 }
+    
+/* ===============================
+   SETTINGS UI
+   =============================== */
+
+.settings-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 0;
+}
+
+.settings-btn {
+    background: rgba(30, 41, 59, 0.9);
+    color: #e2e8f0;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-radius: 10px;
+    padding: 9px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.settings-btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(148, 163, 184, 0.7);
+}
+
+.settings-panel {
+    max-width: 420px;
+    margin: 12px 0 18px auto;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.96);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.settings-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.settings-subtitle {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.settings-panel input {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 6px 0;
+    padding: 11px 12px;
+    border-radius: 9px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    background: rgba(2, 6, 23, 0.75);
+    color: #fff;
+    outline: none;
+}
+
+.settings-panel input:focus {
+    border-color: rgba(96, 165, 250, 0.8);
+}
+
+.change-password-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 11px;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.password-message {
+    margin-top: 10px;
+    min-height: 20px;
+    font-size: 13px;
+    text-align: center;
+}
+
 </style>
 </head>
 
@@ -423,6 +672,65 @@ tr:hover {
         در حال دریافت اطلاعات زنده از GMGN...
     </div>
 
+    
+    <div class="settings-controls">
+        <button
+            id="settingsBtn"
+            class="settings-btn"
+            onclick="toggleSettings()"
+        >
+            ⚙️ تنظیمات
+        </button>
+    </div>
+
+    <div
+        id="settingsPanel"
+        class="settings-panel"
+        style="display:none;"
+    >
+        <div class="settings-title">
+            ⚙️ تنظیمات حساب
+        </div>
+
+        <div class="settings-subtitle">
+            تغییر رمز عبور
+        </div>
+
+        <input
+            type="password"
+            id="currentPassword"
+            placeholder="رمز فعلی"
+            autocomplete="current-password"
+        >
+
+        <input
+            type="password"
+            id="newPassword"
+            placeholder="رمز جدید"
+            autocomplete="new-password"
+        >
+
+        <input
+            type="password"
+            id="confirmPassword"
+            placeholder="تکرار رمز جدید"
+            autocomplete="new-password"
+        >
+
+        <button
+            id="changePasswordBtn"
+            class="change-password-btn"
+            onclick="changePassword()"
+        >
+            🔐 تغییر رمز
+        </button>
+
+        <div
+            id="passwordMessage"
+            class="password-message"
+        ></div>
+    </div>
+
     <div class="watch-controls">
         <button
             id="watchFilterBtn"
@@ -495,7 +803,105 @@ tr:hover {
    LOGIN
    ========================= */
 
-function login() {
+
+/* ===============================
+   SETTINGS FUNCTIONS
+   =============================== */
+
+function toggleSettings() {
+
+    var panel =
+        document.getElementById("settingsPanel");
+
+    if (panel.style.display === "none" || !panel.style.display) {
+        panel.style.display = "block";
+    }
+    else {
+        panel.style.display = "none";
+    }
+}
+
+async function changePassword() {
+
+    var currentPassword =
+        document.getElementById("currentPassword").value;
+
+    var newPassword =
+        document.getElementById("newPassword").value;
+
+    var confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+    var message =
+        document.getElementById("passwordMessage");
+
+    message.textContent = "";
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        message.textContent =
+            "❌ لطفاً همه فیلدها را کامل کنید";
+        return;
+    }
+
+    if (newPassword.length < 8) {
+        message.textContent =
+            "❌ رمز جدید باید حداقل ۸ کاراکتر باشد";
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        message.textContent =
+            "❌ تکرار رمز جدید یکسان نیست";
+        return;
+    }
+
+    try {
+
+        var response = await fetch(
+            "/api/change-password",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    currentPassword: currentPassword,
+                    newPassword: newPassword,
+                    confirmPassword: confirmPassword
+                })
+            }
+        );
+
+        var result = await response.json();
+
+        if (result.success) {
+
+            message.textContent =
+                "✅ رمز عبور با موفقیت تغییر کرد";
+
+            document.getElementById("currentPassword").value = "";
+            document.getElementById("newPassword").value = "";
+            document.getElementById("confirmPassword").value = "";
+
+        }
+        else {
+
+            message.textContent =
+                "❌ " + (
+                    result.error ||
+                    "تغییر رمز انجام نشد"
+                );
+        }
+
+    }
+    catch (e) {
+
+        message.textContent =
+            "❌ خطا در ارتباط با سرور";
+    }
+}
+
+async function login() {
 
     var username =
         document.getElementById("username").value.trim();
@@ -506,28 +912,55 @@ function login() {
     var error =
         document.getElementById("loginError");
 
+    error.textContent = "";
 
-    if (
-        username === "vahid_2026" &&
-        password === "V@8225088m"
-    ) {
-
-        document.getElementById("loginScreen").style.display =
-            "none";
-
-        document.getElementById("appScreen").style.display =
-            "block";
-
-        loadData();
-
+    if (!username || !password) {
+        error.textContent =
+            "❌ لطفاً Username و Password را وارد کنید";
+        return;
     }
-    else {
+
+    try {
+
+        var response = await fetch("/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        });
+
+        var result = await response.json();
+
+        if (result.success) {
+
+            document.getElementById("loginScreen").style.display =
+                "none";
+
+            document.getElementById("appScreen").style.display =
+                "block";
+
+            loadData();
+
+        } else {
+
+            error.textContent =
+                "❌ " +
+                (result.error || "Username یا Password اشتباه است");
+
+        }
+
+    } catch (e) {
+
+        console.error("Login error:", e);
 
         error.textContent =
-            "❌ Username یا Password اشتباه است";
+            "❌ خطا در ارتباط با سرور";
 
     }
-
 }
 
 
@@ -1388,4 +1821,9 @@ setInterval(
 
 </body>
 </html>
+
+
+
+
+
 

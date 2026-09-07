@@ -1,9 +1,9 @@
-ï»¿const http = require("http");
+const http = require("http");
 const { execFile } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 3000;
 
 const HISTORY_FILE =
     path.join(__dirname, "radar-history.json");
@@ -421,7 +421,7 @@ function calculateAccumulationScore(coin, historyToken) {
         Number(coin.sells || 0);
 
     // ===============================
-    // HOLDER GROWTH â€” 20 POINTS
+    // HOLDER GROWTH — 20 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -455,7 +455,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // MARKET CAP GROWTH â€” 15 POINTS
+    // MARKET CAP GROWTH — 15 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -489,7 +489,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // BUY / SELL PRESSURE â€” 15 POINTS
+    // BUY / SELL PRESSURE — 15 POINTS
     // ===============================
 
     if (currentBuys > 0) {
@@ -515,7 +515,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // VOLUME GROWTH â€” 10 POINTS
+    // VOLUME GROWTH — 10 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -549,7 +549,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // SMART DEGEN â€” 10 POINTS
+    // SMART DEGEN — 10 POINTS
     // ===============================
 
     const smartDegen =
@@ -569,7 +569,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // RADAR TIME â€” 5 POINTS
+    // RADAR TIME — 5 POINTS
     // ===============================
 
     if (
@@ -725,9 +725,189 @@ loadApiKey();
 
 console.log(
     "Accumulation test engine loaded"
-);const server = http.createServer(async (req, res) => {
+);
+/* ===============================
+   AUTHENTICATION / PASSWORD
+   =============================== */
+
+const AUTH_FILE =
+    path.join(__dirname, "radar-auth.json");
+
+const DEFAULT_USERNAME = "vahid_2026";
+const DEFAULT_PASSWORD = "V@8225088m";
+
+function loadAuth() {
+
+    const data = loadJsonFile(
+        AUTH_FILE,
+        {
+            username: DEFAULT_USERNAME,
+            password: DEFAULT_PASSWORD
+        }
+    );
+
+    if (!data.username) {
+        data.username = DEFAULT_USERNAME;
+    }
+
+    if (!data.password) {
+        data.password = DEFAULT_PASSWORD;
+    }
+
+    return data;
+}
+
+function saveAuth(data) {
+
+    saveJsonFile(
+        AUTH_FILE,
+        data
+    );
+}
+
+function readRequestBody(req) {
+
+    return new Promise((resolve) => {
+
+        let body = "";
+
+        req.on("data", chunk => {
+            body += chunk;
+        });
+
+        req.on("end", () => {
+
+            try {
+                resolve(
+                    body
+                        ? JSON.parse(body)
+                        : {}
+                );
+            }
+            catch (e) {
+                resolve({});
+            }
+
+        });
+
+    });
+}
+
+function sendJson(res, statusCode, data) {
+
+    res.writeHead(
+        statusCode,
+        {
+            "Content-Type":
+                "application/json; charset=utf-8",
+
+            "Access-Control-Allow-Origin": "*"
+        }
+    );
+
+    res.end(
+        JSON.stringify(data)
+    );
+}
+
+const server = http.createServer(async (req, res) => {
+    
+    /* ===============================
+       AUTH API
+       =============================== */
+
+    if (
+        req.url === "/api/login" &&
+        req.method === "POST"
+    ) {
+        const body = await readRequestBody(req);
+        const auth = loadAuth();
+
+        const username = String(body.username || "").trim();
+        const password = String(body.password || "");
+
+        if (username === auth.username && password === auth.password) {
+            sendJson(res, 200, { success: true });
+        } else {
+            sendJson(res, 401, {
+                success: false,
+                error: "Username ?? Password ?????? ???"
+            });
+        }
+
+        return;
+    }
+
+    if (
+        req.url === "/api/change-password" &&
+        req.method === "POST"
+    ) {
+        const body = await readRequestBody(req);
+        const auth = loadAuth();
+
+        const currentPassword = String(body.currentPassword || "");
+        const newPassword = String(body.newPassword || "");
+        const confirmPassword = String(body.confirmPassword || "");
+
+        if (currentPassword !== auth.password) {
+            sendJson(res, 401, {
+                success: false,
+                error: "??? ???? ?????? ???"
+            });
+            return;
+        }
+
+        if (newPassword.length < 8) {
+            sendJson(res, 400, {
+                success: false,
+                error: "??? ???? ???? ????? ? ??????? ????"
+            });
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            sendJson(res, 400, {
+                success: false,
+                error: "????? ??? ???? ?? ??? ???? ????? ????"
+            });
+            return;
+        }
+
+        if (newPassword === currentPassword) {
+            sendJson(res, 400, {
+                success: false,
+                error: "??? ???? ???? ?? ??? ???? ?????? ????"
+            });
+            return;
+        }
+
+        auth.password = newPassword;
+        saveAuth(auth);
+
+        sendJson(res, 200, {
+            success: true,
+            message: "??? ???? ?? ?????? ????? ???"
+        });
+
+        return;
+    }
+
 
     // ===============================
+    function watchListResponse(res, watchlist) {
+
+        res.writeHead(200, {
+            "Content-Type": "application/json; charset=utf-8",
+            "Access-Control-Allow-Origin": "*"
+        });
+
+        res.end(JSON.stringify({
+            success: true,
+            data: watchlist
+        }));
+
+    }
+
     // WATCH LIST
     // ===============================
 
@@ -1288,4 +1468,7 @@ setInterval(
 );
 
 takeSnapshot();
+
+
+
 
