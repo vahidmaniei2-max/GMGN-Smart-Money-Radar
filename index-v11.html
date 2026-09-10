@@ -132,10 +132,11 @@ color: #19c7c9;}
 }
 
 .topSignature {
+    color: red;
     margin-top: 8px;
-    font-family: "Segoe Script", "Brush Script MT", cursive;
+    font-family: Arial, sans-serif;
     font-size: 23px;
-    font-style: italic;
+    font-style: normal;
     font-weight: bold;
     color: #19c7c9;
     direction: ltr;
@@ -589,7 +590,129 @@ tr:hover {
 }
 
 </style>
-</head>
+<style id="pro-header-layout">
+/* Professional top controls */
+.settings-controls{
+    position:absolute !important;
+    top:18px !important;
+    left:22px !important;
+    z-index:1000 !important;
+    margin:0 !important;
+}
+
+.watch-controls{
+    position:absolute !important;
+    top:18px !important;
+    right:22px !important;
+    z-index:1000 !important;
+    margin:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    gap:8px !important;
+}
+
+.watch-controls .watch-filter-btn{
+    margin-left:0 !important;
+    white-space:nowrap !important;
+}
+
+@media (max-width:700px){
+    .settings-controls{
+        top:12px !important;
+        left:12px !important;
+    }
+
+    .watch-controls{
+        top:12px !important;
+        right:12px !important;
+        gap:5px !important;
+    }
+
+    .watch-controls .watch-filter-btn{
+        padding:7px 9px !important;
+        font-size:11px !important;
+    }
+}
+</style><style id="contract-mobile-layout">
+.contract{
+    display:flex !important;
+    align-items:center !important;
+    gap:8px !important;
+}
+
+.contract .contract-number{
+    order:2 !important;
+    margin-right:0 !important;
+    flex:0 0 auto !important;
+}
+
+.contract .contract-address{
+    order:3 !important;
+    margin-right:0 !important;
+    min-width:0 !important;
+}
+
+.contract .copy-btn{
+    order:1 !important;
+    flex:0 0 auto !important;
+}
+
+@media (max-width:700px){
+    .contract{
+        gap:5px !important;
+    }
+
+    .contract .contract-number{
+        width:28px !important;
+        font-size:11px !important;
+    }
+
+    .contract .copy-btn{
+        padding:5px 7px !important;
+    }
+}
+</style><style id="contract-final-layout">
+.contract{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    direction:ltr !important;
+    gap:6px !important;
+}
+
+.contract .contract-number{
+    order:1 !important;
+    margin:0 !important;
+    flex:0 0 auto !important;
+}
+
+.contract .copy-btn{
+    order:2 !important;
+    margin:0 !important;
+    flex:0 0 auto !important;
+}
+
+.contract .contract-address{
+    order:3 !important;
+    margin:0 !important;
+    flex:0 0 auto !important;
+}
+
+@media (max-width:700px){
+    .contract{
+        gap:4px !important;
+    }
+
+    .contract .contract-number{
+        width:28px !important;
+        font-size:11px !important;
+    }
+
+    .contract .copy-btn{
+        padding:5px 7px !important;
+    }
+}
+</style></head>
 
 
 <body>
@@ -658,9 +781,7 @@ tr:hover {
             تحلیل هوشمند توکن‌های سولانا
         </p>
 
-        <div class="topSignature">
-            Vahid Moniei
-        </div>
+        <div class="topSignature">vahid1989</div>
 
     </div>
 
@@ -1966,6 +2087,13 @@ function escapeWalletText(value) {
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
 
 
 
