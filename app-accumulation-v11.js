@@ -1,4 +1,4 @@
-const http = require("http");
+ï»¿const http = require("http");
 const { execFile } = require("child_process");
 const fs = require("fs");
 const path = require("path");
@@ -25,6 +25,31 @@ const SCORE80_FILE =
     path.join(__dirname, "radar-score80.json");
 
 const SCORE80_THRESHOLD = 80;
+const WALLET_FILE =
+    path.join(__dirname, "radar-wallets.json");
+
+
+// ===============================
+// WALLET STORAGE
+// ===============================
+
+function loadWallets() {
+
+    return loadJsonFile(
+        WALLET_FILE,
+        { wallets: {} }
+    );
+}
+
+
+function saveWallets(data) {
+
+    saveJsonFile(
+        WALLET_FILE,
+        data
+    );
+}
+
 
 
 // ===============================
@@ -421,7 +446,7 @@ function calculateAccumulationScore(coin, historyToken) {
         Number(coin.sells || 0);
 
     // ===============================
-    // HOLDER GROWTH — 20 POINTS
+    // HOLDER GROWTH â€” 20 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -455,7 +480,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // MARKET CAP GROWTH — 15 POINTS
+    // MARKET CAP GROWTH â€” 15 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -489,7 +514,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // BUY / SELL PRESSURE — 15 POINTS
+    // BUY / SELL PRESSURE â€” 15 POINTS
     // ===============================
 
     if (currentBuys > 0) {
@@ -515,7 +540,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // VOLUME GROWTH — 10 POINTS
+    // VOLUME GROWTH â€” 10 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -549,7 +574,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // SMART DEGEN — 10 POINTS
+    // SMART DEGEN â€” 10 POINTS
     // ===============================
 
     const smartDegen =
@@ -569,7 +594,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // RADAR TIME — 5 POINTS
+    // RADAR TIME â€” 5 POINTS
     // ===============================
 
     if (
@@ -1007,6 +1032,105 @@ const server = http.createServer(async (req, res) => {
 
         return;
     }
+    // ===============================
+    // WALLET API
+    // ===============================
+
+    if (req.url === "/api/wallets" && req.method === "GET") {
+
+        const wallets =
+            loadWallets();
+
+        res.writeHead(200, {
+            "Content-Type": "application/json; charset=utf-8",
+            "Access-Control-Allow-Origin": "*"
+        });
+
+        res.end(JSON.stringify({
+            success: true,
+            data: wallets
+        }));
+
+        return;
+    }
+
+
+    if (
+        req.url === "/api/wallets/toggle" &&
+        req.method === "POST"
+    ) {
+
+        const body =
+            await readRequestBody(req);
+
+        const address =
+            String(body.address || "").trim();
+
+        if (!address) {
+
+            res.writeHead(400, {
+                "Content-Type": "application/json; charset=utf-8",
+                "Access-Control-Allow-Origin": "*"
+            });
+
+            res.end(JSON.stringify({
+                success: false,
+                error: "Wallet address is required"
+            }));
+
+            return;
+        }
+
+        const wallets =
+            loadWallets();
+
+        if (!wallets.wallets) {
+            wallets.wallets = {};
+        }
+
+        if (wallets.wallets[address]) {
+
+            delete wallets.wallets[address];
+
+        } else {
+
+            const now =
+                Math.floor(
+                    Date.now() / 1000
+                );
+
+            wallets.wallets[address] = {
+
+                address: address,
+
+                name:
+                    String(body.name || "").trim() ||
+                    "Wallet",
+
+                enabled: true,
+
+                addedAt: now
+
+            };
+        }
+
+        saveWallets(
+            wallets
+        );
+
+        res.writeHead(200, {
+            "Content-Type": "application/json; charset=utf-8",
+            "Access-Control-Allow-Origin": "*"
+        });
+
+        res.end(JSON.stringify({
+            success: true,
+            data: wallets
+        }));
+
+        return;
+    }
+
     if (req.url === "/api/history") {
 
         res.writeHead(200, {
@@ -1464,10 +1588,13 @@ saved++;
 
 setInterval(
     takeSnapshot,
-    5 * 60 * 1000
+    1 * 60 * 1000
 );
 
 takeSnapshot();
+
+
+
 
 
 

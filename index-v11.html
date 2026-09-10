@@ -739,6 +739,49 @@ tr:hover {
         >
             ⭐ نمایش Watch List
         </button>
+
+        <button
+            id="walletPanelBtn"
+            class="watch-filter-btn"
+            onclick="toggleWalletPanel()"
+            style="margin-left:8px;"
+        >
+            💰 Wallet Watchlist
+        </button>
+    </div>
+
+    <div
+        id="walletPanel"
+        style="display:none; margin:15px auto; max-width:1200px; padding:18px; border:1px solid rgba(0,255,220,.25); border-radius:12px; background:rgba(10,20,30,.85);"
+    >
+        <div style="font-size:18px;font-weight:bold;margin-bottom:12px;">
+            💰 Wallet Watchlist
+        </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;">
+            <input
+                id="walletNameInput"
+                type="text"
+                placeholder="نام کیف پول"
+                style="padding:10px;border-radius:8px;border:1px solid #555;background:#111;color:#fff;min-width:160px;"
+            >
+
+            <input
+                id="walletAddressInput"
+                type="text"
+                placeholder="Solana Wallet Address"
+                style="padding:10px;border-radius:8px;border:1px solid #555;background:#111;color:#fff;min-width:320px;"
+            >
+
+            <button
+                onclick="addWallet()"
+                style="padding:10px 16px;border:0;border-radius:8px;cursor:pointer;"
+            >
+                ➕ افزودن کیف پول
+            </button>
+        </div>
+
+        <div id="walletList"></div>
     </div>
 
 
@@ -1819,8 +1862,111 @@ setInterval(
 
 </script>
 
+<script>
+async function loadWallets() {
+    try {
+        const r = await fetch("/api/wallets");
+        const j = await r.json();
+        const box = document.getElementById("walletList");
+
+        if (!box) return;
+
+        const wallets = (j.data && j.data.wallets) ? j.data.wallets : {};
+        const items = Object.values(wallets);
+
+        if (!items.length) {
+            box.innerHTML = '<div style="opacity:.7;padding:10px;">هنوز کیف پولی اضافه نشده است.</div>';
+            return;
+        }
+
+        box.innerHTML = items.map(w => `
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;margin:6px 0;border:1px solid rgba(255,255,255,.08);border-radius:8px;">
+                <div>
+                    <b>💰 ${escapeWalletText(w.name || "Wallet")}</b>
+                    <div style="font-size:12px;opacity:.7;word-break:break-all;">${escapeWalletText(w.address)}</div>
+                </div>
+                <button onclick="removeWallet('${encodeURIComponent(w.address)}')" style="padding:7px 12px;border:0;border-radius:7px;cursor:pointer;">
+                    🗑 حذف
+                </button>
+            </div>
+        `).join("");
+
+    } catch (e) {
+        console.error("Wallet load error:", e);
+    }
+}
+
+async function addWallet() {
+    const name = document.getElementById("walletNameInput").value.trim();
+    const address = document.getElementById("walletAddressInput").value.trim();
+
+    if (!address) {
+        alert("آدرس کیف پول را وارد کن");
+        return;
+    }
+
+    const r = await fetch("/api/wallets/toggle", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({
+            address: address,
+            name: name || "Wallet"
+        })
+    });
+
+    const j = await r.json();
+
+    if (j.success) {
+        document.getElementById("walletNameInput").value = "";
+        document.getElementById("walletAddressInput").value = "";
+        await loadWallets();
+    } else {
+        alert(j.error || "خطا در افزودن کیف پول");
+    }
+}
+
+async function removeWallet(encodedAddress) {
+    const address = decodeURIComponent(encodedAddress);
+
+    const r = await fetch("/api/wallets/toggle", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({address: address})
+    });
+
+    const j = await r.json();
+
+    if (j.success) {
+        await loadWallets();
+    }
+}
+
+function toggleWalletPanel() {
+    const panel = document.getElementById("walletPanel");
+
+    if (!panel) return;
+
+    const hidden = panel.style.display === "none";
+
+    panel.style.display = hidden ? "block" : "none";
+
+    if (hidden) {
+        loadWallets();
+    }
+}
+
+function escapeWalletText(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+</script>
 </body>
 </html>
+
 
 
 
