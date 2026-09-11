@@ -17,7 +17,7 @@ const MAX_MC = 500000;
 const MIN_HOLDERS = 300;
 const MAX_HOLDERS = 10000;
 
-const MIN_AGE_DAYS = 7;
+const MIN_AGE_DAYS = 3;
 const WATCHLIST_FILE =
     path.join(__dirname, "radar-watchlist.json");
 
