@@ -24,7 +24,293 @@ const WATCHLIST_FILE =
 const SCORE80_FILE =
     path.join(__dirname, "radar-score80.json");
 
+// ===============================
+// TELEGRAM SENDER
+// ===============================
+
+// ===============================
+// TELEGRAM SCORE80 ALERT
+// ===============================
+
+function checkTelegramScore80(coin) {
+
+    if (!coin || !coin.address || Number(coin.accumulationScore || 0) < SCORE80_THRESHOLD) {
+        return;
+    }
+    console.log("TELEGRAM SCORE80 TRIGGERED:", coin.symbol || coin.name || coin.address, Number(coin.accumulationScore || 0));
+    if (false) {
+        return;
+    }
+
+    const stateFile = path.join(__dirname, "radar-telegram.json");
+    const state = loadJsonFile(stateFile, { sent: {} });
+
+    if (!state.sent) {
+        state.sent = {};
+    }
+
+    const address = coin.address;
+
+    if (state.sent[address]) {
+        return;
+    }
+
+    const message =
+        "?? GMGN SMART MONEY SIGNAL\n\n" +
+        "?? " + (coin.symbol || coin.name || "-") + "\n" +
+        "?? Score: " + Number(coin.accumulationScore || 0) + "\n" +
+        "?? Status: " + (coin.accumulationStatus || "-") + "\n" +
+        "?? Market Cap: $" + Number(coin.marketCap || 0).toLocaleString() + "\n" +
+        "?? Holders: " + Number(coin.holders || 0).toLocaleString() + "\n\n" +
+        "?? Contract:\n" +
+        address;
+
+      state.sent[address] = {
+          score: Number(coin.accumulationScore || 0),
+          symbol: coin.symbol || coin.name || "-",
+          entryPrice: Number(coin.price || 0),
+          sentAt: Math.floor(Date.now() / 1000),
+          resultFinal: false
+      };
+
+    saveJsonFile(stateFile, state);
+    sendTelegramMessage(message);
+}
+function updateTelegramPerformance(history) {
+
+    if (!history || !history.tokens) {
+        return;
+    }
+
+    const stateFile =
+        path.join(__dirname, "radar-telegram.json");
+
+    const performanceFile =
+        path.join(__dirname, "radar-telegram-performance.json");
+
+    const state =
+        loadJsonFile(stateFile, { sent: {} });
+
+    if (!state.sent) {
+        return;
+    }
+
+    const performance =
+        loadJsonFile(
+            performanceFile,
+            {
+                results: {},
+                total: 0,
+                winners: 0,
+                losers: 0
+            }
+        );
+
+    Object.keys(state.sent).forEach(address => {
+
+        const signal = state.sent[address];
+
+        if (
+            !signal ||
+            signal.resultFinal ||
+            !signal.entryPrice ||
+            !signal.sentAt
+        ) {
+            return;
+        }
+
+        const tokenHistory =
+            history.tokens[address];
+
+        if (
+            !tokenHistory ||
+            !Array.isArray(tokenHistory.snapshots)
+        ) {
+            return;
+        }
+
+        const elapsed =
+            Math.floor(Date.now() / 1000) - signal.sentAt;
+
+        if (elapsed < 3600) {
+            return;
+        }
+
+        let latestPrice = 0;
+        let bestPrice = 0;
+        let worstPrice = 0;
+
+        tokenHistory.snapshots.forEach(snapshot => {
+
+            if (
+                Number(snapshot.time || 0) < signal.sentAt ||
+                Number(snapshot.price || 0) <= 0
+            ) {
+                return;
+            }
+
+            const price = Number(snapshot.price);
+
+            latestPrice = price;
+
+            if (!bestPrice || price > bestPrice) {
+                bestPrice = price;
+            }
+
+            if (!worstPrice || price < worstPrice) {
+                worstPrice = price;
+            }
+        });
+
+        if (!latestPrice) {
+            return;
+        }
+
+        const entry = Number(signal.entryPrice);
+
+        const finalPercent =
+            ((latestPrice - entry) / entry) * 100;
+
+        const bestPercent =
+            ((bestPrice - entry) / entry) * 100;
+
+        const worstPercent =
+            ((worstPrice - entry) / entry) * 100;
+
+        const result =
+            finalPercent >= 0 ? "WIN" : "LOSS";
+
+        signal.resultFinal = true;
+        signal.finalPercent =
+            Number(finalPercent.toFixed(2));
+
+        signal.bestPercent =
+            Number(bestPercent.toFixed(2));
+
+        signal.worstPercent =
+            Number(worstPercent.toFixed(2));
+
+        signal.result = result;
+
+        performance.results[address] = {
+            symbol: signal.symbol || "-",
+            score: Number(signal.score || 0),
+            finalPercent: signal.finalPercent,
+            bestPercent: signal.bestPercent,
+            worstPercent: signal.worstPercent,
+            result: result
+        };
+
+        performance.total =
+            Object.keys(performance.results).length;
+
+        performance.winners =
+            Object.values(performance.results)
+                .filter(x => x.result === "WIN").length;
+
+        performance.losers =
+            Object.values(performance.results)
+                .filter(x => x.result === "LOSS").length;
+
+        const winRate =
+            performance.total > 0
+                ? (performance.winners / performance.total) * 100
+                : 0;
+
+        sendTelegramMessage(
+            "📊 GMGN SIGNAL RESULT\n\n" +
+            "🪙 " + (signal.symbol || "-") + "\n" +
+            "🎯 Score: " + Number(signal.score || 0) + "\n" +
+            "📈 Final 60m: " + signal.finalPercent + "%\n" +
+            "🚀 Best 60m: " + signal.bestPercent + "%\n" +
+            "📉 Worst: " + signal.worstPercent + "%\n" +
+            "🏁 Result: " + result + "\n\n" +
+            "📊 RADAR PERFORMANCE\n" +
+            "Signals: " + performance.total + "\n" +
+            "Winners: " + performance.winners + "\n" +
+            "Losers: " + performance.losers + "\n" +
+            "Win Rate: " + winRate.toFixed(1) + "%"
+        );
+    });
+
+    saveJsonFile(stateFile, state);
+    saveJsonFile(performanceFile, performance);
+}
+function sendTelegramMessage(message) {
+
+    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+        console.log("Telegram is not configured");
+        return;
+    }
+
+    const data = JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message
+    });
+
+    const request = require("https").request({
+        hostname: "api.telegram.org",
+        path: "/bot" + TELEGRAM_BOT_TOKEN + "/sendMessage",
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Content-Length": Buffer.byteLength(data)
+        }
+    }, response => {
+
+        let body = "";
+
+        response.on("data", chunk => {
+            body += chunk;
+        });
+
+        response.on("end", () => {
+            try {
+                const result = JSON.parse(body);
+                if (result.ok) {
+                    console.log("Telegram message sent");
+                } else {
+                    console.log("Telegram error:", result.description);
+                }
+            } catch (error) {
+                console.log("Telegram response error");
+            }
+        });
+    });
+
+    request.on("error", error => {
+        console.log("Telegram connection error:", error.message);
+    });
+
+    request.write(data);
+    request.end();
+}
 const SCORE80_THRESHOLD = 80;
+// ===============================
+// TELEGRAM
+// ===============================
+
+const TELEGRAM_BOT_TOKEN =
+    (() => {
+        try {
+            const envText = fs.readFileSync(ENV_FILE, "utf8");
+            const line = envText.split(/\r?\n/).find(x => x.trim().startsWith("TELEGRAM_BOT_TOKEN="));
+            return line ? line.substring(line.indexOf("=") + 1).trim() : (process.env.TELEGRAM_BOT_TOKEN || "");
+        } catch (e) {
+            return process.env.TELEGRAM_BOT_TOKEN || "";
+        }
+    })();
+
+const TELEGRAM_CHAT_ID =
+    (() => {
+        try {
+            const envText = fs.readFileSync(ENV_FILE, "utf8");
+            const line = envText.split(/\r?\n/).find(x => x.trim().startsWith("TELEGRAM_CHAT_ID="));
+            return line ? line.substring(line.indexOf("=") + 1).trim() : (process.env.TELEGRAM_CHAT_ID || "");
+        } catch (e) {
+            return process.env.TELEGRAM_CHAT_ID || "";
+        }
+    })();
 const WALLET_FILE =
     path.join(__dirname, "radar-wallets.json");
 
@@ -446,7 +732,7 @@ function calculateAccumulationScore(coin, historyToken) {
         Number(coin.sells || 0);
 
     // ===============================
-    // HOLDER GROWTH — 20 POINTS
+    // HOLDER GROWTH â€” 20 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -480,7 +766,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // MARKET CAP GROWTH — 15 POINTS
+    // MARKET CAP GROWTH â€” 15 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -514,7 +800,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // BUY / SELL PRESSURE — 15 POINTS
+    // BUY / SELL PRESSURE â€” 15 POINTS
     // ===============================
 
     if (currentBuys > 0) {
@@ -540,7 +826,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // VOLUME GROWTH — 10 POINTS
+    // VOLUME GROWTH â€” 10 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -574,7 +860,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // SMART DEGEN — 10 POINTS
+    // SMART DEGEN â€” 10 POINTS
     // ===============================
 
     const smartDegen =
@@ -594,7 +880,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // RADAR TIME — 5 POINTS
+    // RADAR TIME â€” 5 POINTS
     // ===============================
 
     if (
@@ -1294,8 +1580,12 @@ parsed.data.rank.forEach(coin => {
 
     coin.accumulationReasons =
         accumulation.reasons;
+
+    console.log("DEBUG SCORE:", coin.symbol || coin.name || coin.address, Number(coin.accumulationScore || 0)); recordScore80(coin, coin.accumulationScore, coin.accumulationStatus); checkTelegramScore80(coin);
 });
                         saveHistory(history);
+
+
                     }
 
                    const displayHistory = loadHistory();
@@ -1570,6 +1860,8 @@ saved++;
 
                     saveHistory(history);
 
+                      updateTelegramPerformance(history);
+
                     console.log(
                         "Snapshot saved:",
                         saved,
@@ -1592,6 +1884,18 @@ setInterval(
 );
 
 takeSnapshot();
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
