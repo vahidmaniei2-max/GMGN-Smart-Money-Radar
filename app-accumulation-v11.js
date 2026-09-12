@@ -17,7 +17,7 @@ const MAX_MC = 500000;
 const MIN_HOLDERS = 300;
 const MAX_HOLDERS = 10000;
 
-const MIN_AGE_DAYS = 3;
+const MIN_AGE_DAYS = 1;
 const WATCHLIST_FILE =
     path.join(__dirname, "radar-watchlist.json");
 
@@ -60,8 +60,8 @@ function checkTelegramScore80(coin) {
         "?? " + (coin.symbol || coin.name || "-") + "\n" +
         "?? Score: " + Number(coin.accumulationScore || 0) + "\n" +
         "?? Status: " + (coin.accumulationStatus || "-") + "\n" +
-        "?? Market Cap: $" + Number(coin.marketCap || 0).toLocaleString() + "\n" +
-        "?? Holders: " + Number(coin.holders || 0).toLocaleString() + "\n\n" +
+        "?? Market Cap: $" + Number(coin.market_cap || 0).toLocaleString() + "\n" +
+        "?? Holders: " + Number(coin.holder_count || 0).toLocaleString() + "\n\n" +
         "?? Contract:\n" +
         address;
 
@@ -1884,6 +1884,8 @@ setInterval(
 );
 
 takeSnapshot();
+
+
 
 
 

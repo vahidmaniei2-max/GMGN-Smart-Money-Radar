@@ -718,7 +718,339 @@ tr:hover {
     display:none !important;
   }
 }
-</style></head>
+</style><style>
+#mobileMenuButton {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 10001;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(0,255,220,.35);
+    border-radius: 12px;
+    background: rgba(5,18,27,.92);
+    color: #00ffe0;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,.35);
+    backdrop-filter: blur(10px);
+}
+
+#mobileMenuButton:active {
+    transform: scale(.95);
+}
+
+#mobileMenuOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(3px);
+}
+
+#mobileMenu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: min(310px, 82vw);
+    height: 100vh;
+    padding: 78px 16px 20px;
+    box-sizing: border-box;
+    background: linear-gradient(180deg, #07151e, #091f29);
+    border-right: 1px solid rgba(0,255,220,.22);
+    box-shadow: 10px 0 35px rgba(0,0,0,.45);
+    transform: translateX(-105%);
+    transition: transform .25s ease;
+}
+
+#mobileMenuOverlay.open {
+    display: block;
+}
+
+#mobileMenuOverlay.open #mobileMenu {
+    transform: translateX(0);
+}
+
+.mobileMenuTitle {
+    color: #00ffe0;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(0,255,220,.14);
+}
+
+#mobileMenu .settings-controls,
+#mobileMenu .watch-controls {
+    display: flex !important;
+    flex-direction: column;
+    gap: 9px;
+    margin: 0 !important;
+}
+
+#mobileMenu .watch-controls {
+    margin-top: 9px !important;
+}
+
+#mobileMenu button {
+    width: 100% !important;
+    margin: 0 !important;
+    min-height: 46px;
+    box-sizing: border-box;
+}
+
+#mobileMenuClose {
+    position: absolute;
+    top: 18px;
+    right: 16px;
+    border: 0;
+    background: transparent;
+    color: #9fb5bd;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+@media (min-width: 700px) {
+    #mobileMenuButton {
+        top: 18px;
+        left: 18px;
+    }
+}
+
+@media (max-width: 600px) {
+    #mobileMenuButton {
+        top: 10px;
+        left: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 21px;
+    }
+
+    .header {
+        padding-top: 55px !important;
+    }
+}
+</style>
+<style>
+/* ===== MOBILE MENU PROFESSIONAL FIX ===== */
+
+#mobileMenuButton{
+    position:fixed;
+    top:10px;
+    left:10px;
+    z-index:10001;
+    width:36px!important;
+    height:36px!important;
+    min-width:36px!important;
+    min-height:36px!important;
+    padding:0!important;
+    margin:0!important;
+    border:1px solid rgba(0,255,220,.35);
+    border-radius:10px;
+    background:rgba(5,18,27,.94);
+    color:#00ffe0;
+    font-size:20px!important;
+    line-height:34px!important;
+    text-align:center;
+    cursor:pointer;
+    box-shadow:0 4px 18px rgba(0,0,0,.35);
+    backdrop-filter:blur(10px);
+}
+
+#mobileMenuButton:active{
+    transform:scale(.94);
+}
+
+/* منوی کناری */
+#mobileMenu{
+    display:block!important;
+    width:min(310px,82vw)!important;
+    padding:72px 16px 24px!important;
+    box-sizing:border-box;
+}
+
+/* عنوان */
+.mobileMenuTitle{
+    display:block!important;
+    width:100%!important;
+    box-sizing:border-box;
+    margin:0 0 16px!important;
+    padding:0 0 14px!important;
+}
+
+/* ظرف گزینه‌ها */
+#mobileMenuItems{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:10px!important;
+    width:100%!important;
+}
+
+/* تنظیمات و Watch Controls */
+#mobileMenu .settings-controls,
+#mobileMenu .watch-controls{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:10px!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+}
+
+/* هر دکمه یک ردیف کامل */
+#mobileMenu .settings-controls button,
+#mobileMenu .watch-controls button{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    width:100%!important;
+    min-width:100%!important;
+    height:48px!important;
+    min-height:48px!important;
+    margin:0!important;
+    padding:0 16px!important;
+    box-sizing:border-box!important;
+    white-space:nowrap!important;
+    flex:none!important;
+}
+
+/* فاصله بین Watch List و Wallet */
+#mobileMenu .watch-controls{
+    gap:10px!important;
+}
+
+/* دکمه بستن */
+#mobileMenuClose{
+    width:36px!important;
+    height:36px!important;
+    min-height:36px!important;
+    padding:0!important;
+    margin:0!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+}
+
+/* موبایل */
+@media(max-width:600px){
+    #mobileMenuButton{
+        top:10px!important;
+        left:10px!important;
+        width:36px!important;
+        height:36px!important;
+        line-height:34px!important;
+        font-size:20px!important;
+    }
+
+    .header{
+        padding-top:52px!important;
+    }
+}
+</style>
+<style>
+/* ===== MOBILE MENU ORDER + COMPACT ===== */
+
+#mobileMenuItems{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:7px!important;
+    width:100%!important;
+}
+
+#mobileMenu .settings-controls,
+#mobileMenu .watch-controls{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:7px!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+}
+
+#mobileMenu .settings-controls button,
+#mobileMenu .watch-controls button{
+    width:100%!important;
+    min-width:0!important;
+    height:42px!important;
+    min-height:42px!important;
+    margin:0!important;
+    padding:0 13px!important;
+    box-sizing:border-box!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    white-space:nowrap!important;
+    flex:none!important;
+    font-size:14px!important;
+}
+
+/* فاصله خیلی کم بین گروه‌ها */
+#mobileMenu .watch-controls{
+    margin-top:0!important;
+}
+
+/* عنوان منو جمع‌وجورتر */
+.mobileMenuTitle{
+    margin-bottom:12px!important;
+    padding-bottom:10px!important;
+    font-size:16px!important;
+}
+</style>
+<style>
+/* ===== FINAL MOBILE MENU BUTTON LAYOUT ===== */
+
+#mobileMenuItems{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    justify-content:flex-start!important;
+    gap:8px!important;
+    width:100%!important;
+}
+
+#mobileMenuItems .mobile-menu-item{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    width:100%!important;
+    height:42px!important;
+    min-height:42px!important;
+    padding:0 12px!important;
+    margin:0!important;
+    box-sizing:border-box!important;
+    flex:none!important;
+    font-size:14px!important;
+    line-height:42px!important;
+    white-space:nowrap!important;
+}
+
+#mobileMenuItems .settings-controls,
+#mobileMenuItems .watch-controls{
+    display:contents!important;
+}
+
+#mobileMenuItems button{
+    width:100%!important;
+    height:42px!important;
+    min-height:42px!important;
+    margin:0!important;
+    padding:0 12px!important;
+    box-sizing:border-box!important;
+    flex:none!important;
+}
+
+.mobileMenuTitle{
+    font-size:16px!important;
+    margin-bottom:12px!important;
+    padding-bottom:10px!important;
+}
+</style>
+</head>
 
 
 <body>
@@ -776,6 +1108,93 @@ tr:hover {
      ========================= -->
 
 <div id="appScreen">
+
+<div id="mobileMenuButton" onclick="toggleMobileMenu()" aria-label="Menu">
+    ☰
+</div>
+
+<div id="mobileMenuOverlay" onclick="closeMobileMenu(event)">
+    <div id="mobileMenu">
+        <button id="mobileMenuClose" type="button" onclick="closeMobileMenu(event)">
+            ✕
+        </button>
+
+        <div class="mobileMenuTitle">
+            ☰ Radar Menu
+        </div>
+
+        <div id="mobileMenuItems"></div>
+    </div>
+</div>
+
+<div id="aiAnalyzerPanel" style="margin:18px auto; max-width:1200px; padding:20px; border:1px solid rgba(0,255,220,.28); border-radius:16px; background:linear-gradient(135deg,rgba(8,20,30,.96),rgba(10,30,40,.88)); box-shadow:0 0 25px rgba(0,255,220,.08);">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:15px;">
+        <div>
+            <div style="font-size:21px;font-weight:700;color:#00ffe0;">
+                🤖 AI TOKEN ANALYZER
+            </div>
+            <div style="font-size:12px;color:#9fb5bd;margin-top:5px;">
+                تحلیل هوشمند توکن بر اساس Contract Address
+            </div>
+        </div>
+
+        <div style="font-size:11px;padding:6px 10px;border-radius:20px;background:rgba(255,193,7,.12);color:#ffd54f;border:1px solid rgba(255,193,7,.25);">
+            AI ENGINE آماده اتصال
+        </div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <input
+            id="aiContractInput"
+            type="text"
+            placeholder="Contract Address را وارد کنید..."
+            autocomplete="off"
+            style="flex:1;min-width:260px;padding:13px 14px;border-radius:10px;border:1px solid rgba(0,255,220,.25);background:rgba(0,0,0,.35);color:#fff;outline:none;"
+        >
+
+        <button
+            type="button"
+            onclick="alert('🤖 موتور AI به‌زودی فعال می‌شود. فعلاً این بخش نمایشی است.')"
+            style="padding:13px 22px;border:0;border-radius:10px;background:linear-gradient(135deg,#00c9a7,#00ffe0);color:#001b19;font-weight:700;cursor:pointer;"
+        >
+            🔍 Analyze
+        </button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;">
+
+        <div style="padding:13px;border-radius:10px;background:rgba(255,255,255,.035);">
+            <div style="font-size:11px;color:#8da3aa;">وضعیت</div>
+            <div style="margin-top:5px;color:#ffd54f;font-weight:700;">⏳ در انتظار تحلیل</div>
+        </div>
+
+        <div style="padding:13px;border-radius:10px;background:rgba(255,255,255,.035);">
+            <div style="font-size:11px;color:#8da3aa;">Entry Signal</div>
+            <div style="margin-top:5px;color:#aaa;font-weight:700;">—</div>
+        </div>
+
+        <div style="padding:13px;border-radius:10px;background:rgba(255,255,255,.035);">
+            <div style="font-size:11px;color:#8da3aa;">Risk</div>
+            <div style="margin-top:5px;color:#aaa;font-weight:700;">—</div>
+        </div>
+
+        <div style="padding:13px;border-radius:10px;background:rgba(255,255,255,.035);">
+            <div style="font-size:11px;color:#8da3aa;">AI Score</div>
+            <div style="margin-top:5px;color:#aaa;font-weight:700;">— / 100</div>
+        </div>
+
+    </div>
+
+    <div style="margin-top:14px;padding:14px;border-radius:10px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.05);">
+        <div style="font-size:12px;color:#8da3aa;margin-bottom:8px;">🧠 AI Analysis</div>
+        <div style="font-size:13px;color:#b8c7cc;line-height:1.8;">
+            Contract Address را وارد کنید تا تحلیل وضعیت، روند، نقدینگی، هولدرها،
+            Smart Money، ریسک و شرایط احتمالی ورود در این قسمت نمایش داده شود.
+        </div>
+    </div>
+
+</div>
 
     <div class="header">
 
@@ -2091,8 +2510,121 @@ function escapeWalletText(value) {
         .replace(/'/g, "&#039;");
 }
 </script>
+<script>
+(function () {
+
+    function setupMobileMenu() {
+
+        var target = document.getElementById("mobileMenuItems");
+
+        if (!target) {
+            return;
+        }
+
+        var settings = document.querySelector(".settings-controls");
+        var watch = document.querySelector(".watch-controls");
+
+        if (settings && settings.parentElement !== target) {
+            target.appendChild(settings);
+        }
+
+        if (watch && watch.parentElement !== target) {
+            target.appendChild(watch);
+        }
+    }
+
+    window.toggleMobileMenu = function () {
+
+        setupMobileMenu();
+
+        var overlay =
+            document.getElementById("mobileMenuOverlay");
+
+        if (overlay) {
+            overlay.classList.toggle("open");
+        }
+    };
+
+    window.closeMobileMenu = function (event) {
+
+        if (
+            event &&
+            event.target &&
+            event.target.id !== "mobileMenuOverlay" &&
+            event.target.id !== "mobileMenuClose"
+        ) {
+            return;
+        }
+
+        var overlay =
+            document.getElementById("mobileMenuOverlay");
+
+        if (overlay) {
+            overlay.classList.remove("open");
+        }
+    };
+
+    document.addEventListener("DOMContentLoaded", function () {
+        setupMobileMenu();
+    });
+
+})();
+</script>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+    var target=document.getElementById("mobileMenuItems");
+    if(!target)return;
+
+    var settings=document.querySelector(".settings-controls");
+    var watch=document.querySelector(".watch-controls");
+
+    if(settings)target.appendChild(settings);
+    if(watch)target.appendChild(watch);
+});
+</script>
+<script>
+(function(){
+
+    function arrangeMobileMenu(){
+
+        var target=document.getElementById("mobileMenuItems");
+        if(!target)return;
+
+        var settings=document.getElementById("settingsBtn");
+        var watch=document.getElementById("watchFilterBtn");
+        var wallet=document.getElementById("walletPanelBtn");
+
+        if(!settings || !watch || !wallet)return;
+
+        /* انتقال مستقیم سه دکمه به منو */
+        target.appendChild(settings);
+        target.appendChild(watch);
+        target.appendChild(wallet);
+
+        /* کلاس یکسان برای سه گزینه */
+        settings.classList.add("mobile-menu-item");
+        watch.classList.add("mobile-menu-item");
+        wallet.classList.add("mobile-menu-item");
+    }
+
+    document.addEventListener("DOMContentLoaded",function(){
+        arrangeMobileMenu();
+    });
+
+    window.addEventListener("load",function(){
+        arrangeMobileMenu();
+    });
+
+})();
+</script>
 </body>
 </html>
+
+
+
+
+
+
 
 
 
