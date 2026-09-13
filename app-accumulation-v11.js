@@ -17,7 +17,8 @@ const MAX_MC = 500000;
 const MIN_HOLDERS = 300;
 const MAX_HOLDERS = 10000;
 
-const MIN_AGE_DAYS = 1;
+const MIN_AGE_DAYS = 0.5;
+const MAX_AGE_DAYS = 3;
 const WATCHLIST_FILE =
     path.join(__dirname, "radar-watchlist.json");
 
@@ -218,14 +219,14 @@ function updateTelegramPerformance(history) {
                 : 0;
 
         sendTelegramMessage(
-            "📊 GMGN SIGNAL RESULT\n\n" +
-            "🪙 " + (signal.symbol || "-") + "\n" +
-            "🎯 Score: " + Number(signal.score || 0) + "\n" +
-            "📈 Final 60m: " + signal.finalPercent + "%\n" +
-            "🚀 Best 60m: " + signal.bestPercent + "%\n" +
-            "📉 Worst: " + signal.worstPercent + "%\n" +
-            "🏁 Result: " + result + "\n\n" +
-            "📊 RADAR PERFORMANCE\n" +
+            "?? GMGN SIGNAL RESULT\n\n" +
+            "?? " + (signal.symbol || "-") + "\n" +
+            "?? Score: " + Number(signal.score || 0) + "\n" +
+            "?? Final 60m: " + signal.finalPercent + "%\n" +
+            "?? Best 60m: " + signal.bestPercent + "%\n" +
+            "?? Worst: " + signal.worstPercent + "%\n" +
+            "?? Result: " + result + "\n\n" +
+            "?? RADAR PERFORMANCE\n" +
             "Signals: " + performance.total + "\n" +
             "Winners: " + performance.winners + "\n" +
             "Losers: " + performance.losers + "\n" +
@@ -1506,6 +1507,7 @@ const server = http.createServer(async (req, res) => {
                                     return (
                                         ageDays >=
                                             MIN_AGE_DAYS &&
+                                        ageDays <= MAX_AGE_DAYS &&
 
                                         marketCap >=
                                             MIN_MC &&
@@ -1734,6 +1736,7 @@ res.end(
 
                         if (
                             ageDays < MIN_AGE_DAYS ||
+                            ageDays > MAX_AGE_DAYS ||
                             marketCap < MIN_MC ||
                             marketCap > MAX_MC ||
                             holders < MIN_HOLDERS ||
@@ -1880,10 +1883,14 @@ saved++;
 
 setInterval(
     takeSnapshot,
-    1 * 60 * 1000
+    20 * 1000
 );
 
 takeSnapshot();
+
+
+
+
 
 
 
