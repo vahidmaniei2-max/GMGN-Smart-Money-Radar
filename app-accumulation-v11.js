@@ -17,8 +17,8 @@ const MAX_MC = 500000;
 const MIN_HOLDERS = 300;
 const MAX_HOLDERS = 10000;
 
-const MIN_AGE_DAYS = 0.5;
-const MAX_AGE_DAYS = 3;
+const MIN_AGE_DAYS = 0.1666666667;
+const MAX_AGE_DAYS = 1;
 const WATCHLIST_FILE =
     path.join(__dirname, "radar-watchlist.json");
 
@@ -1883,32 +1883,8 @@ saved++;
 
 setInterval(
     takeSnapshot,
-    20 * 1000
+    10 * 1000
 );
 
 takeSnapshot();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
