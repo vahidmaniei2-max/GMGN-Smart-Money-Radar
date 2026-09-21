@@ -480,7 +480,118 @@ const WATCH_SCORE = 25;
 const PUMP_ALERT_SCORE = 45;
 const STRONG_PUMP_SCORE = 65;
 
-function calculatePumpAlarm(coin, previous) {
+function calculatePrePumpTrajectory(historyToken) {
+
+    if (
+        !historyToken ||
+        !Array.isArray(historyToken.snapshots)
+    ) {
+        return false;
+    }
+
+    const s = historyToken.snapshots;
+
+    if (s.length < 14) {
+        return false;
+    }
+
+    function pct(a, b) {
+        if (a == null || b == null || a === 0) {
+            return null;
+        }
+
+        return ((b - a) / a) * 100;
+    }
+
+    function featureAt(i) {
+
+        if (i < 12) {
+            return null;
+        }
+
+        const cur = s[i];
+        const s6 = s[i - 6];
+        const s12 = s[i - 12];
+
+        const vg = pct(
+            Number(s6.volume),
+            Number(cur.volume)
+        );
+
+        const vp = pct(
+            Number(s12.volume),
+            Number(s6.volume)
+        );
+
+        const hg = pct(
+            Number(s6.holders),
+            Number(cur.holders)
+        );
+
+        const hp = pct(
+            Number(s12.holders),
+            Number(s6.holders)
+        );
+
+        const lg = pct(
+            Number(s6.liquidity),
+            Number(cur.liquidity)
+        );
+
+        if (
+            [vg, vp, hg, hp, lg]
+                .some(v => v == null)
+        ) {
+            return null;
+        }
+
+        return {
+            H: hg,
+            HA: hg - hp,
+            L: lg,
+            VA: vg - vp
+        };
+    }
+
+    const lastIndex = s.length - 1;
+
+    let firstIndex = lastIndex;
+
+    for (let i = lastIndex - 1; i >= 0; i--) {
+
+        const gap =
+            Number(s[i + 1].time) -
+            Number(s[i].time);
+
+        if (gap > 60) {
+            break;
+        }
+
+        firstIndex = i;
+    }
+
+    if (firstIndex === lastIndex) {
+        return false;
+    }
+
+    const first = featureAt(firstIndex);
+    const last = featureAt(lastIndex);
+
+    if (!first || !last) {
+        return false;
+    }
+
+    const dH = last.H - first.H;
+    const dHA = last.HA - first.HA;
+    const dL = last.L - first.L;
+
+    return (
+        dH > 0 &&
+        dHA > 0 &&
+        dL < 0
+    );
+}
+function calculatePumpAlarm(coin, previous, historyToken) {
 
     let score = 0;
     const reasons = [];
@@ -678,6 +789,19 @@ function calculatePumpAlarm(coin, previous) {
     // ===============================
     // FINAL ALARM LEVEL
     // ===============================
+
+    // ===============================
+    // PRE-PUMP TRAJECTORY BONUS
+    // ===============================
+
+    if (calculatePrePumpTrajectory(historyToken)) {
+
+        score += 10;
+
+        reasons.push(
+            "Pre-Pump Trajectory +10"
+        );
+    }
 
     let level = "NONE";
 
@@ -1552,10 +1676,7 @@ parsed.data.rank.forEach(coin => {
     }
 
     const alarm =
-        calculatePumpAlarm(
-            coin,
-            previous
-        );
+        calculatePumpAlarm(coin, previous, tokenHistory);
 
     coin.pumpAlarm =
         alarm.level;
@@ -1897,5 +2018,8 @@ setInterval(
 );
 
 takeSnapshot();
+
+
+
 
 
