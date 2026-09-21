@@ -1,6 +1,8 @@
 ﻿const http = require("http");
 const { execFile } = require("child_process");
 const fs = require("fs");
+
+const { runTrajectoryShadow } = require("./prepump-live-trajectory-shadow-runner-v2.js");
 const path = require("path");
 
 const PORT = process.env.PORT || 3000;
@@ -1863,6 +1865,14 @@ saved++;
 
                     saveHistory(history);
 
+                    // PRE-PUMP TRAJECTORY SHADOW — READ ONLY ANALYSIS
+                    try {
+                        runTrajectoryShadow();
+                    } catch (e) {
+                        console.log("Trajectory Shadow error:", e.message);
+                    }
+
+
                       updateTelegramPerformance(history);
 
                     console.log(
@@ -1887,4 +1897,5 @@ setInterval(
 );
 
 takeSnapshot();
+
 
