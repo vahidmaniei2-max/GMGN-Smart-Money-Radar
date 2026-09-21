@@ -795,8 +795,7 @@ function calculatePumpAlarm(coin, previous, historyToken) {
     // ===============================
 
     if (calculatePrePumpTrajectory(historyToken)) {
-
-        score += 10;
+score += 10;
 
         reasons.push(
             "Pre-Pump Trajectory +10"
@@ -2018,6 +2017,8 @@ setInterval(
 );
 
 takeSnapshot();
+
+
 
 
 
