@@ -1219,40 +1219,37 @@ function parseRateLimitReset(text) {
 }
 
 function fetchGMGN(callback) {
-    const cooldownUntil = getRateLimitUntil();
-    if (cooldownUntil > Date.now()) {
-        log('GMGN COOLDOWN ACTIVE', Math.ceil((cooldownUntil - Date.now()) / 1000) + 's remaining');
-        callback(new Error('GMGN_COOLDOWN_ACTIVE'));
-        return;
-    }
+    const cachePath = require('path').join(ROOT, '4h-gmgn-rank-cache.json');
+    const CACHE_MAX_AGE_MS = 3 * 60 * 1000;
 
-    const args = ['node_modules/gmgn-cli/dist/index.js','market','trending','--chain','sol','--interval','5m','--limit','100','--min-created','0m','--max-created','8h'];
-
-    execFile('node', args, {
-        cwd: ROOT,
-        timeout: COMMAND_TIMEOUT_MS,
-        env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY },
-        maxBuffer: 20 * 1024 * 1024
-    }, (error, stdout, stderr) => {
-        if (error) {
-            const raw = String(stderr || error.message || '');
-            if (/429|RATE_LIMIT_BANNED|rate limit/i.test(raw)) {
-                let until = parseRateLimitReset(raw);
-                if (!until) until = Date.now() + 15 * 60 * 1000;
-                setRateLimitUntil(until, 'GMGN_429');
-                log('GMGN 429 DETECTED', 'cooldownUntil=' + new Date(until).toISOString());
-            }
-            callback(new Error(raw));
+    try {
+        if (!require('fs').existsSync(cachePath)) {
+            log('GMGN SHARED CACHE NOT FOUND — waiting for Main Radar');
+            callback(new Error('GMGN_SHARED_CACHE_NOT_FOUND'));
             return;
         }
-        try {
-            const parsed = JSON.parse(stdout);
-            const rank = parsed && parsed.data && Array.isArray(parsed.data.rank) ? parsed.data.rank : [];
-            callback(null, rank);
-        } catch (e) {
-            callback(new Error('GMGN JSON parse error: ' + e.message));
+
+        const raw = require('fs').readFileSync(cachePath, 'utf8');
+        const parsed = JSON.parse(raw);
+        const updatedAt = Number(parsed && parsed.updatedAt || 0);
+        const rank = parsed && Array.isArray(parsed.rank) ? parsed.rank : [];
+
+        if (!updatedAt || (Date.now() - updatedAt) > CACHE_MAX_AGE_MS) {
+            log(
+                'GMGN SHARED CACHE STALE',
+                'age=' + Math.max(0, Math.floor((Date.now() - updatedAt) / 1000)) + 's'
+            );
+            callback(new Error('GMGN_SHARED_CACHE_STALE'));
+            return;
         }
-    });
+
+        log('GMGN SHARED CACHE OK', 'rank=' + rank.length);
+        callback(null, rank);
+
+    } catch (e) {
+        log('GMGN SHARED CACHE READ ERROR', e.message);
+        callback(new Error('GMGN_SHARED_CACHE_READ_ERROR: ' + e.message));
+    }
 }
 function cleanup(db, now) {
     const cutoff =
@@ -1530,4 +1527,5 @@ function main() {
 }
 
 main();
+
 

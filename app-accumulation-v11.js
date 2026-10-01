@@ -1751,6 +1751,21 @@ if (req.url === "/api/pump" || req.url.startsWith("/api/pump?")) {
                     const history =
                         loadHistory();
 
+                    // 4H SHARED GMGN CACHE — raw rank for independent sniper
+                    try {
+                        require('fs').writeFileSync(
+                            require('path').join(__dirname, '4h-gmgn-rank-cache.json'),
+                            JSON.stringify({
+                                updatedAt: Date.now(),
+                                rank: parsed && parsed.data && Array.isArray(parsed.data.rank)
+                                    ? parsed.data.rank
+                                    : []
+                            })
+                        );
+                    } catch (e) {
+                        console.log('4H shared cache write error:', e.message);
+                    }
+
                     if (
                         parsed.data &&
                         Array.isArray(
@@ -2293,6 +2308,7 @@ setInterval(
 );
 
 takeSnapshot();
+
 
 
 
