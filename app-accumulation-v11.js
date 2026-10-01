@@ -1762,6 +1762,7 @@ if (req.url === "/api/pump" || req.url.startsWith("/api/pump?")) {
                                     : []
                             })
                         );
+                        console.log('4H SHARED CACHE WRITTEN rank=' + (parsed && parsed.data && Array.isArray(parsed.data.rank) ? parsed.data.rank.length : 0));
                     } catch (e) {
                         console.log('4H shared cache write error:', e.message);
                     }
@@ -2308,7 +2309,4 @@ setInterval(
 );
 
 takeSnapshot();
-
-
-
 
