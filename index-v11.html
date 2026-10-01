@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -1204,6 +1204,285 @@ tr:hover {
     background: rgba(0,229,255,.18);
 }
 </style></style>
+<style id="sniper4h-live-enhancement">
+.sniper4h-rownum {
+    font-weight: 800;
+    opacity: .75;
+    white-space: nowrap;
+}
+.sniper4h-contract-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+.sniper4h-copy-btn {
+    border: 0;
+    border-radius: 6px;
+    padding: 3px 6px;
+    cursor: pointer;
+    font-size: 12px;
+    background: rgba(255,255,255,.10);
+}
+.sniper4h-copy-btn:hover {
+    background: rgba(255,255,255,.20);
+}
+.sniper4h-alarm {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    background: #555;
+    box-shadow: none;
+    opacity: .45;
+}
+.sniper4h-alarm.on {
+    background: #ff3030;
+    opacity: 1;
+    box-shadow:
+        0 0 7px #ff3030,
+        0 0 15px rgba(255,48,48,.65);
+    animation: sniper4hAlarmPulse 1s infinite;
+}
+@keyframes sniper4hAlarmPulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.18); }
+}
+</style>
+
+<style id="sniper4h-physical-lamp-and-colors">
+
+/* =========================================================
+   4H PHYSICAL PUMP LAMP
+   ========================================================= */
+
+.sniper4h-alarm{
+    position:relative !important;
+    display:inline-flex !important;
+    align-items:flex-end !important;
+    justify-content:center !important;
+    width:58px !important;
+    min-width:58px !important;
+    height:46px !important;
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    color:transparent !important;
+    font-size:0 !important;
+    overflow:visible !important;
+}
+
+/* lamp base / metal holder */
+.sniper4h-alarm{
+    filter:drop-shadow(0 3px 3px rgba(0,0,0,.45));
+}
+
+.sniper4h-alarm::before{
+    content:"" !important;
+    position:absolute !important;
+    top:2px !important;
+    left:12px !important;
+    width:34px !important;
+    height:34px !important;
+    border-radius:50% !important;
+
+    background:
+        radial-gradient(circle at 35% 28%,
+            rgba(255,255,255,.95) 0 7%,
+            rgba(255,255,255,.38) 8% 13%,
+            rgba(105,112,124,.72) 25%,
+            rgba(48,54,64,.96) 58%,
+            rgba(20,24,30,1) 100%) !important;
+
+    border:2px solid rgba(150,158,172,.48) !important;
+
+    box-shadow:
+        inset -5px -7px 10px rgba(0,0,0,.55),
+        inset 4px 4px 7px rgba(255,255,255,.16),
+        0 2px 4px rgba(0,0,0,.55) !important;
+
+    transition:all .25s ease !important;
+}
+
+/* metal base */
+.sniper4h-alarm::after{
+    content:"" !important;
+    position:absolute !important;
+    left:18px !important;
+    bottom:1px !important;
+    width:22px !important;
+    height:8px !important;
+    border-radius:2px 2px 5px 5px !important;
+
+    background:
+        linear-gradient(180deg,
+            #8c95a3 0%,
+            #454d59 45%,
+            #20252d 100%) !important;
+
+    border:1px solid rgba(180,188,200,.35) !important;
+
+    box-shadow:
+        inset 0 1px 1px rgba(255,255,255,.28),
+        0 2px 3px rgba(0,0,0,.55) !important;
+}
+
+/* ON = real red glowing lamp */
+.sniper4h-alarm.on::before{
+    background:
+        radial-gradient(circle at 34% 25%,
+            #ffffff 0 5%,
+            #ffb0b0 6% 12%,
+            #ff5c5c 18% 31%,
+            #ff1717 38% 58%,
+            #b50000 72%,
+            #650000 100%) !important;
+
+    border-color:rgba(255,125,125,.9) !important;
+
+    box-shadow:
+        0 0 5px rgba(255,35,35,.95),
+        0 0 12px rgba(255,30,30,.9),
+        0 0 24px rgba(255,20,20,.7),
+        0 0 42px rgba(255,0,0,.38),
+        inset -5px -7px 10px rgba(90,0,0,.4),
+        inset 4px 4px 7px rgba(255,255,255,.3) !important;
+
+    animation:sniper4hRealLampGlow 1.15s ease-in-out infinite !important;
+}
+
+@keyframes sniper4hRealLampGlow{
+    0%,100%{
+        transform:scale(1);
+        filter:brightness(.95);
+    }
+    50%{
+        transform:scale(1.06);
+        filter:brightness(1.18);
+    }
+}
+
+
+/* =========================================================
+   4H TABLE — PROFESSIONAL COLOR CODING
+   ========================================================= */
+
+#sniper4hLiveSection table{
+    border-collapse:separate !important;
+    border-spacing:0 3px !important;
+}
+
+#sniper4hLiveSection tbody tr{
+    transition:all .18s ease !important;
+}
+
+#sniper4hLiveSection tbody tr:hover{
+    transform:translateX(2px) !important;
+    filter:brightness(1.12) !important;
+}
+
+/* rank */
+#sniper4hLiveSection tbody td:nth-child(1){
+    color:#a78bfa !important;
+    font-weight:900 !important;
+}
+
+/* token */
+#sniper4hLiveSection tbody td:nth-child(2){
+    color:#f5d76e !important;
+    font-weight:800 !important;
+}
+
+/* alarm */
+#sniper4hLiveSection tbody td:nth-child(3){
+    min-width:70px !important;
+}
+
+/* contract */
+#sniper4hLiveSection tbody td:nth-child(4){
+    color:#8ab4ff !important;
+    font-family:monospace !important;
+    font-size:11px !important;
+}
+
+/* market cap */
+#sniper4hLiveSection tbody td:nth-child(5){
+    color:#62d9ff !important;
+    font-weight:800 !important;
+}
+
+/* holders */
+#sniper4hLiveSection tbody td:nth-child(6){
+    color:#63e6a5 !important;
+    font-weight:800 !important;
+}
+
+/* holder delta */
+#sniper4hLiveSection tbody td:nth-child(7){
+    color:#b88cff !important;
+    font-weight:800 !important;
+}
+
+/* buys */
+#sniper4hLiveSection tbody td:nth-child(8){
+    color:#35e58b !important;
+    font-weight:900 !important;
+}
+
+/* sells */
+#sniper4hLiveSection tbody td:nth-child(9){
+    color:#ff7070 !important;
+    font-weight:900 !important;
+}
+
+/* flow */
+#sniper4hLiveSection tbody td:nth-child(10){
+    color:#ffd166 !important;
+    font-weight:900 !important;
+}
+
+/* age */
+#sniper4hLiveSection tbody td:nth-child(11){
+    color:#c4cbd6 !important;
+    font-weight:700 !important;
+}
+
+/* subtle colored row background */
+#sniper4hLiveSection tbody tr{
+    background:
+        linear-gradient(90deg,
+            rgba(99,102,241,.045),
+            rgba(34,211,238,.025),
+            rgba(52,211,153,.035)) !important;
+
+    border-radius:8px !important;
+}
+
+#sniper4hLiveSection tbody tr td:first-child{
+    border-radius:8px 0 0 8px !important;
+}
+
+#sniper4hLiveSection tbody tr td:last-child{
+    border-radius:0 8px 8px 0 !important;
+}
+
+/* header colors */
+#sniper4hLiveSection thead th:nth-child(1){color:#a78bfa !important;}
+#sniper4hLiveSection thead th:nth-child(2){color:#f5d76e !important;}
+#sniper4hLiveSection thead th:nth-child(3){color:#ff6262 !important;}
+#sniper4hLiveSection thead th:nth-child(4){color:#8ab4ff !important;}
+#sniper4hLiveSection thead th:nth-child(5){color:#62d9ff !important;}
+#sniper4hLiveSection thead th:nth-child(6){color:#63e6a5 !important;}
+#sniper4hLiveSection thead th:nth-child(7){color:#b88cff !important;}
+#sniper4hLiveSection thead th:nth-child(8){color:#35e58b !important;}
+#sniper4hLiveSection thead th:nth-child(9){color:#ff7070 !important;}
+#sniper4hLiveSection thead th:nth-child(10){color:#ffd166 !important;}
+#sniper4hLiveSection thead th:nth-child(11){color:#c4cbd6 !important;}
+
+</style>
 </head>
 
 
@@ -1244,7 +1523,7 @@ tr:hover {
             class="loginButton"
             onclick="login()"
         >
-            🔐 LOGIN
+            LOGIN
         </button>
 
         <div
@@ -1493,14 +1772,15 @@ tr:hover {
 
                 <tr>
 
-                    <th>#</th>`r`n                    <th>⭐ Watch</th>
+                    <th>#</th>
+                    <th>⭐ Watch</th>
                     <th>ارز</th>
                    <th>Score</th>
 <th>Status</th>
 <th>🚨 Alarm</th>
 <th>Pump Score</th>
 <th>Alarm Reason</th>
-<th>🎯 4H Sniper</th>
+
 <th>قیمت</th>
                     <th>1m</th>
                     <th>5m</th>
@@ -1532,6 +1812,359 @@ tr:hover {
 
     </div>
 
+
+
+    <!-- ======================================================
+         4H SECOND CANDLE SNIPER — LIVE
+         ====================================================== -->
+    <div id="sniper4hLiveSection" style="
+        margin-top:24px;
+        padding:18px;
+        border:1px solid rgba(255,255,255,.10);
+        border-radius:12px;
+        background:rgba(255,255,255,.025);
+    ">
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:12px;
+            margin-bottom:14px;
+            flex-wrap:wrap;
+        ">
+            <div>
+                <div style="font-size:18px;font-weight:700;">
+                    🔥 4H SECOND CANDLE SNIPER
+                </div>
+                <div style="font-size:12px;opacity:.65;margin-top:4px;">
+                    Live signals during token age 4h–8h · collector 5m
+                </div>
+            </div>
+
+            <div id="sniper4hLiveStatus"
+                 style="font-size:12px;opacity:.65;">
+                Waiting for data...
+            </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+            <table style="width:100%;min-width:900px;">
+                <thead>
+                    <tr>
+                        <th>#</th><th>Token</th><th>Alarm</th><th>Contract</th><th>MC</th><th>Holders</th><th>Holder Δ</th><th>Buys</th><th>Sells</th><th>Flow Δ</th><th>Age</th>
+                    </tr>
+                </thead>
+                <tbody id="sniper4hLiveBody">
+                    <tr>
+                        <td colspan="10" style="opacity:.6;">
+                            Waiting for 4H signals...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    (function () {
+
+        function sniper4hFormatNumber(value) {
+            var n = Number(value || 0);
+            if (!isFinite(n)) return "0";
+
+            if (Math.abs(n) >= 1000000) {
+                return (n / 1000000).toFixed(2) + "M";
+            }
+
+            if (Math.abs(n) >= 1000) {
+                return (n / 1000).toFixed(1) + "K";
+            }
+
+            return Math.round(n).toLocaleString();
+        }
+
+        function sniper4hFormatAge(ageH) {
+            var h = Number(ageH || 0);
+            if (!isFinite(h)) h = 0;
+
+            var hours = Math.floor(h);
+            var minutes = Math.floor((h - hours) * 60);
+
+            return hours + "h " + String(minutes).padStart(2, "0") + "m";
+        }
+
+        async function load4HSniperLive() {
+
+    var body =
+        document.getElementById("sniper4hLiveBody");
+
+    var status =
+        document.getElementById("sniper4hLiveStatus");
+
+    if (!body) return;
+
+    try {
+
+        var response =
+            await fetch(
+                "/api/sniper-4h-live-v2?t=" + Date.now(),
+                { cache: "no-store" }
+            );
+
+        if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+        }
+
+        var data =
+            await response.json();
+
+        var signals =
+            Array.isArray(data.signals)
+                ? data.signals
+                : [];
+
+        if (!signals.length) {
+
+            body.innerHTML =
+                '<tr>' +
+                '<td colspan="11" style="opacity:.6;">' +
+                'No live 4H signals right now.' +
+                '</td>' +
+                '</tr>';
+
+            status.textContent =
+                "No active signals · " +
+                new Date().toLocaleTimeString();
+
+            return;
+        }
+
+        // Reuse the main radar's already-fetched live GMGN data.
+        var liveRank =
+            Array.isArray(window.__gmgnLiveRank)
+                ? window.__gmgnLiveRank
+                : [];
+
+        var liveMap = {};
+
+        liveRank.forEach(function (coin) {
+
+            if (coin && coin.address) {
+
+                liveMap[
+                    String(coin.address).toLowerCase()
+                ] = coin;
+
+            }
+
+        });
+
+        var nowSec =
+            Math.floor(Date.now() / 1000);
+
+        body.innerHTML =
+            signals.map(function (s, index) {
+
+                var symbol =
+                    String(s.symbol || "?")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;");
+
+                var address =
+                    String(s.address || "");
+
+                var shortAddress =
+                    address.length > 14
+                        ? address.slice(0, 7) +
+                          "..." +
+                          address.slice(-7)
+                        : address;
+
+                var live =
+                    liveMap[
+                        address.toLowerCase()
+                    ] || null;
+
+                // LIVE SECOND-CANDLE DATA
+                // The live signal already contains the current
+                // Candle-2 snapshot and its deltas.
+
+                var sig =
+                    s.signal || {};
+
+                var marketCap =
+                    Number(sig.market_cap || 0);
+
+                var holders =
+                    Number(sig.holders || 0);
+
+                var holderDelta =
+                    Number(sig.holderDelta || 0);
+
+                var buys =
+                    Number(sig.buys || 0);
+
+                var sells =
+                    Number(sig.sells || 0);
+
+                var flowDelta =
+                    buys - sells;
+
+                var listingTime =
+                    Number(s.listingTime || 0);
+
+                var ageH =
+                    listingTime > 0
+                        ? Math.max(
+                            0,
+                            (nowSec - listingTime) / 3600
+                        )
+                        : Number(
+                            s.signal &&
+                            s.signal.signalAgeHours || 0
+                        );
+
+                /*
+                 * REAL PUMP ALARM
+                 *
+                 * The main radar's pumpDetected is triggered
+                 * at +50% from firstPrice.
+                 *
+                 * pumpTime is the actual trigger timestamp.
+                 *
+                 * Lamp ON only during the first 5 minutes.
+                 */
+                var pumpDetected =
+                    !!(
+                        live &&
+                        live.pumpDetected
+                    );
+
+                var pumpTime =
+                    Number(
+                        live &&
+                        live.pumpTime || 0
+                    );
+
+                var pumpAgeSec =
+                    pumpTime > 0
+                        ? nowSec - pumpTime
+                        : 999999999;
+
+                var pumpActive =
+                    pumpDetected &&
+                    pumpTime > 0 &&
+                    pumpAgeSec >= 0 &&
+                    pumpAgeSec <= 300;
+
+                var pumpPercent =
+                    Number(
+                        live &&
+                        live.pumpPercent || 0
+                    );
+
+                var escapedAddress =
+                    address
+                        .replace(/\\/g, "\\\\")
+                        .replace(/'/g, "\\'");
+
+                return (
+                    "<tr>" +
+
+                    "<td class='sniper4h-rownum'>" +
+                        (index + 1) +
+                        "." +
+                    "</td>" +
+
+                    "<td><b>" +
+                        symbol +
+                    "</b></td>" +
+
+                    "<td>" +
+                        (
+                            pumpActive
+                                ? "<span class='sniper4h-alarm on' " +
+                                  "title='Active Pump +" +
+                                  pumpPercent.toFixed(1) +
+                                  "%'></span>"
+                                : "<span class='sniper4h-alarm' " +
+                                  "title='No active pump'></span>"
+                        ) +
+                    "</td>" +
+
+                    "<td>" +
+                        "<div class='sniper4h-contract-wrap'>" +
+                            "<span style='font-family:monospace;font-size:11px;'>" +
+                                shortAddress +
+                            "</span>" +
+                            "<button class='sniper4h-copy-btn' " +
+                                "onclick=\"copyContract('" +
+                                escapedAddress +
+                                "',this)\">📋</button>" +
+                        "</div>" +
+                    "</td>" +
+
+                    "<td>" +
+                        sniper4hFormatNumber(marketCap) +
+                    "</td>" +
+
+                    "<td>" +
+                        sniper4hFormatNumber(holders) +
+                    "</td>" +
+
+                    "<td>" +
+                        (holderDelta >= 0 ? "+" : "") +
+                        sniper4hFormatNumber(holderDelta) +
+                    "</td>" +
+
+                    "<td>" +
+                        sniper4hFormatNumber(buys) +
+                    "</td>" +
+
+                    "<td>" +
+                        sniper4hFormatNumber(sells) +
+                    "</td>" +
+
+                    "<td>" +
+                        (flowDelta >= 0 ? "+" : "") +
+                        sniper4hFormatNumber(flowDelta) +
+                    "</td>" +
+
+                    "<td>" +
+                        sniper4hFormatAge(ageH) +
+                    "</td>" +
+
+                    "</tr>"
+                );
+
+            }).join("");
+
+        status.textContent =
+            signals.length +
+            " active signal" +
+            (signals.length === 1 ? "" : "s") +
+            " · " +
+            new Date().toLocaleTimeString();
+
+    } catch (e) {
+
+        status.textContent =
+            "4H data unavailable";
+
+        body.innerHTML =
+            '<tr>' +
+            '<td colspan="11" style="opacity:.6;">' +
+            'Waiting for 4H collector data...' +
+            '</td>' +
+            '</tr>';
+    }
+}
+
+load4HSniperLive();
+setInterval(load4HSniperLive, 15000);
+
+    })();
+    </script>
 
     <div class="signature">
         وحید منیعی
@@ -2372,9 +3005,8 @@ else {
     "/100" +
 "</td>" +
 
-"<td class='alarm-reason'>" + pumpReasons + "</td>" + "`r`n" + "<td class='sniper-cell'>" + sniperHtml + "</td>" +
-
-                "<td>" +
+                        "<td class='alarm-reason'>" + pumpReasons + "</td>" + "\n" +
+"<td>" +
 
                     (
                         coin.price !== undefined
@@ -2886,269 +3518,8 @@ document.addEventListener("click", async function (e) {
 });
 </script>
 
-<!-- 4H_SECOND_CANDLE_SNIPER_EXPERIMENTAL_V1 -->
-<style>
-#sniper4hExperimental {
-    margin: 18px 0;
-    padding: 16px;
-    border: 1px solid rgba(0,229,255,.35);
-    border-radius: 12px;
-    background: rgba(0,20,28,.72);
-}
-#sniper4hExperimental .sniperTitle {
-    font-size: 18px;
-    font-weight: 900;
-    color: #00e5ff;
-    margin-bottom: 8px;
-}
-#sniper4hExperimental .sniperMeta {
-    color: #9fb3ba;
-    font-size: 12px;
-    margin-bottom: 12px;
-}
-#sniper4hExperimental .sniperEmpty {
-    color: #888;
-    padding: 12px 0;
-}
-#sniper4hExperimental table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-}
-#sniper4hExperimental th,
-#sniper4hExperimental td {
-    padding: 8px 6px;
-    border-bottom: 1px solid rgba(255,255,255,.08);
-    text-align: left;
-}
-#sniper4hExperimental th {
-    color: #9fb3ba;
-}
-#sniper4hExperimental .signalTag {
-    color: #00e5ff;
-    font-weight: 800;
-}
-#sniper4hExperimental .patternText {
-    color: #ffd166;
-}
-#sniper4hExperimental .addressText {
-    font-family: monospace;
-    color: #aaa;
-}
-<style id="sniperCopyStyle">
-#sniper4hExperimental .sniperCopyBtn {
-    margin-left: 6px;
-    padding: 3px 7px;
-    border: 1px solid rgba(0,229,255,.35);
-    border-radius: 5px;
-    background: rgba(0,229,255,.08);
-    color: #00e5ff;
-    cursor: pointer;
-    font-size: 10px;
-}
-#sniper4hExperimental .sniperCopyBtn:hover {
-    background: rgba(0,229,255,.18);
-}
-</style></style>
-
-<div id="sniper4hExperimental">
-    <div class="sniperTitle">🔥 4H SECOND CANDLE SNIPER — EXPERIMENTAL</div>
-    <div class="sniperMeta" id="sniper4hMeta">
-        خواندن مستقیم از Collector مستقل — بدون تأثیر روی Radar
-    </div>
-    <div id="sniper4hBody">
-        <div class="sniperEmpty">در حال دریافت سیگنال‌ها...</div>
-    </div>
-</div>
-
-<script>
-(function () {
-    const body = document.getElementById("sniper4hBody");
-    const meta = document.getElementById("sniper4hMeta");
-
-    function esc(v) {
-        return String(v == null ? "" : v)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;");
-    }
-
-    function fmtTime(ts) {
-        if (!ts) return "-";
-        try {
-            return new Date(Number(ts) * 1000).toLocaleString();
-        } catch (_) {
-            return "-";
-        }
-    }
-
-    function pct(v) {
-        if (v == null || !Number.isFinite(Number(v))) return "-";
-        return Number(v).toFixed(1) + "%";
-    }
-
-    function outcomeText(out) {
-        if (!out || !out.targets) return "⏳ pending";
-
-        const vals = [5,10,20,50,100].map(n => {
-            const x = out.targets["+" + n];
-            if (!x) return "+" + n + ":—";
-            return "+" + n + ":" + (x.hit ? "✓" : "—");
-        });
-
-        return vals.join(" ");
-    }
-
-    function render(data) {
-        const signals = Array.isArray(data.signals)
-            ? data.signals
-            : [];
-
-        meta.textContent =
-            "TOKENS: " + (data.totalTokens || 0) +
-            "  |  SIGNALS: " + (data.totalSignals || 0) +
-            "  |  آخرین بروزرسانی: " +
-            new Date().toLocaleTimeString();
-
-        if (!signals.length) {
-            body.innerHTML =
-                '<div class="sniperEmpty">هنوز سیگنال 4H Sniper ثبت نشده است.</div>';
-            return;
-        }
-
-        let html =
-            "<div style='overflow-x:auto;'>" +
-            "<table>" +
-            "<thead><tr>" +
-            "<th>Token</th>" +
-            "<th>Signal Time</th>" +
-            "<th>Patterns</th>" +
-            "<th>Entry</th>" +
-            "<th>Entry MC</th>" +
-            "<th>Outcome</th>" +
-            "<th>MFE</th>" +
-            "<th>MAE</th>" +
-            "</tr></thead><tbody>";
-
-        for (const t of signals) {
-            const s = t.signal || {};
-            const o = t.outcomes || null;
-            const patterns = Array.isArray(s.patterns)
-                ? s.patterns.join(", ")
-                : "-";
-
-            const mfe = o && o.mfeMae
-                ? pct(o.mfeMae.mfePct)
-                : "-";
-
-            const mae = o && o.mfeMae
-                ? pct(o.mfeMae.maePct)
-                : "-";
-
-            const tokenName =
-                t.symbol ||
-                t.name ||
-                (t.address
-                    ? t.address.slice(0, 8) + "..."
-                    : "UNKNOWN");
-
-            html +=
-                "<tr>" +
-                "<td><span class='signalTag'>🎯 " +
-                    esc(tokenName) +
-                "</span><br><span class='addressText'>" +
-                    esc(t.address) +
-                "</span></td>" +
-                "<td>" + esc(fmtTime(s.signalTime)) + "</td>" +
-                "<td class='patternText'>" +
-                    esc(patterns) +
-                "</td>" +
-                "<td>" +
-                    esc(s.entryPrice == null ? "-" :
-                        Number(s.entryPrice).toPrecision(8)) +
-                "</td>" +
-                "<td>" +
-                    esc(s.entryMarketCap == null ? "-" :
-                        Number(s.entryMarketCap).toLocaleString()) +
-                "</td>" +
-                "<td>" + esc(outcomeText(o)) + "</td>" +
-                "<td>" + esc(mfe) + "</td>" +
-                "<td>" + esc(mae) + "</td>" +
-                "</tr>";
-        }
-
-        html += "</tbody></table></div>";
-        body.innerHTML = html;
-    }
-
-    async function refresh() {
-        try {
-            const r = await fetch(
-                "/api/sniper-4h-live?t=" + Date.now(),
-                { cache: "no-store" }
-            );
-
-            if (!r.ok) {
-                throw new Error("HTTP " + r.status);
-            }
-
-            render(await r.json());
-        } catch (e) {
-            body.innerHTML =
-                '<div class="sniperEmpty">⚠️ Sniper data unavailable: ' +
-                esc(e.message) +
-                "</div>";
-        }
-    }
-
-    refresh();
-    setInterval(refresh, 15000);
-})();
-
-document.addEventListener("click", async function (e) {
-    const btn = e.target.closest(".sniperCopyBtn");
-    if (!btn) return;
-
-    const address = btn.getAttribute("data-address") || "";
-
-    try {
-        await navigator.clipboard.writeText(address);
-        const oldText = btn.textContent;
-        btn.textContent = "✅ Copied";
-
-        setTimeout(function () {
-            btn.textContent = oldText;
-        }, 1200);
-    } catch (_) {
-        btn.textContent = "❌ Failed";
-
-        setTimeout(function () {
-            btn.textContent = "📋 Copy";
-        }, 1200);
-    }
-});
-</script>
-<!-- END 4H_SECOND_CANDLE_SNIPER_EXPERIMENTAL_V1 -->
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

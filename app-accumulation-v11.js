@@ -1,4 +1,4 @@
-const http = require("http");
+﻿const http = require("http");
 const { execFile } = require("child_process");
 const fs = require("fs");
 
@@ -858,7 +858,7 @@ function calculateAccumulationScore(coin, historyToken) {
         Number(coin.sells || 0);
 
     // ===============================
-    // HOLDER GROWTH â€” 20 POINTS
+    // HOLDER GROWTH Ã¢â‚¬â€ 20 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -892,7 +892,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // MARKET CAP GROWTH â€” 15 POINTS
+    // MARKET CAP GROWTH Ã¢â‚¬â€ 15 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -926,7 +926,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // BUY / SELL PRESSURE â€” 15 POINTS
+    // BUY / SELL PRESSURE Ã¢â‚¬â€ 15 POINTS
     // ===============================
 
     if (currentBuys > 0) {
@@ -952,7 +952,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // VOLUME GROWTH â€” 10 POINTS
+    // VOLUME GROWTH Ã¢â‚¬â€ 10 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -986,7 +986,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // SMART DEGEN â€” 10 POINTS
+    // SMART DEGEN Ã¢â‚¬â€ 10 POINTS
     // ===============================
 
     const smartDegen =
@@ -1006,7 +1006,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // RADAR TIME â€” 5 POINTS
+    // RADAR TIME Ã¢â‚¬â€ 5 POINTS
     // ===============================
 
     if (
@@ -1565,11 +1565,22 @@ if (req.url.startsWith("/api/sniper-4h-live") && req.method === "GET") {
             ? Object.values(data.tokens)
             : [];
 
+        const now = Math.floor(Date.now() / 1000);
+
         const signals = tokens
-            .filter(t => t && t.signal)
+            .filter(t => {
+                if (!t || !t.liveSecondCandleSignal) return false;
+
+                const listing = Number(t.listingTime || 0);
+                if (!listing) return false;
+
+                const ageH = (now - listing) / 3600;
+
+                return ageH >= 4 && ageH < 8;
+            })
             .sort((x, y) =>
-                Number((y.signal && y.signal.signalTime) || 0) -
-                Number((x.signal && x.signal.signalTime) || 0)
+                Number((y.liveSecondCandleSignal && y.liveSecondCandleSignal.signalTime) || 0) -
+                Number((x.liveSecondCandleSignal && x.liveSecondCandleSignal.signalTime) || 0)
             );
 
         res.writeHead(200, {
@@ -1587,7 +1598,7 @@ if (req.url.startsWith("/api/sniper-4h-live") && req.method === "GET") {
                 symbol: t.symbol || "",
                 name: t.name || "",
                 listingTime: t.listingTime || null,
-                signal: t.signal || null,
+                signal: t.liveSecondCandleSignal || null,
                 outcomes: t.outcomes || null
             }))
         }));
@@ -1708,7 +1719,7 @@ function getSecondCandleSniperState(token) {
         ageHours: ageHours
     };
 }
-if (req.url === "/api/pump") {
+if (req.url === "/api/pump" || req.url.startsWith("/api/pump?")) {
 
         execFile("node", ["node_modules/gmgn-cli/dist/index.js", "market", "trending", "--chain", "sol", "--interval", "5m", "--limit", "100"], { timeout: 30000, env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY } },
             (error, stdout, stderr) => {
@@ -2211,7 +2222,7 @@ saved++;
 
                     saveHistory(history);
 
-                    // PRE-PUMP TRAJECTORY SHADOW — READ ONLY ANALYSIS
+                    // PRE-PUMP TRAJECTORY SHADOW â€” READ ONLY ANALYSIS
                     try {
                         runTrajectoryShadow();
                     } catch (e) {
@@ -2237,18 +2248,51 @@ saved++;
     );
 }
 
+/* 4H SECOND CANDLE SNIPER — MANAGED CHILD PROCESS */
+let fourHSniperProcess = null;
+
+try {
+    const { spawn } = require("child_process");
+
+    fourHSniperProcess = spawn(
+        process.execPath,
+        [require("path").join(__dirname, "4h-second-candle-sniper-v2.js")],
+        {
+            cwd: __dirname,
+            stdio: ["ignore", "pipe", "pipe"]
+        }
+    );
+
+    fourHSniperProcess.stdout.on("data", data => {
+        console.log("[4H SNIPER]", data.toString().trim());
+    });
+
+    fourHSniperProcess.stderr.on("data", data => {
+        console.log("[4H SNIPER ERROR]", data.toString().trim());
+    });
+
+    fourHSniperProcess.on("exit", (code, signal) => {
+        console.log(
+            "[4H SNIPER] child exited",
+            "code=" + code,
+            "signal=" + signal
+        );
+        fourHSniperProcess = null;
+    });
+
+    console.log("[4H SNIPER] collector started");
+} catch (e) {
+    console.log(
+        "[4H SNIPER] startup error:",
+        e.message
+    );
+}
 setInterval(
     takeSnapshot,
     60 * 1000
 );
 
 takeSnapshot();
-
-
-
-
-
-
 
 
 
