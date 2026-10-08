@@ -1773,8 +1773,8 @@ tr:hover {
                 <tr>
 
                     <th>#</th>
-                    <th>⭐ Watch</th>
                     <th>ارز</th>
+                    <th>📋</th>
                    <th>Score</th>
 <th>Status</th>
 <th>🚨 Alarm</th>
@@ -1791,8 +1791,6 @@ tr:hover {
 <th>First Seen</th>
 <th>Radar Time</th>
 <th>Snapshots</th>
-<th>Contract</th>
-
                 </tr>
 
             </thead>
@@ -1851,7 +1849,7 @@ tr:hover {
             <table style="width:100%;min-width:900px;">
                 <thead>
                     <tr>
-                        <th>#</th><th>Token</th><th>Alarm</th><th>Contract</th><th>MC</th><th>Holders</th><th>Holder Δ</th><th>Buys</th><th>Sells</th><th>Flow Δ</th><th>Age</th>
+                        <th>#</th><th>Token</th><th>Alarm</th><th>Contract</th><th>MC</th><th>Holders</th><th>Holder Δ</th><th>Buys</th><th>Sells</th><th>Flow Δ</th><th>Age</th><th>Snapshots</th>
                     </tr>
                 </thead>
                 <tbody id="sniper4hLiveBody">
@@ -2079,6 +2077,15 @@ tr:hover {
                     "<td><b>" +
                         symbol +
                     "</b></td>" +
+                    "<td class='contract'>" +
+    "<button " +
+    "class='copy-btn' " +
+    "onclick='copyContract(\"" +
+    address +
+    "\", this)'>" +
+    "📋" +
+    "</button>" +
+"</td>" +
 
                     "<td>" +
                         (
@@ -2930,25 +2937,25 @@ var sniper = coin.secondCandleSniper || { state: "NO DATA" }; var sniperState = 
 if (pumpAlarm === "STRONG_PUMP") {
 
     alarmHtml =
-        '<span class="alarm-strong">🚨 STRONG PUMP</span>';
+        '<span class="main-radar-crystal-led strong" title="STRONG PUMP"></span>';
 
 }
 else if (pumpAlarm === "PUMP_ALERT") {
 
     alarmHtml =
-        '<span class="alarm-pump">🔥 PUMP ALERT</span>';
+        '<span class="main-radar-crystal-led pump" title="PUMP ALERT"></span>';
 
 }
 else if (pumpAlarm === "WATCH") {
 
     alarmHtml =
-        '<span class="alarm-watch">👀 WATCH</span>';
+        '<span class="main-radar-crystal-led watch" title="WATCH"></span>';
 
 }
 else {
 
     alarmHtml =
-        '<span class="alarm-none">—</span>';
+        '<span class="main-radar-crystal-led off" title="No Pump"></span>';
 
 }
             var row =
@@ -2961,30 +2968,18 @@ else {
                     (index + 1) +
                 "</td>" +
 
-                "<td>" +
-                    "<button " +
-                    "class='watch-btn " +
-                    (
-                        currentWatchList[address]
-                            ? "active"
-                            : ""
-                    ) +
-                    "' " +
-                    "onclick='toggleWatch(\"" +
-                    address +
-                    "\", this)'>" +
-                    (
-                        currentWatchList[address]
-                            ? "⭐"
-                            : "☆"
-                    ) +
-                    "</button>" +
-                "</td>" +
-
-
                 "<td><b>" +
                     symbol +
                 "</b></td>" +
+                    "<td class='contract'>" +
+    "<button " +
+    "class='copy-btn' " +
+    "onclick='copyContract(\"" +
+    address +
+    "\", this)'>" +
+    "📋" +
+    "</button>" +
+"</td>" +
 
 
                 "<td class='score'>" +
@@ -3087,33 +3082,7 @@ else {
             ? snapshotsCount
             : "-"
     ) +
-"</td>" +
-
-
-
-
-
-
-"<td class='contract'>" +
-                    "<span class='contract-number'>" +
-                    (index + 1) +
-                    "</span>" +
-                    "<span class='contract-address'>" +
-                    address +
-                    "</span>" +
-
-                    " <button " +
-                    "class='copy-btn' " +
-                    "onclick='copyContract(\"" +
-                    address +
-                    "\", this)'>" +
-
-                    "📋" +
-
-                    "</button>" +
-
-                "</td>";
-
+"</td>";
 
             row.dataset.watch =
                 currentWatchList[address]
@@ -3518,8 +3487,3493 @@ document.addEventListener("click", async function (e) {
 });
 </script>
 
+<style id="compact-copy-button-final">
+.contract {
+    width: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+    padding: 2px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+.contract .copy-btn {
+    width: 24px !important;
+    min-width: 24px !important;
+    max-width: 24px !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    border: 0 !important;
+    border-radius: 5px !important;
+    font-size: 13px !important;
+    line-height: 24px !important;
+    display: block !important;
+    cursor: pointer !important;
+}
+</style>
+
+<style id="final-compact-copy-and-pump-led">
+
+/* =========================================================
+   FINAL COMPACT COPY BUTTON
+   ========================================================= */
+
+.contract {
+    width: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+    padding: 2px 3px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+.contract .copy-btn {
+    width: 24px !important;
+    min-width: 24px !important;
+    max-width: 24px !important;
+
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+
+    padding: 0 !important;
+    margin: 0 auto !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    font-size: 13px !important;
+    line-height: 1 !important;
+
+    border-radius: 6px !important;
+}
+
+
+/* =========================================================
+   SMALL PROFESSIONAL PUMP LED
+   ========================================================= */
+
+.sniper4h-alarm {
+    position: relative !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 14px !important;
+    height: 14px !important;
+
+    padding: 0 !important;
+    margin: 0 auto !important;
+
+    border-radius: 50% !important;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ffffff 0%,
+            #cfd5dc 12%,
+            #68717c 35%,
+            #252b33 70%,
+            #11151a 100%
+        ) !important;
+
+    border: 1px solid #59636e !important;
+
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,.35),
+        0 0 0 1px rgba(0,0,0,.35) !important;
+
+    vertical-align: middle !important;
+
+    font-size: 0 !important;
+    line-height: 0 !important;
+
+    transition:
+        background .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease !important;
+}
+
+
+/* روشن شدن واقعی آلارم */
+
+.sniper4h-alarm.on {
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #fff9d6 0%,
+            #fff36b 15%,
+            #ffd000 38%,
+            #ff8a00 68%,
+            #d92b00 100%
+        ) !important;
+
+    border-color: #ffb300 !important;
+
+    box-shadow:
+        0 0 3px #ffd000,
+        0 0 8px rgba(255,174,0,.95),
+        0 0 16px rgba(255,92,0,.55),
+        inset 0 1px 2px rgba(255,255,255,.7) !important;
+
+    transform: scale(1.05) !important;
+
+    animation:
+        finalPumpLedPulse 1.15s ease-in-out infinite !important;
+}
+
+
+/* نقطه انعکاس روی LED */
+
+.sniper4h-alarm::before {
+    content: "" !important;
+
+    position: absolute !important;
+
+    width: 4px !important;
+    height: 4px !important;
+
+    top: 2px !important;
+    left: 3px !important;
+
+    border-radius: 50% !important;
+
+    background: rgba(255,255,255,.85) !important;
+
+    box-shadow:
+        0 0 3px rgba(255,255,255,.9) !important;
+
+    pointer-events: none !important;
+}
+
+
+/* حالت روشن: هاله کوچک‌تر و شیک‌تر */
+
+.sniper4h-alarm.on::after {
+    content: "" !important;
+
+    position: absolute !important;
+
+    inset: -3px !important;
+
+    border-radius: 50% !important;
+
+    border: 1px solid rgba(255,174,0,.35) !important;
+
+    pointer-events: none !important;
+}
+
+
+@keyframes finalPumpLedPulse {
+
+    0%, 100% {
+        opacity: 1;
+        filter: brightness(1);
+    }
+
+    50% {
+        opacity: .72;
+        filter: brightness(1.35);
+    }
+
+}
+
+
+/* =========================================================
+   MAIN RADAR ALARM CELLS
+   ========================================================= */
+
+.alarm-strong,
+.alarm-pump,
+.alarm-watch,
+.alarm-none {
+
+    display: inline-flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 16px !important;
+    height: 18px !important;
+
+    padding: 0 4px !important;
+
+    border-radius: 5px !important;
+
+    font-size: 11px !important;
+    line-height: 1 !important;
+
+}
+
+
+/* =========================================================
+   4H TABLE LED CELL
+   ========================================================= */
+
+#sniper4hLiveSection tbody td:nth-child(3) {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+
+/* =========================================================
+   COPY COLUMN HEADER
+   ========================================================= */
+
+th:has(+ th),
+th {
+    vertical-align: middle;
+}
+
+</style>
+
+
+<style id="main-radar-crystal-led-final">
+
+/* فقط بخش Alarm رادار اصلی */
+.alarm-strong,
+.alarm-pump,
+.alarm-watch,
+.alarm-none {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    max-width: 14px !important;
+
+    padding: 0 !important;
+    margin: 0 auto !important;
+
+    border-radius: 50% !important;
+
+    font-size: 0 !important;
+    line-height: 0 !important;
+
+    position: relative !important;
+    vertical-align: middle !important;
+
+    border: 1px solid #59636e !important;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ffffff 0%,
+            #cfd5dc 12%,
+            #68717c 35%,
+            #252b33 70%,
+            #11151a 100%
+        ) !important;
+
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,.35),
+        0 0 0 1px rgba(0,0,0,.35) !important;
+}
+
+
+/* WATCH = زرد کم‌رنگ */
+.alarm-watch {
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #fffde0 0%,
+            #e8df55 18%,
+            #a89d18 45%,
+            #4d480b 100%
+        ) !important;
+
+    border-color: #aaa12d !important;
+
+    box-shadow:
+        0 0 4px rgba(220,210,50,.65),
+        inset 0 1px 2px rgba(255,255,255,.5) !important;
+}
+
+
+/* PUMP ALERT = نارنجی */
+.alarm-pump {
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #fff8d5 0%,
+            #ffd84d 16%,
+            #ff8a00 42%,
+            #c83d00 72%,
+            #641500 100%
+        ) !important;
+
+    border-color: #ff9d00 !important;
+
+    box-shadow:
+        0 0 4px #ffb300,
+        0 0 10px rgba(255,115,0,.85),
+        inset 0 1px 2px rgba(255,255,255,.7) !important;
+
+    animation: mainPumpLedPulse 1.15s ease-in-out infinite !important;
+}
+
+
+/* STRONG PUMP = قرمز */
+.alarm-strong {
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #fff5f5 0%,
+            #ff9b9b 14%,
+            #ff3030 40%,
+            #c90000 68%,
+            #650000 100%
+        ) !important;
+
+    border-color: #ff4b4b !important;
+
+    box-shadow:
+        0 0 4px #ff3b3b,
+        0 0 10px rgba(255,0,0,.9),
+        0 0 18px rgba(255,0,0,.45),
+        inset 0 1px 2px rgba(255,255,255,.75) !important;
+
+    animation: mainStrongLedPulse .8s ease-in-out infinite !important;
+}
+
+
+/* انعکاس کوچک روی LED */
+.alarm-strong::before,
+.alarm-pump::before,
+.alarm-watch::before,
+.alarm-none::before {
+    content: "" !important;
+
+    position: absolute !important;
+
+    width: 4px !important;
+    height: 4px !important;
+
+    top: 2px !important;
+    left: 3px !important;
+
+    border-radius: 50% !important;
+
+    background: rgba(255,255,255,.85) !important;
+
+    pointer-events: none !important;
+}
+
+
+/* سلول Alarm رادار اصلی */
+td:has(.alarm-strong),
+td:has(.alarm-pump),
+td:has(.alarm-watch),
+td:has(.alarm-none) {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+
+/* =========================================================
+   COPY COLUMN — فقط به اندازه خود دکمه
+   ========================================================= */
+
+th:nth-child(3),
+td.contract {
+    width: 30px !important;
+    min-width: 30px !important;
+    max-width: 30px !important;
+
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+
+    white-space: nowrap !important;
+    text-align: center !important;
+}
+
+
+td.contract .copy-btn {
+    display: inline-flex !important;
+
+    width: 23px !important;
+    min-width: 23px !important;
+    max-width: 23px !important;
+
+    height: 23px !important;
+    min-height: 23px !important;
+    max-height: 23px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    font-size: 13px !important;
+    line-height: 1 !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* جلوگیری از حداقل عرض اضافه روی جدول */
+@keyframes mainPumpLedPulse {
+    0%, 100% {
+        filter: brightness(1);
+        transform: scale(1);
+    }
+
+    50% {
+        filter: brightness(1.35);
+        transform: scale(1.08);
+    }
+}
+
+@keyframes mainStrongLedPulse {
+    0%, 100% {
+        filter: brightness(1);
+        transform: scale(1);
+    }
+
+    50% {
+        filter: brightness(1.5);
+        transform: scale(1.1);
+    }
+}
+
+</style>
+
+
+<style id="main-radar-copy-only-final">
+
+/* فقط Copy column رادار اصلی */
+#coins {
+    /* بدون تغییر layout جدول */
+}
+
+#coins td.contract {
+    width: 30px !important;
+    min-width: 30px !important;
+    max-width: 30px !important;
+    padding: 2px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+#coins td.contract .copy-btn {
+    width: 23px !important;
+    min-width: 23px !important;
+    max-width: 23px !important;
+
+    height: 23px !important;
+    min-height: 23px !important;
+    max-height: 23px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    font-size: 13px !important;
+}
+
+#coins ~ * {
+    /* intentionally untouched */
+}
+
+</style>
+
+
+<style id="main-radar-alarm-match-4h">
+
+/* =========================================================
+   MAIN RADAR PUMP LED = EXACT 4H LED STYLE
+   ========================================================= */
+
+.alarm-strong,
+.alarm-pump,
+.alarm-watch,
+.alarm-none {
+    position: relative !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    max-width: 14px !important;
+
+    padding: 0 !important;
+    margin: 0 auto !important;
+
+    border-radius: 50% !important;
+
+    font-size: 0 !important;
+    line-height: 0 !important;
+
+    vertical-align: middle !important;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ffffff 0%,
+            #cfd5dc 12%,
+            #68717c 35%,
+            #252b33 70%,
+            #11151a 100%
+        ) !important;
+
+    border: 1px solid #59636e !important;
+
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,.35),
+        0 0 0 1px rgba(0,0,0,.35) !important;
+}
+
+
+/* همان حالت روشن LED چهارH */
+
+.alarm-watch {
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #fffde0 0%,
+            #e8df55 18%,
+            #a89d18 45%,
+            #4d480b 100%
+        ) !important;
+
+    border-color: #aaa12d !important;
+
+    box-shadow:
+        0 0 4px rgba(220,210,50,.65),
+        inset 0 1px 2px rgba(255,255,255,.5) !important;
+}
+
+
+.alarm-pump {
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #fff8d5 0%,
+            #ffd84d 16%,
+            #ff8a00 42%,
+            #c83d00 72%,
+            #641500 100%
+        ) !important;
+
+    border-color: #ff9d00 !important;
+
+    box-shadow:
+        0 0 4px #ffb300,
+        0 0 10px rgba(255,115,0,.85),
+        inset 0 1px 2px rgba(255,255,255,.7) !important;
+
+    animation:
+        sniper4hAlarmPulse 1.15s ease-in-out infinite !important;
+}
+
+
+.alarm-strong {
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #fff5f5 0%,
+            #ff9b9b 14%,
+            #ff3030 40%,
+            #c90000 68%,
+            #650000 100%
+        ) !important;
+
+    border-color: #ff4b4b !important;
+
+    box-shadow:
+        0 0 4px #ff3b3b,
+        0 0 10px rgba(255,0,0,.9),
+        0 0 18px rgba(255,0,0,.45),
+        inset 0 1px 2px rgba(255,255,255,.75) !important;
+
+    animation:
+        sniper4hAlarmPulse .8s ease-in-out infinite !important;
+}
+
+
+/* همان انعکاس LED چهارH */
+
+.alarm-strong::before,
+.alarm-pump::before,
+.alarm-watch::before,
+.alarm-none::before {
+    content: "" !important;
+
+    position: absolute !important;
+
+    width: 4px !important;
+    height: 4px !important;
+
+    top: 2px !important;
+    left: 3px !important;
+
+    border-radius: 50% !important;
+
+    background: rgba(255,255,255,.85) !important;
+
+    pointer-events: none !important;
+}
+
+
+@keyframes sniper4hAlarmPulse {
+
+    0%, 100% {
+        filter: brightness(1);
+        transform: scale(1);
+    }
+
+    50% {
+        filter: brightness(1.35);
+        transform: scale(1.08);
+    }
+
+}
+
+</style>
+
+<style id="main-radar-led-final">
+
+/* =========================================================
+   MAIN RADAR — 4H STYLE PHYSICAL LED
+   ========================================================= */
+
+.alarm-strong,
+.alarm-pump,
+.alarm-watch,
+.alarm-none {
+    position: relative !important;
+
+    display: inline-block !important;
+
+    width: 22px !important;
+    height: 22px !important;
+
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    padding: 0 !important;
+    margin: 0 auto !important;
+
+    border-radius: 50% !important;
+
+    font-size: 0 !important;
+    line-height: 0 !important;
+
+    vertical-align: middle !important;
+
+    border: 2px solid #343b45 !important;
+
+    background:
+        radial-gradient(
+            circle at 32% 27%,
+            #ffffff 0%,
+            #d9dde2 8%,
+            #858d97 22%,
+            #424952 45%,
+            #1b2026 72%,
+            #0b0e12 100%
+        ) !important;
+
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,.35),
+        inset 0 -2px 3px rgba(0,0,0,.8),
+        0 1px 3px rgba(0,0,0,.8) !important;
+
+    overflow: hidden !important;
+}
+
+
+/* انعکاس شیشه LED */
+
+.alarm-strong::before,
+.alarm-pump::before,
+.alarm-watch::before,
+.alarm-none::before {
+    content: "" !important;
+
+    position: absolute !important;
+
+    width: 7px !important;
+    height: 5px !important;
+
+    top: 3px !important;
+    left: 4px !important;
+
+    border-radius: 50% !important;
+
+    background: rgba(255,255,255,.9) !important;
+
+    filter: blur(.3px);
+
+    box-shadow:
+        0 0 3px rgba(255,255,255,.7) !important;
+
+    pointer-events: none !important;
+}
+
+
+/* حلقه داخلی LED */
+
+.alarm-strong::after,
+.alarm-pump::after,
+.alarm-watch::after,
+.alarm-none::after {
+    content: "" !important;
+
+    position: absolute !important;
+
+    inset: 3px !important;
+
+    border-radius: 50% !important;
+
+    border: 1px solid rgba(255,255,255,.12) !important;
+
+    pointer-events: none !important;
+}
+
+
+/* =========================================================
+   WATCH — زرد
+   ========================================================= */
+
+.alarm-watch {
+    background:
+        radial-gradient(
+            circle at 32% 27%,
+            #fffde8 0%,
+            #fff36a 10%,
+            #d8cb28 27%,
+            #8e8410 52%,
+            #403b08 78%,
+            #181703 100%
+        ) !important;
+
+    border-color: #b9ae28 !important;
+
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,.55),
+        inset 0 -2px 3px rgba(0,0,0,.7),
+        0 0 5px rgba(230,220,40,.75),
+        0 0 12px rgba(230,210,30,.35) !important;
+}
+
+
+/* =========================================================
+   PUMP ALERT — نارنجی
+   ========================================================= */
+
+.alarm-pump {
+    background:
+        radial-gradient(
+            circle at 32% 27%,
+            #fffbe0 0%,
+            #ffe66b 9%,
+            #ffb300 23%,
+            #ff7200 43%,
+            #c93b00 67%,
+            #581300 100%
+        ) !important;
+
+    border-color: #ff9f19 !important;
+
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,.65),
+        inset 0 -2px 3px rgba(70,0,0,.7),
+        0 0 6px #ffae00,
+        0 0 14px rgba(255,115,0,.85),
+        0 0 22px rgba(255,80,0,.35) !important;
+
+    animation:
+        mainRadarLedPulse 1.15s ease-in-out infinite !important;
+}
+
+
+/* =========================================================
+   STRONG PUMP — قرمز
+   ========================================================= */
+
+.alarm-strong {
+    background:
+        radial-gradient(
+            circle at 32% 27%,
+            #ffffff 0%,
+            #ffdede 9%,
+            #ff7777 20%,
+            #ff2929 39%,
+            #c90000 63%,
+            #600000 84%,
+            #220000 100%
+        ) !important;
+
+    border-color: #ff5555 !important;
+
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,.7),
+        inset 0 -2px 3px rgba(70,0,0,.8),
+        0 0 6px #ff3030,
+        0 0 14px rgba(255,0,0,.95),
+        0 0 25px rgba(255,0,0,.55) !important;
+
+    animation:
+        mainRadarLedStrongPulse .8s ease-in-out infinite !important;
+}
+
+
+/* =========================================================
+   OFF — چراغ خاموش ولی فیزیکی
+   ========================================================= */
+
+.alarm-none {
+    opacity: .65 !important;
+}
+
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+@keyframes mainRadarLedPulse {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.10);
+        filter: brightness(1.35);
+    }
+
+}
+
+
+@keyframes mainRadarLedStrongPulse {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.14);
+        filter: brightness(1.55);
+    }
+
+}
+
+</style>
+<style id="main-radar-halo-led">
+
+/* =========================================================
+   MAIN RADAR — HALO SIGNAL LED
+   مدل متفاوت از چراغ 4H
+   ========================================================= */
+
+.alarm-strong,
+.alarm-pump,
+.alarm-watch,
+.alarm-none {
+
+    position: relative !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 26px !important;
+    height: 26px !important;
+
+    min-width: 26px !important;
+    max-width: 26px !important;
+
+    padding: 0 !important;
+    margin: 0 auto !important;
+
+    border-radius: 50% !important;
+
+    font-size: 0 !important;
+    line-height: 0 !important;
+
+    background: transparent !important;
+    border: 0 !important;
+
+    box-shadow: none !important;
+
+    overflow: visible !important;
+}
+
+
+/* هسته مرکزی چراغ */
+
+.alarm-strong::before,
+.alarm-pump::before,
+.alarm-watch::before,
+.alarm-none::before {
+
+    content: "" !important;
+
+    position: absolute !important;
+
+    width: 10px !important;
+    height: 10px !important;
+
+    left: 50% !important;
+    top: 50% !important;
+
+    transform: translate(-50%, -50%) !important;
+
+    border-radius: 50% !important;
+
+    z-index: 3 !important;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ffffff 0%,
+            #e9edf2 12%,
+            #7e8792 35%,
+            #303740 70%,
+            #101318 100%
+        ) !important;
+
+    border: 1px solid rgba(255,255,255,.25) !important;
+
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,.45),
+        inset 0 -2px 2px rgba(0,0,0,.8),
+        0 1px 3px rgba(0,0,0,.8) !important;
+
+    transition:
+        background .2s ease,
+        box-shadow .2s ease !important;
+}
+
+
+/* حلقه نورانی بیرونی */
+
+.alarm-strong::after,
+.alarm-pump::after,
+.alarm-watch::after,
+.alarm-none::after {
+
+    content: "" !important;
+
+    position: absolute !important;
+
+    left: 50% !important;
+    top: 50% !important;
+
+    width: 20px !important;
+    height: 20px !important;
+
+    transform: translate(-50%, -50%) !important;
+
+    border-radius: 50% !important;
+
+    z-index: 1 !important;
+
+    border: 2px solid #343a43 !important;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.04) 0%,
+            rgba(255,255,255,.01) 55%,
+            transparent 70%
+        ) !important;
+
+    box-shadow:
+        inset 0 0 3px rgba(255,255,255,.15),
+        0 0 0 1px rgba(0,0,0,.5) !important;
+}
+
+
+/* =========================================================
+   WATCH — حلقه زرد
+   ========================================================= */
+
+.alarm-watch::after {
+
+    border-color: #a99d22 !important;
+
+    box-shadow:
+        0 0 4px rgba(225,215,45,.7),
+        0 0 9px rgba(225,215,45,.3),
+        inset 0 0 4px rgba(255,240,70,.35) !important;
+}
+
+.alarm-watch::before {
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #fffed0 0%,
+            #f4e94d 22%,
+            #c4b91d 50%,
+            #5c5708 100%
+        ) !important;
+
+    box-shadow:
+        0 0 5px #e5d72e,
+        0 0 10px rgba(225,210,30,.55),
+        inset 0 1px 2px rgba(255,255,255,.7) !important;
+}
+
+
+/* =========================================================
+   PUMP ALERT — حلقه نارنجی + هسته طلایی
+   ========================================================= */
+
+.alarm-pump::after {
+
+    border-color: #ff8c00 !important;
+
+    box-shadow:
+        0 0 5px #ff9d00,
+        0 0 11px rgba(255,120,0,.8),
+        0 0 18px rgba(255,90,0,.3),
+        inset 0 0 5px rgba(255,180,30,.45) !important;
+}
+
+.alarm-pump::before {
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #fffde0 0%,
+            #ffe66b 18%,
+            #ffae00 45%,
+            #e85a00 72%,
+            #681500 100%
+        ) !important;
+
+    box-shadow:
+        0 0 6px #ffb000,
+        0 0 12px rgba(255,115,0,.9),
+        inset 0 1px 2px rgba(255,255,255,.8) !important;
+
+    animation:
+        radarHaloCore 1s ease-in-out infinite !important;
+}
+
+
+/* =========================================================
+   STRONG PUMP — حلقه قرمز چندلایه
+   ========================================================= */
+
+.alarm-strong::after {
+
+    border-color: #ff3030 !important;
+
+    box-shadow:
+        0 0 5px #ff3030,
+        0 0 10px #ff1515,
+        0 0 18px rgba(255,0,0,.75),
+        0 0 28px rgba(255,0,0,.3),
+        inset 0 0 6px rgba(255,50,50,.55) !important;
+
+    animation:
+        radarHaloRing .75s ease-in-out infinite !important;
+}
+
+.alarm-strong::before {
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ffffff 0%,
+            #ffd6d6 12%,
+            #ff5555 30%,
+            #e00000 62%,
+            #650000 100%
+        ) !important;
+
+    box-shadow:
+        0 0 7px #ff2020,
+        0 0 15px rgba(255,0,0,.95),
+        0 0 25px rgba(255,0,0,.55),
+        inset 0 1px 2px rgba(255,255,255,.8) !important;
+
+    animation:
+        radarHaloCoreStrong .65s ease-in-out infinite !important;
+}
+
+
+/* =========================================================
+   OFF
+   ========================================================= */
+
+.alarm-none {
+    opacity: .55 !important;
+}
+
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+@keyframes radarHaloCore {
+
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.18);
+        filter: brightness(1.35);
+    }
+}
+
+
+@keyframes radarHaloCoreStrong {
+
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.22);
+        filter: brightness(1.6);
+    }
+}
+
+
+@keyframes radarHaloRing {
+
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: .8;
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.18);
+        opacity: 1;
+    }
+}
+
+</style>
+
+<style id="main-radar-orbit-led">
+
+/* =========================================================
+   MAIN RADAR — ORBIT PUMP LED
+   مستقل از چراغ 4H
+   ========================================================= */
+
+.main-radar-crystal-led {
+    position: relative !important;
+
+    display: inline-block !important;
+
+    width: 22px !important;
+    height: 22px !important;
+
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    border-radius: 50% !important;
+
+    padding: 0 !important;
+    margin: 0 auto !important;
+
+    vertical-align: middle !important;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ffffff 0%,
+            #d9e1e8 9%,
+            #6c7884 28%,
+            #26303a 58%,
+            #0b1015 100%
+        ) !important;
+
+    border: 1px solid #596773 !important;
+
+    box-shadow:
+        inset 0 1px 3px rgba(255,255,255,.45),
+        inset 0 -2px 4px rgba(0,0,0,.7),
+        0 0 0 1px rgba(0,0,0,.5) !important;
+
+    transition:
+        background .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease !important;
+}
+
+
+/* حلقه بیرونی */
+
+.main-radar-crystal-led::before {
+
+    content: "" !important;
+
+    position: absolute !important;
+
+    inset: -4px !important;
+
+    border-radius: 50% !important;
+
+    border: 1px solid rgba(120,135,150,.35) !important;
+
+    box-shadow:
+        0 0 4px rgba(100,120,140,.15) !important;
+
+    pointer-events: none !important;
+}
+
+
+/* انعکاس شیشه */
+
+.main-radar-crystal-led::after {
+
+    content: "" !important;
+
+    position: absolute !important;
+
+    width: 7px !important;
+    height: 4px !important;
+
+    top: 3px !important;
+    left: 5px !important;
+
+    border-radius: 50% !important;
+
+    background: rgba(255,255,255,.72) !important;
+
+    transform: rotate(-25deg) !important;
+
+    filter: blur(.2px) !important;
+
+    pointer-events: none !important;
+}
+
+
+/* =========================
+   WATCH
+   ========================= */
+
+.main-radar-crystal-led.watch {
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #fffde8 0%,
+            #fff36b 14%,
+            #d7c900 34%,
+            #6d6500 65%,
+            #292600 100%
+        ) !important;
+
+    border-color: #d8ca35 !important;
+
+    box-shadow:
+        inset 0 1px 3px rgba(255,255,255,.55),
+        inset 0 -2px 4px rgba(0,0,0,.55),
+        0 0 7px rgba(240,220,30,.65),
+        0 0 15px rgba(220,200,0,.25) !important;
+}
+
+
+/* =========================
+   PUMP
+   ========================= */
+
+.main-radar-crystal-led.pump {
+
+    background:
+        radial-gradient(
+            circle at 34% 28%,
+            #fffbdc 0%,
+            #ffe45c 11%,
+            #ff9d00 28%,
+            #ed4d00 52%,
+            #761900 78%,
+            #260700 100%
+        ) !important;
+
+    border-color: #ff9d24 !important;
+
+    box-shadow:
+        inset 0 1px 3px rgba(255,255,255,.65),
+        inset 0 -2px 4px rgba(0,0,0,.65),
+        0 0 7px rgba(255,145,0,.95),
+        0 0 17px rgba(255,80,0,.7),
+        0 0 28px rgba(255,60,0,.25) !important;
+
+    animation:
+        mainRadarPumpPulse 1s ease-in-out infinite !important;
+}
+
+
+/* =========================
+   STRONG PUMP
+   ========================= */
+
+.main-radar-crystal-led.strong {
+
+    background:
+        radial-gradient(
+            circle at 34% 28%,
+            #ffffff 0%,
+            #ffdede 10%,
+            #ff6868 25%,
+            #ff1616 45%,
+            #b50000 68%,
+            #430000 100%
+        ) !important;
+
+    border-color: #ff5a5a !important;
+
+    box-shadow:
+        inset 0 1px 3px rgba(255,255,255,.75),
+        inset 0 -2px 4px rgba(0,0,0,.7),
+        0 0 8px rgba(255,40,40,1),
+        0 0 18px rgba(255,0,0,.9),
+        0 0 30px rgba(255,0,0,.4) !important;
+
+    animation:
+        mainRadarStrongPulse .65s ease-in-out infinite !important;
+}
+
+
+/* =========================
+   OFF
+   ========================= */
+
+.main-radar-crystal-led.off {
+
+    opacity: .7 !important;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #e8edf0 0%,
+            #87919a 18%,
+            #414a52 42%,
+            #1c2228 72%,
+            #0c1014 100%
+        ) !important;
+
+    border-color: #4c5862 !important;
+
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,.3),
+        inset 0 -2px 4px rgba(0,0,0,.7) !important;
+}
+
+
+/* =========================
+   ANIMATIONS
+   ========================= */
+
+@keyframes mainRadarPumpPulse {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+        filter: brightness(1.3);
+    }
+}
+
+
+@keyframes mainRadarStrongPulse {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.16);
+        filter: brightness(1.45);
+    }
+}
+
+</style>
+
+<style id="main-radar-crystal-led-ultimate">
+
+/* =========================================================
+   MAIN RADAR — NEW PUMP LED
+   Completely independent from old .alarm-* styles
+   ========================================================= */
+
+.main-radar-crystal-led {
+    position: relative !important;
+    display: inline-block !important;
+
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    padding: 0 !important;
+    margin: 0 auto !important;
+
+    border-radius: 50% !important;
+    border: 2px solid #303742 !important;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ffffff 0%,
+            #d7dce2 8%,
+            #727b86 24%,
+            #343b45 48%,
+            #171b21 78%,
+            #0b0e12 100%
+        ) !important;
+
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,.30),
+        inset 0 -3px 5px rgba(0,0,0,.65),
+        0 2px 5px rgba(0,0,0,.55) !important;
+
+    vertical-align: middle !important;
+
+    font-size: 0 !important;
+    line-height: 0 !important;
+
+    transition:
+        background .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease,
+        filter .2s ease !important;
+}
+
+
+/* شیشه/انعکاس چراغ */
+
+.main-radar-crystal-led::before {
+    content: "" !important;
+
+    position: absolute !important;
+
+    top: 3px !important;
+    left: 4px !important;
+
+    width: 7px !important;
+    height: 5px !important;
+
+    border-radius: 50% !important;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(255,255,255,.95) 0%,
+            rgba(255,255,255,.55) 45%,
+            rgba(255,255,255,0) 100%
+        ) !important;
+
+    opacity: .85 !important;
+
+    pointer-events: none !important;
+}
+
+
+/* حلقه نور داخلی */
+
+.main-radar-crystal-led::after {
+    content: "" !important;
+
+    position: absolute !important;
+
+    inset: 3px !important;
+
+    border-radius: 50% !important;
+
+    border: 1px solid rgba(255,255,255,.12) !important;
+
+    pointer-events: none !important;
+}
+
+
+/* =========================
+   WATCH — زرد
+   ========================= */
+
+.main-radar-crystal-led.watch {
+    border-color: #c9b72c !important;
+
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #fffbd1 0%,
+            #f5e85b 15%,
+            #d0bd20 34%,
+            #81750b 62%,
+            #302d05 100%
+        ) !important;
+
+    box-shadow:
+        0 0 5px rgba(255,225,40,.75),
+        0 0 12px rgba(255,210,20,.35),
+        inset 0 2px 3px rgba(255,255,255,.55),
+        inset 0 -3px 5px rgba(0,0,0,.45) !important;
+}
+
+
+/* =========================
+   PUMP ALERT — نارنجی
+   ========================= */
+
+.main-radar-crystal-led.pump {
+    border-color: #ff9d19 !important;
+
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #fffbdc 0%,
+            #ffe05a 12%,
+            #ff9d00 30%,
+            #ef4d00 57%,
+            #7b1900 82%,
+            #330900 100%
+        ) !important;
+
+    box-shadow:
+        0 0 5px rgba(255,175,30,.95),
+        0 0 12px rgba(255,100,0,.80),
+        0 0 22px rgba(255,70,0,.38),
+        inset 0 2px 3px rgba(255,255,255,.65),
+        inset 0 -3px 5px rgba(0,0,0,.50) !important;
+
+    animation:
+        mainRadarPumpPulse 1.05s ease-in-out infinite !important;
+}
+
+
+/* =========================
+   STRONG PUMP — قرمز
+   ========================= */
+
+.main-radar-crystal-led.strong {
+    border-color: #ff4d4d !important;
+
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #ffffff 0%,
+            #ffd4d4 10%,
+            #ff6969 25%,
+            #f00000 47%,
+            #a50000 70%,
+            #450000 100%
+        ) !important;
+
+    box-shadow:
+        0 0 6px rgba(255,55,55,1),
+        0 0 14px rgba(255,0,0,.90),
+        0 0 26px rgba(255,0,0,.55),
+        inset 0 2px 3px rgba(255,255,255,.70),
+        inset 0 -3px 5px rgba(0,0,0,.55) !important;
+
+    animation:
+        mainRadarStrongPulse .72s ease-in-out infinite !important;
+}
+
+
+/* =========================
+   OFF
+   ========================= */
+
+.main-radar-crystal-led.off {
+    border-color: #3b424b !important;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #aeb5bd 0%,
+            #666e78 20%,
+            #353c45 48%,
+            #171b20 75%,
+            #0b0e12 100%
+        ) !important;
+
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,.18),
+        inset 0 -3px 5px rgba(0,0,0,.65),
+        0 2px 5px rgba(0,0,0,.50) !important;
+}
+
+
+/* =========================
+   ANIMATIONS
+   ========================= */
+
+@keyframes mainRadarPumpPulse {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.10);
+        filter: brightness(1.35);
+    }
+}
+
+
+@keyframes mainRadarStrongPulse {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.14);
+        filter: brightness(1.55);
+    }
+}
+
+</style>
+<style id="main-radar-crystal-led-final-v2">
+
+/* =========================================================
+   MAIN RADAR — FINAL ORB PUMP LIGHT
+   آخرین لایه CSS - فقط برای رادار اصلی
+   ========================================================= */
+
+.main-radar-crystal-led {
+    position: relative !important;
+    display: inline-block !important;
+
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    max-width: 24px !important;
+
+    padding: 0 !important;
+    margin: 0 auto !important;
+
+    border-radius: 50% !important;
+
+    box-sizing: border-box !important;
+
+    font-size: 0 !important;
+    line-height: 0 !important;
+
+    vertical-align: middle !important;
+
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #ffffff 0%,
+            #d9dee5 8%,
+            #737d88 22%,
+            #3b444e 45%,
+            #171c22 72%,
+            #080b0f 100%
+        ) !important;
+
+    border: 2px solid #59636d !important;
+
+    box-shadow:
+        inset 2px 2px 4px rgba(255,255,255,.28),
+        inset -3px -4px 6px rgba(0,0,0,.75),
+        0 2px 5px rgba(0,0,0,.7) !important;
+
+    overflow: visible !important;
+
+    transform: translateZ(0) !important;
+}
+
+
+/* شیشه براق */
+
+.main-radar-crystal-led::before {
+    content: "" !important;
+
+    position: absolute !important;
+
+    top: 3px !important;
+    left: 4px !important;
+
+    width: 9px !important;
+    height: 6px !important;
+
+    border-radius: 50% !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.95),
+            rgba(255,255,255,.15)
+        ) !important;
+
+    filter: blur(.2px) !important;
+
+    opacity: .95 !important;
+
+    pointer-events: none !important;
+
+    z-index: 3 !important;
+}
+
+
+/* حلقه بیرونی */
+
+.main-radar-crystal-led::after {
+    content: "" !important;
+
+    position: absolute !important;
+
+    inset: -3px !important;
+
+    border-radius: 50% !important;
+
+    border: 1px solid rgba(255,255,255,.08) !important;
+
+    box-shadow:
+        inset 0 0 3px rgba(255,255,255,.08) !important;
+
+    pointer-events: none !important;
+
+    z-index: 2 !important;
+}
+
+
+/* =========================
+   WATCH — GOLD
+   ========================= */
+
+.main-radar-crystal-led.watch {
+
+    border-color: #d4bd2c !important;
+
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #fffde9 0%,
+            #fff27a 10%,
+            #e5cd32 27%,
+            #9b890d 53%,
+            #4c4304 78%,
+            #201d02 100%
+        ) !important;
+
+    box-shadow:
+        0 0 5px rgba(255,225,50,.9),
+        0 0 13px rgba(255,205,30,.55),
+        0 0 22px rgba(255,200,0,.22),
+        inset 2px 2px 4px rgba(255,255,255,.5),
+        inset -3px -4px 6px rgba(0,0,0,.55) !important;
+}
+
+
+/* =========================
+   PUMP ALERT — ORANGE
+   ========================= */
+
+.main-radar-crystal-led.pump {
+
+    border-color: #ffad22 !important;
+
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #fffde9 0%,
+            #ffe77a 9%,
+            #ffad16 24%,
+            #ff6500 45%,
+            #c62c00 68%,
+            #501000 100%
+        ) !important;
+
+    box-shadow:
+        0 0 5px rgba(255,180,30,1),
+        0 0 13px rgba(255,105,0,.9),
+        0 0 24px rgba(255,70,0,.5),
+        inset 2px 2px 4px rgba(255,255,255,.65),
+        inset -3px -4px 6px rgba(0,0,0,.6) !important;
+
+    animation:
+        radarOrangePulse 1.05s ease-in-out infinite !important;
+}
+
+
+/* =========================
+   STRONG PUMP — RED
+   ========================= */
+
+.main-radar-crystal-led.strong {
+
+    border-color: #ff5252 !important;
+
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #ffffff 0%,
+            #ffdede 9%,
+            #ff7373 23%,
+            #ff1717 43%,
+            #b90000 66%,
+            #4a0000 100%
+        ) !important;
+
+    box-shadow:
+        0 0 6px rgba(255,55,55,1),
+        0 0 15px rgba(255,0,0,.95),
+        0 0 28px rgba(255,0,0,.6),
+        0 0 42px rgba(255,0,0,.22),
+        inset 2px 2px 4px rgba(255,255,255,.7),
+        inset -3px -4px 6px rgba(0,0,0,.6) !important;
+
+    animation:
+        radarRedPulse .7s ease-in-out infinite !important;
+}
+
+
+/* =========================
+   OFF
+   ========================= */
+
+.main-radar-crystal-led.off {
+
+    border-color: #414952 !important;
+
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #bfc5cb 0%,
+            #858d96 13%,
+            #505862 32%,
+            #292f36 58%,
+            #11151a 82%,
+            #07090c 100%
+        ) !important;
+
+    box-shadow:
+        inset 2px 2px 4px rgba(255,255,255,.20),
+        inset -3px -4px 6px rgba(0,0,0,.75),
+        0 2px 5px rgba(0,0,0,.6) !important;
+
+    animation: none !important;
+}
+
+
+/* =========================
+   ANIMATIONS
+   ========================= */
+
+@keyframes radarOrangePulse {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+        filter: brightness(1.4);
+    }
+}
+
+
+@keyframes radarRedPulse {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.16);
+        filter: brightness(1.55);
+    }
+}
+
+</style>
+<style id="main-radar-crystal-led-v3">
+
+/* =========================================================
+   MAIN RADAR — CRYSTAL PUMP LED V3
+   Completely independent from old .alarm-* styling
+   ========================================================= */
+
+.main-radar-crystal-led {
+    position: relative !important;
+
+    display: inline-block !important;
+
+    width: 22px !important;
+    height: 22px !important;
+
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    margin: 0 auto !important;
+    padding: 0 !important;
+
+    border-radius: 50% !important;
+
+    font-size: 0 !important;
+    line-height: 0 !important;
+
+    vertical-align: middle !important;
+
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            rgba(255,255,255,.95) 0%,
+            rgba(255,255,255,.42) 8%,
+            rgba(70,78,90,.95) 24%,
+            rgba(25,30,38,1) 58%,
+            rgba(8,11,16,1) 100%
+        ) !important;
+
+    border: 1px solid rgba(125,140,160,.8) !important;
+
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,.55),
+        inset 0 -2px 4px rgba(0,0,0,.85),
+        0 1px 3px rgba(0,0,0,.8) !important;
+
+    transition:
+        background .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease !important;
+}
+
+
+/* شیشه / انعکاس بالای LED */
+
+.main-radar-crystal-led::before {
+    content: "" !important;
+
+    position: absolute !important;
+
+    top: 3px !important;
+    left: 5px !important;
+
+    width: 7px !important;
+    height: 4px !important;
+
+    border-radius: 70% 40% 60% 30% !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.95),
+            rgba(255,255,255,.35),
+            transparent
+        ) !important;
+
+    transform: rotate(-18deg) !important;
+
+    pointer-events: none !important;
+
+    z-index: 3 !important;
+}
+
+
+/* هاله‌ی بیرونی */
+
+.main-radar-crystal-led::after {
+    content: "" !important;
+
+    position: absolute !important;
+
+    inset: -5px !important;
+
+    border-radius: 50% !important;
+
+    background: transparent !important;
+
+    border: 1px solid transparent !important;
+
+    pointer-events: none !important;
+
+    z-index: -1 !important;
+}
+
+
+/* =========================================================
+   OFF
+   ========================================================= */
+
+.main-radar-crystal-led.off {
+    opacity: .48 !important;
+
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #d9dde2 0%,
+            #737b85 16%,
+            #343b44 42%,
+            #151a20 72%,
+            #080b0f 100%
+        ) !important;
+
+    border-color: #56606c !important;
+
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,.3),
+        inset 0 -2px 4px rgba(0,0,0,.9),
+        0 1px 3px rgba(0,0,0,.7) !important;
+}
+
+
+/* =========================================================
+   WATCH — GOLD
+   ========================================================= */
+
+.main-radar-crystal-led.watch {
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #fffde8 0%,
+            #fff58a 12%,
+            #d6c52b 30%,
+            #807412 58%,
+            #292605 100%
+        ) !important;
+
+    border-color: #e6d84a !important;
+
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,.8),
+        inset 0 -2px 4px rgba(45,40,0,.8),
+        0 0 6px rgba(255,225,40,.75),
+        0 0 14px rgba(255,205,0,.35) !important;
+}
+
+
+/* =========================================================
+   PUMP — ORANGE / AMBER
+   ========================================================= */
+
+.main-radar-crystal-led.pump {
+    background:
+        radial-gradient(
+            circle at 30% 23%,
+            #ffffff 0%,
+            #fff4b0 8%,
+            #ffd43b 20%,
+            #ff8a00 40%,
+            #d83b00 68%,
+            #541000 100%
+        ) !important;
+
+    border-color: #ffb52e !important;
+
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,.9),
+        inset 0 -3px 5px rgba(80,20,0,.8),
+        0 0 5px #ffb300,
+        0 0 12px rgba(255,120,0,.9),
+        0 0 22px rgba(255,70,0,.42) !important;
+
+    animation:
+        mainRadarCrystalPump 1.05s ease-in-out infinite !important;
+}
+
+
+/* =========================================================
+   STRONG PUMP — RED
+   ========================================================= */
+
+.main-radar-crystal-led.strong {
+    background:
+        radial-gradient(
+            circle at 30% 23%,
+            #ffffff 0%,
+            #ffdcdc 8%,
+            #ff7777 20%,
+            #ff2525 40%,
+            #bd0000 68%,
+            #4c0000 100%
+        ) !important;
+
+    border-color: #ff6666 !important;
+
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,.95),
+        inset 0 -3px 5px rgba(80,0,0,.85),
+        0 0 6px #ff3b3b,
+        0 0 14px rgba(255,0,0,.95),
+        0 0 25px rgba(255,0,0,.5) !important;
+
+    animation:
+        mainRadarCrystalStrong 0.78s ease-in-out infinite !important;
+}
+
+
+/* =========================================================
+   PUMP PULSE
+   ========================================================= */
+
+@keyframes mainRadarCrystalPump {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+        filter: brightness(1.35);
+    }
+}
+
+
+/* =========================================================
+   STRONG PUMP PULSE
+   ========================================================= */
+
+@keyframes mainRadarCrystalStrong {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.16);
+        filter: brightness(1.55);
+    }
+}
+
+
+/* =========================================================
+   MAIN RADAR ALARM CELL
+   ========================================================= */
+
+td:has(.main-radar-crystal-led) {
+    text-align: center !important;
+    vertical-align: middle !important;
+
+    min-width: 54px !important;
+    width: 54px !important;
+}
+
+
+/* Prevent old alarm sizing from affecting the new LED */
+
+.main-radar-crystal-led,
+.main-radar-crystal-led::before,
+.main-radar-crystal-led::after {
+    box-sizing: border-box !important;
+}
+
+</style>
+<style id="main-radar-crystal-v3-authority">
+
+/* =========================================================
+   MAIN RADAR CRYSTAL V3 — FINAL AUTHORITY
+   Only this block controls the main radar pump lamp.
+   ========================================================= */
+
+.main-radar-crystal-led {
+    position: relative !important;
+    display: inline-block !important;
+
+    width: 24px !important;
+    height: 24px !important;
+
+    min-width: 24px !important;
+    max-width: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+
+    margin: 0 auto !important;
+    padding: 0 !important;
+
+    border-radius: 50% !important;
+    box-sizing: border-box !important;
+
+    font-size: 0 !important;
+    line-height: 0 !important;
+
+    vertical-align: middle !important;
+
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #ffffff 0%,
+            #f5f7fa 7%,
+            #aeb7c2 16%,
+            #4d5865 34%,
+            #1d242d 62%,
+            #080b10 100%
+        ) !important;
+
+    border: 2px solid #687583 !important;
+
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,.65),
+        inset 0 -3px 5px rgba(0,0,0,.9),
+        0 2px 4px rgba(0,0,0,.75) !important;
+
+    transform: translateZ(0);
+}
+
+
+/* Glass highlight */
+
+.main-radar-crystal-led::before {
+    content: "" !important;
+
+    position: absolute !important;
+
+    top: 3px !important;
+    left: 5px !important;
+
+    width: 9px !important;
+    height: 5px !important;
+
+    border-radius: 80% 40% 70% 30% !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,1),
+            rgba(255,255,255,.45),
+            rgba(255,255,255,0)
+        ) !important;
+
+    transform: rotate(-18deg) !important;
+
+    pointer-events: none !important;
+
+    z-index: 5 !important;
+}
+
+
+/* Outer aura */
+
+.main-radar-crystal-led::after {
+    content: "" !important;
+
+    position: absolute !important;
+
+    inset: -5px !important;
+
+    border-radius: 50% !important;
+
+    background: transparent !important;
+
+    border: 1px solid transparent !important;
+
+    pointer-events: none !important;
+
+    z-index: -1 !important;
+}
+
+
+/* OFF */
+
+.main-radar-crystal-led.off {
+    opacity: .55 !important;
+
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #dfe4e9 0%,
+            #89929c 16%,
+            #424a54 38%,
+            #1d232b 68%,
+            #080b0f 100%
+        ) !important;
+
+    border-color: #59636e !important;
+
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,.35),
+        inset 0 -3px 5px rgba(0,0,0,.9),
+        0 2px 4px rgba(0,0,0,.7) !important;
+}
+
+
+/* WATCH */
+
+.main-radar-crystal-led.watch {
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #fffef0 0%,
+            #fff68c 10%,
+            #e4d23c 27%,
+            #9b8b12 55%,
+            #332e04 100%
+        ) !important;
+
+    border-color: #ead84a !important;
+
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,.85),
+        inset 0 -3px 5px rgba(50,40,0,.85),
+        0 0 6px rgba(255,225,50,.85),
+        0 0 16px rgba(255,205,0,.4) !important;
+}
+
+
+/* PUMP */
+
+.main-radar-crystal-led.pump {
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #ffffff 0%,
+            #fff5ad 8%,
+            #ffd83d 20%,
+            #ff9200 39%,
+            #df4000 66%,
+            #5c1200 100%
+        ) !important;
+
+    border-color: #ffb62e !important;
+
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,.95),
+        inset 0 -3px 5px rgba(80,20,0,.9),
+        0 0 6px #ffbd28,
+        0 0 15px rgba(255,115,0,.95),
+        0 0 28px rgba(255,65,0,.45) !important;
+
+    animation:
+        mainRadarCrystalV3Pump 1.05s ease-in-out infinite !important;
+}
+
+
+/* STRONG PUMP */
+
+.main-radar-crystal-led.strong {
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #ffffff 0%,
+            #ffe1e1 8%,
+            #ff7777 19%,
+            #ff2424 39%,
+            #c40000 66%,
+            #4c0000 100%
+        ) !important;
+
+    border-color: #ff6666 !important;
+
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,.95),
+        inset 0 -3px 5px rgba(80,0,0,.9),
+        0 0 7px #ff4040,
+        0 0 17px rgba(255,0,0,.95),
+        0 0 30px rgba(255,0,0,.5) !important;
+
+    animation:
+        mainRadarCrystalV3Strong .78s ease-in-out infinite !important;
+}
+
+
+@keyframes mainRadarCrystalV3Pump {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.13);
+        filter: brightness(1.4);
+    }
+}
+
+
+@keyframes mainRadarCrystalV3Strong {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.17);
+        filter: brightness(1.55);
+    }
+}
+
+
+/* Main radar alarm cell */
+
+td:has(.main-radar-crystal-led) {
+    width: 58px !important;
+    min-width: 58px !important;
+    max-width: 58px !important;
+
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+</style>
+<style id="main-radar-crystal-final-authority">
+
+/* =========================================================
+   MAIN RADAR — CRYSTAL CORE LED
+   FINAL AUTHORITY
+   ========================================================= */
+
+.main-radar-crystal-led {
+    position: relative !important;
+    display: inline-block !important;
+
+    width: 18px !important;
+    height: 18px !important;
+
+    min-width: 18px !important;
+    max-width: 18px !important;
+    min-height: 18px !important;
+    max-height: 18px !important;
+
+    margin: 0 auto !important;
+    padding: 0 !important;
+
+    border-radius: 50% !important;
+
+    font-size: 0 !important;
+    line-height: 0 !important;
+
+    vertical-align: middle !important;
+
+    box-sizing: border-box !important;
+
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #ffffff 0%,
+            #dce4ec 9%,
+            #778594 24%,
+            #303944 48%,
+            #11161d 78%,
+            #05070a 100%
+        ) !important;
+
+    border: 1px solid rgba(190,205,220,.75) !important;
+
+    box-shadow:
+        inset 2px 2px 3px rgba(255,255,255,.55),
+        inset -2px -3px 4px rgba(0,0,0,.9),
+        0 1px 3px rgba(0,0,0,.8) !important;
+
+    transition:
+        transform .18s ease,
+        filter .18s ease,
+        box-shadow .18s ease !important;
+
+    z-index: 1 !important;
+}
+
+
+/* =========================================================
+   CRYSTAL HIGHLIGHT
+   ========================================================= */
+
+.main-radar-crystal-led::before {
+    content: "" !important;
+
+    position: absolute !important;
+
+    top: 2px !important;
+    left: 3px !important;
+
+    width: 6px !important;
+    height: 4px !important;
+
+    border-radius: 70% 45% 65% 35% !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,1),
+            rgba(255,255,255,.65),
+            rgba(255,255,255,0)
+        ) !important;
+
+    transform: rotate(-18deg) !important;
+
+    box-shadow:
+        0 0 2px rgba(255,255,255,.8) !important;
+
+    pointer-events: none !important;
+
+    z-index: 4 !important;
+}
+
+
+/* =========================================================
+   OUTER CRYSTAL RING
+   ========================================================= */
+
+.main-radar-crystal-led::after {
+    content: "" !important;
+
+    position: absolute !important;
+
+    inset: -4px !important;
+
+    border-radius: 50% !important;
+
+    border: 1px solid rgba(130,145,160,.35) !important;
+
+    background: transparent !important;
+
+    box-shadow:
+        inset 0 0 3px rgba(255,255,255,.12) !important;
+
+    pointer-events: none !important;
+
+    z-index: -1 !important;
+}
+
+
+/* =========================================================
+   OFF
+   ========================================================= */
+
+.main-radar-crystal-led.off {
+    opacity: .55 !important;
+
+    filter: saturate(.25) brightness(.75) !important;
+
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #d5d9de 0%,
+            #727b85 14%,
+            #3b434d 35%,
+            #171c23 70%,
+            #080b0f 100%
+        ) !important;
+
+    border-color: #59636e !important;
+
+    box-shadow:
+        inset 2px 2px 3px rgba(255,255,255,.28),
+        inset -2px -3px 4px rgba(0,0,0,.9),
+        0 1px 3px rgba(0,0,0,.7) !important;
+}
+
+
+/* =========================================================
+   WATCH — GOLD CRYSTAL
+   ========================================================= */
+
+.main-radar-crystal-led.watch {
+    background:
+        radial-gradient(
+            circle at 32% 24%,
+            #ffffff 0%,
+            #fffbc4 8%,
+            #f3e85a 20%,
+            #c2ae18 43%,
+            #695d08 70%,
+            #211e02 100%
+        ) !important;
+
+    border-color: #f1dd43 !important;
+
+    box-shadow:
+        inset 2px 2px 3px rgba(255,255,255,.85),
+        inset -2px -3px 4px rgba(70,55,0,.75),
+        0 0 5px rgba(255,225,40,.9),
+        0 0 12px rgba(255,205,0,.55) !important;
+}
+
+
+/* =========================================================
+   PUMP — ELECTRIC AMBER CRYSTAL
+   ========================================================= */
+
+.main-radar-crystal-led.pump {
+    background:
+        radial-gradient(
+            circle at 31% 23%,
+            #ffffff 0%,
+            #fff7c4 8%,
+            #ffd83d 19%,
+            #ff9a00 38%,
+            #ef4b00 61%,
+            #751900 82%,
+            #270700 100%
+        ) !important;
+
+    border-color: #ffc14a !important;
+
+    box-shadow:
+        inset 2px 2px 3px rgba(255,255,255,.9),
+        inset -2px -3px 5px rgba(75,20,0,.85),
+        0 0 5px #ffbd25,
+        0 0 11px rgba(255,130,0,.95),
+        0 0 20px rgba(255,75,0,.5) !important;
+
+    animation:
+        mainRadarCrystalPumpFinal 1.05s ease-in-out infinite !important;
+}
+
+
+/* =========================================================
+   STRONG — RED CRYSTAL
+   ========================================================= */
+
+.main-radar-crystal-led.strong {
+    background:
+        radial-gradient(
+            circle at 31% 23%,
+            #ffffff 0%,
+            #ffe5e5 8%,
+            #ff8b8b 19%,
+            #ff3434 38%,
+            #d00000 62%,
+            #700000 82%,
+            #270000 100%
+        ) !important;
+
+    border-color: #ff7474 !important;
+
+    box-shadow:
+        inset 2px 2px 3px rgba(255,255,255,.95),
+        inset -2px -3px 5px rgba(80,0,0,.9),
+        0 0 5px #ff4141,
+        0 0 12px rgba(255,0,0,1),
+        0 0 22px rgba(255,0,0,.6) !important;
+
+    animation:
+        mainRadarCrystalStrongFinal .78s ease-in-out infinite !important;
+}
+
+
+/* =========================================================
+   PUMP ANIMATION
+   ========================================================= */
+
+@keyframes mainRadarCrystalPumpFinal {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+        filter: brightness(1.4);
+    }
+}
+
+
+/* =========================================================
+   STRONG ANIMATION
+   ========================================================= */
+
+@keyframes mainRadarCrystalStrongFinal {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.16);
+        filter: brightness(1.6);
+    }
+}
+
+
+/* =========================================================
+   ALARM CELL
+   ========================================================= */
+
+td:has(.main-radar-crystal-led) {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+
+/* Make sure old alarm styles cannot resize the new lamp */
+
+td:has(.main-radar-crystal-led) .alarm-strong,
+td:has(.main-radar-crystal-led) .alarm-pump,
+td:has(.main-radar-crystal-led) .alarm-watch,
+td:has(.main-radar-crystal-led) .alarm-none {
+    all: unset !important;
+}
+
+</style>
+<style id="main-radar-pill-lamp-final">
+
+/* =========================================================
+   MAIN RADAR — PILL / LENS PUMP LAMP
+   ========================================================= */
+
+.main-radar-crystal-led {
+    position: relative !important;
+
+    display: inline-block !important;
+
+    width: 34px !important;
+    height: 12px !important;
+
+    min-width: 34px !important;
+    max-width: 34px !important;
+
+    min-height: 12px !important;
+    max-height: 12px !important;
+
+    margin: 2px auto !important;
+    padding: 0 !important;
+
+    border-radius: 999px !important;
+
+    font-size: 0 !important;
+    line-height: 0 !important;
+
+    vertical-align: middle !important;
+
+    box-sizing: border-box !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            #8b949e 0%,
+            #343b44 42%,
+            #11151b 100%
+        ) !important;
+
+    border: 1px solid #697581 !important;
+
+    box-shadow:
+        inset 0 2px 2px rgba(255,255,255,.35),
+        inset 0 -2px 3px rgba(0,0,0,.9),
+        0 1px 3px rgba(0,0,0,.8) !important;
+
+    overflow: visible !important;
+
+    transition:
+        background .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease !important;
+}
+
+
+/* شیشه براق روی چراغ */
+
+.main-radar-crystal-led::before {
+    content: "" !important;
+
+    position: absolute !important;
+
+    left: 5px !important;
+    right: 5px !important;
+    top: 2px !important;
+
+    height: 3px !important;
+
+    border-radius: 999px !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.9),
+            rgba(255,255,255,.35),
+            transparent
+        ) !important;
+
+    pointer-events: none !important;
+
+    z-index: 3 !important;
+}
+
+
+/* هاله‌ی بیرونی */
+
+.main-radar-crystal-led::after {
+    content: "" !important;
+
+    position: absolute !important;
+
+    left: -4px !important;
+    right: -4px !important;
+    top: -4px !important;
+    bottom: -4px !important;
+
+    border-radius: 999px !important;
+
+    border: 1px solid transparent !important;
+
+    pointer-events: none !important;
+
+    z-index: -1 !important;
+}
+
+
+/* =========================================================
+   OFF
+   ========================================================= */
+
+.main-radar-crystal-led.off {
+    opacity: .42 !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            #8b9299,
+            #363d45 45%,
+            #101419
+        ) !important;
+
+    border-color: #555f69 !important;
+
+    box-shadow:
+        inset 0 2px 2px rgba(255,255,255,.25),
+        inset 0 -2px 3px rgba(0,0,0,.9),
+        0 1px 2px rgba(0,0,0,.7) !important;
+}
+
+
+/* =========================================================
+   WATCH — GOLD
+   ========================================================= */
+
+.main-radar-crystal-led.watch {
+    background:
+        linear-gradient(
+            180deg,
+            #fffbd0 0%,
+            #e8d83e 30%,
+            #a58f09 62%,
+            #403800 100%
+        ) !important;
+
+    border-color: #f4dc43 !important;
+
+    box-shadow:
+        inset 0 2px 2px rgba(255,255,255,.8),
+        inset 0 -2px 3px rgba(70,50,0,.8),
+        0 0 5px rgba(255,225,50,.9),
+        0 0 14px rgba(255,205,0,.45) !important;
+}
+
+
+/* =========================================================
+   PUMP — ORANGE
+   ========================================================= */
+
+.main-radar-crystal-led.pump {
+    background:
+        linear-gradient(
+            180deg,
+            #fff6b0 0%,
+            #ffd32f 20%,
+            #ff8500 52%,
+            #d93600 78%,
+            #651000 100%
+        ) !important;
+
+    border-color: #ffbd38 !important;
+
+    box-shadow:
+        inset 0 2px 2px rgba(255,255,255,.9),
+        inset 0 -2px 3px rgba(80,20,0,.85),
+        0 0 5px #ffbd28,
+        0 0 12px rgba(255,115,0,.95),
+        0 0 22px rgba(255,70,0,.45) !important;
+
+    animation:
+        mainRadarPillPump 1s ease-in-out infinite !important;
+}
+
+
+/* =========================================================
+   STRONG PUMP — RED
+   ========================================================= */
+
+.main-radar-crystal-led.strong {
+    background:
+        linear-gradient(
+            180deg,
+            #ffeaea 0%,
+            #ff7777 20%,
+            #ff2222 50%,
+            #c80000 76%,
+            #5d0000 100%
+        ) !important;
+
+    border-color: #ff7070 !important;
+
+    box-shadow:
+        inset 0 2px 2px rgba(255,255,255,.95),
+        inset 0 -2px 3px rgba(80,0,0,.9),
+        0 0 5px #ff3c3c,
+        0 0 13px rgba(255,0,0,1),
+        0 0 24px rgba(255,0,0,.55) !important;
+
+    animation:
+        mainRadarPillStrong .72s ease-in-out infinite !important;
+}
+
+
+/* =========================================================
+   PUMP PULSE
+   ========================================================= */
+
+@keyframes mainRadarPillPump {
+
+    0%, 100% {
+        transform: scaleX(1) scaleY(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scaleX(1.08) scaleY(1.18);
+        filter: brightness(1.4);
+    }
+}
+
+
+/* =========================================================
+   STRONG PUMP PULSE
+   ========================================================= */
+
+@keyframes mainRadarPillStrong {
+
+    0%, 100% {
+        transform: scaleX(1) scaleY(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scaleX(1.1) scaleY(1.22);
+        filter: brightness(1.6);
+    }
+}
+
+
+/* سلول Alarm فقط اندازه مناسب چراغ داشته باشد */
+
+td:has(.main-radar-crystal-led) {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+</style>
+<style id="main-radar-pink-pump-final">
+
+/* PUMP ALERT — PINK BLINKING LED */
+
+.main-radar-crystal-led.pump {
+    background:
+        linear-gradient(
+            180deg,
+            #fff0fa 0%,
+            #ffb3df 18%,
+            #ff4fba 42%,
+            #e90086 68%,
+            #72003f 100%
+        ) !important;
+
+    border-color: #ff72c8 !important;
+
+    box-shadow:
+        inset 0 2px 2px rgba(255,255,255,.9),
+        inset 0 -2px 3px rgba(90,0,55,.8),
+        0 0 5px #ff55bd,
+        0 0 13px rgba(255,0,150,.95),
+        0 0 25px rgba(255,0,150,.55) !important;
+
+    animation:
+        mainRadarPinkPump 0.85s ease-in-out infinite !important;
+}
+
+
+/* Pink blinking pulse */
+
+@keyframes mainRadarPinkPump {
+
+    0%, 100% {
+        opacity: .72;
+        transform: scaleX(1) scaleY(1);
+        filter: brightness(.9);
+        box-shadow:
+            inset 0 2px 2px rgba(255,255,255,.75),
+            0 0 4px rgba(255,70,190,.7),
+            0 0 9px rgba(255,0,150,.45);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scaleX(1.1) scaleY(1.18);
+        filter: brightness(1.45);
+        box-shadow:
+            inset 0 2px 2px rgba(255,255,255,1),
+            0 0 7px #ff63c5,
+            0 0 16px rgba(255,0,160,1),
+            0 0 28px rgba(255,0,160,.7);
+    }
+}
+
+</style>
+<style id="main-radar-pink-pump-ultimate">
+
+/* =========================================================
+   PUMP ALERT = PINK BLINKING
+   FINAL OVERRIDE
+   ========================================================= */
+
+.main-radar-crystal-led.pump {
+    background: linear-gradient(
+        180deg,
+        #fff5fc 0%,
+        #ffb7e3 18%,
+        #ff55bd 40%,
+        #ec008c 68%,
+        #720044 100%
+    ) !important;
+
+    border: 1px solid #ff7bce !important;
+
+    opacity: 1 !important;
+
+    box-shadow:
+        inset 0 2px 2px rgba(255,255,255,.95),
+        inset 0 -2px 3px rgba(90,0,55,.85),
+        0 0 5px #ff5bc4,
+        0 0 14px #ff009d,
+        0 0 28px rgba(255,0,160,.7) !important;
+
+    animation:
+        radarPinkBlink .65s ease-in-out infinite !important;
+}
+
+
+/* براق شدن خود چراغ */
+
+.main-radar-crystal-led.pump::before {
+    background:
+        linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255,255,255,.95) 35%,
+            rgba(255,220,245,.9) 50%,
+            transparent 100%
+        ) !important;
+
+    opacity: 1 !important;
+}
+
+
+/* هاله صورتی */
+
+.main-radar-crystal-led.pump::after {
+    border-color: rgba(255,0,160,.65) !important;
+
+    box-shadow:
+        0 0 7px rgba(255,0,160,.8),
+        0 0 16px rgba(255,0,160,.55) !important;
+
+    animation:
+        radarPinkHalo .65s ease-in-out infinite !important;
+}
+
+
+/* چشمک واقعی */
+
+@keyframes radarPinkBlink {
+
+    0%, 100% {
+        opacity: .65 !important;
+        filter: brightness(.85) saturate(1.15);
+
+        transform:
+            scaleX(1)
+            scaleY(1);
+    }
+
+    50% {
+        opacity: 1 !important;
+        filter: brightness(1.65) saturate(1.5);
+
+        transform:
+            scaleX(1.10)
+            scaleY(1.22);
+    }
+}
+
+
+@keyframes radarPinkHalo {
+
+    0%, 100% {
+        opacity: .45;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.12);
+    }
+}
+
+</style>
+<style id="main-radar-pink-pump-authority">
+
+/* =========================================================
+   MAIN RADAR — PUMP = PINK BLINKING
+   Final authority override
+   ========================================================= */
+
+.main-radar-crystal-led.pump {
+    background:
+        radial-gradient(
+            circle at 30% 22%,
+            #ffffff 0%,
+            #ffe6f5 8%,
+            #ffb6df 20%,
+            #ff4fba 38%,
+            #e60082 62%,
+            #72003f 100%
+        ) !important;
+
+    border-color: #ff7acb !important;
+
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,.95),
+        inset 0 -3px 5px rgba(90,0,55,.85),
+        0 0 5px #ff8bd3,
+        0 0 12px rgba(255,40,170,.95),
+        0 0 24px rgba(255,0,140,.65),
+        0 0 38px rgba(255,0,150,.35) !important;
+
+    animation:
+        mainRadarPinkPumpBlink 0.85s ease-in-out infinite !important;
+}
+
+
+/* شیشه / انعکاس صورتی */
+
+.main-radar-crystal-led.pump::before {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,1),
+            rgba(255,235,250,.75),
+            rgba(255,120,200,.15),
+            transparent
+        ) !important;
+}
+
+
+/* هاله‌ی صورتی هنگام پامپ */
+
+.main-radar-crystal-led.pump::after {
+    border-color: rgba(255,70,190,.75) !important;
+    box-shadow:
+        0 0 8px rgba(255,40,170,.8),
+        0 0 18px rgba(255,0,150,.5) !important;
+
+    animation:
+        mainRadarPinkHalo 0.85s ease-in-out infinite !important;
+}
+
+
+/* چشمک + کمی بزرگ شدن */
+
+@keyframes mainRadarPinkPumpBlink {
+
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+        opacity: .92;
+    }
+
+    50% {
+        transform: scale(1.12);
+        filter: brightness(1.55);
+        opacity: 1;
+    }
+}
+
+
+/* ضربان هاله */
+
+@keyframes mainRadarPinkHalo {
+
+    0%, 100% {
+        opacity: .35;
+        transform: scale(.92);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.12);
+    }
+}
+
+</style>
+<script id="main-radar-pump-sound">
+
+/* =========================================================
+   MAIN RADAR — SOFT PUMP SOUND
+   Plays only when alarm state changes into a pump state
+   ========================================================= */
+
+(function () {
+
+    let lastPumpSoundState = "NONE";
+    let pumpAudioContext = null;
+
+    function getAudioContext() {
+
+        if (!pumpAudioContext) {
+            const AudioCtx =
+                window.AudioContext ||
+                window.webkitAudioContext;
+
+            if (!AudioCtx) return null;
+
+            pumpAudioContext = new AudioCtx();
+        }
+
+        if (pumpAudioContext.state === "suspended") {
+            pumpAudioContext.resume().catch(() => {});
+        }
+
+        return pumpAudioContext;
+    }
+
+
+    function playSoftPumpTone(strong) {
+
+        const ctx = getAudioContext();
+
+        if (!ctx) return;
+
+        const now = ctx.currentTime;
+
+        /*
+         * Two very soft tones.
+         * PUMP = warm soft chime
+         * STRONG = slightly brighter chime
+         */
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = "sine";
+
+        osc.frequency.setValueAtTime(
+            strong ? 880 : 660,
+            now
+        );
+
+        osc.frequency.exponentialRampToValueAtTime(
+            strong ? 1046 : 784,
+            now + 0.16
+        );
+
+        gain.gain.setValueAtTime(0.0001, now);
+
+        gain.gain.exponentialRampToValueAtTime(
+            strong ? 0.055 : 0.038,
+            now + 0.025
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            now + 0.42
+        );
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.45);
+
+
+        /*
+         * Very soft second harmonic
+         */
+
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+
+        osc2.type = "sine";
+
+        osc2.frequency.setValueAtTime(
+            strong ? 1318 : 988,
+            now
+        );
+
+        gain2.gain.setValueAtTime(0.0001, now);
+
+        gain2.gain.exponentialRampToValueAtTime(
+            strong ? 0.018 : 0.012,
+            now + 0.035
+        );
+
+        gain2.gain.exponentialRampToValueAtTime(
+            0.0001,
+            now + 0.32
+        );
+
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+
+        osc2.start(now);
+        osc2.stop(now + 0.35);
+    }
+
+
+    /*
+     * Called by the radar whenever pumpAlarm is evaluated.
+     */
+
+    window.mainRadarPumpSound = function (state) {
+
+        state = String(state || "NONE").toUpperCase();
+
+        const isPump =
+            state === "PUMP_ALERT" ||
+            state === "STRONG_PUMP";
+
+        const wasPump =
+            lastPumpSoundState === "PUMP_ALERT" ||
+            lastPumpSoundState === "STRONG_PUMP";
+
+        /*
+         * Sound only on transition:
+         *
+         * NONE -> PUMP
+         * WATCH -> PUMP
+         * PUMP -> STRONG
+         *
+         * Never repeatedly on every refresh.
+         */
+
+        if (isPump && (!wasPump || state !== lastPumpSoundState)) {
+
+            playSoftPumpTone(
+                state === "STRONG_PUMP"
+            );
+
+        }
+
+        lastPumpSoundState = state;
+    };
+
+
+    /*
+     * Browser audio unlock.
+     * A single user interaction enables the AudioContext.
+     */
+
+    function unlockPumpAudio() {
+
+        const ctx = getAudioContext();
+
+        if (ctx && ctx.state === "suspended") {
+            ctx.resume().catch(() => {});
+        }
+    }
+
+    document.addEventListener(
+        "click",
+        unlockPumpAudio,
+        { passive: true }
+    );
+
+    document.addEventListener(
+        "touchstart",
+        unlockPumpAudio,
+        { passive: true }
+    );
+
+    document.addEventListener(
+        "keydown",
+        unlockPumpAudio,
+        { passive: true }
+    );
+
+})();
+
+</script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+<style id="compact-contract-column">
+.contract {
+    width: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+    padding: 4px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+.contract .copy-btn {
+    margin: 0 !important;
+    padding: 4px 6px !important;
+    font-size: 13px !important;
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
