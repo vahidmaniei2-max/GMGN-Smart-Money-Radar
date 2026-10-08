@@ -1,4 +1,4 @@
-﻿const http = require("http");
+const http = require("http");
 const { execFile } = require("child_process");
 const fs = require("fs");
 
@@ -1576,7 +1576,9 @@ if (req.url.startsWith("/api/sniper-4h-live") && req.method === "GET") {
 
                 const ageH = (now - listing) / 3600;
 
-                return ageH >= 4 && ageH < 8;
+                const signalTime = Number(t.liveSecondCandleSignal.signalTime || 0);
+                const signalAgeH = signalTime > 0 ? (signalTime - listing) / 3600 : -1;
+                return signalAgeH >= 4 && signalAgeH < 8;
             })
             .sort((x, y) =>
                 Number((y.liveSecondCandleSignal && y.liveSecondCandleSignal.signalTime) || 0) -

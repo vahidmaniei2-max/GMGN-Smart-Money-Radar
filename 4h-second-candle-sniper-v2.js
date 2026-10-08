@@ -1,4 +1,4 @@
-﻿
+
 /*
 ============================================================
  GMGN 4H SECOND CANDLE SNIPER V1
@@ -929,9 +929,8 @@ function evaluateToken(token, now) {
       Once Candle 2 ends, the live signal is no longer active.
       Keep historical outcome analysis untouched.
     */
-    if (ageH >= CANDLE2_END_H) {
-        token.liveSecondCandleSignal = null;
-    }
+    // Keep the live signal in history after Candle 2 ends.
+    // The API will decide whether it is still a valid live Candle-2 signal.
 
     /*
       Original historical 32h outcome engine.
