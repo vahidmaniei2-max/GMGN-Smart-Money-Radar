@@ -13,14 +13,14 @@ const HISTORY_FILE =
 const ENV_FILE =
     path.join(__dirname, ".env");
 
-const MIN_MC = 30000;
-const MAX_MC = 500000;
+const MIN_MC = 50000;
+const MAX_MC = Number.POSITIVE_INFINITY;
 
 const MIN_HOLDERS = 300;
 const MAX_HOLDERS = 10000;
 
-const MIN_AGE_DAYS = 0.1666666667;
-const MAX_AGE_DAYS = 1;
+const MIN_AGE_DAYS = 7;
+const MAX_AGE_DAYS = Number.POSITIVE_INFINITY;
 const WATCHLIST_FILE =
     path.join(__dirname, "radar-watchlist.json");
 
@@ -2309,7 +2309,7 @@ try {
 }
 setInterval(
     takeSnapshot,
-    60 * 1000
+    15 * 1000
 );
 
 takeSnapshot();
