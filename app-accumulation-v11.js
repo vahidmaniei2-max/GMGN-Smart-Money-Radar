@@ -2309,7 +2309,7 @@ try {
 }
 setInterval(
     takeSnapshot,
-    15 * 1000
+    60 * 1000
 );
 
 takeSnapshot();
