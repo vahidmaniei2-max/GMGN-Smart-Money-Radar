@@ -111,21 +111,22 @@ async function syncSupabase(db, now) {
         return;
     }
 
-    const tokens = Object.values(db.tokens || {});
+    const tokens = Object.values(db.tokens || {}).filter(token => token && (token.address || token.mint || token.tokenAddress));
     const batchSize = 20;
     for (let i = 0; i < tokens.length; i += batchSize) {
         const rows = tokens.slice(i, i + batchSize).map(token => ({
+            address: String(token.address || token.mint || token.tokenAddress).trim(),
             token_data: token,
             updated_at: new Date(now * 1000).toISOString()
         }));
 
-        const response = await fetch(base + "/rest/v1/sniper_history", {
+        const response = await fetch(base + "/rest/v1/sniper_history?on_conflict=address", {
             method: "POST",
             headers: {
                 "apikey": key,
                 "Authorization": "Bearer " + key,
                 "Content-Type": "application/json",
-                "Prefer": "return=minimal"
+                "Prefer": "resolution=merge-duplicates,return=minimal"
             },
             body: JSON.stringify(rows),
             signal: AbortSignal.timeout(30000)
@@ -1258,7 +1259,7 @@ function fetchGMGN(callback) {
 
     try {
         if (!require('fs').existsSync(cachePath)) {
-            log('GMGN SHARED CACHE NOT FOUND — waiting for Main Radar');
+            log('GMGN SHARED CACHE NOT FOUND â€” waiting for Main Radar');
             callback(new Error('GMGN_SHARED_CACHE_NOT_FOUND'));
             return;
         }
@@ -1563,5 +1564,3 @@ function main() {
 }
 
 main();
-
-
