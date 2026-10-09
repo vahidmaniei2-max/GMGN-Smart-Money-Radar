@@ -1389,7 +1389,7 @@ function runCycle() {
                 report
             );
 
-            syncSupabase(db, now).catch(e => log("SUPABASE SYNC ERROR", e.message));
+            syncSupabase(db, now).catch(e => log("SUPABASE SYNC ERROR", e.message, e.cause ? String(e.cause) : "", e.stack ? e.stack.split("\n").slice(0,3).join(" | ") : ""));
 
             log(
                 "SNAPSHOT END",
