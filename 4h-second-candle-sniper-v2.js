@@ -103,6 +103,41 @@ function saveJson(file, data) {
     fs.renameSync(tmp, file);
 }
 
+async function syncSupabase(db, now) {
+    const base = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
+    const key = process.env.SUPABASE_SECRET_KEY || "";
+    if (!base || !key) {
+        log("SUPABASE SKIP", "missing server environment variables");
+        return;
+    }
+
+    const tokens = Object.values(db.tokens || {});
+    const batchSize = 20;
+    for (let i = 0; i < tokens.length; i += batchSize) {
+        const rows = tokens.slice(i, i + batchSize).map(token => ({
+            token_data: token,
+            updated_at: new Date(now * 1000).toISOString()
+        }));
+
+        const response = await fetch(base + "/rest/v1/sniper_history", {
+            method: "POST",
+            headers: {
+                "apikey": key,
+                "Authorization": "Bearer " + key,
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal"
+            },
+            body: JSON.stringify(rows),
+            signal: AbortSignal.timeout(30000)
+        });
+
+        if (!response.ok) {
+            const detail = (await response.text()).slice(0, 500);
+            throw new Error("HTTP " + response.status + ": " + detail);
+        }
+    }
+    log("SUPABASE SYNC OK", "tokens=" + tokens.length);
+}
 function emptyDatabase() {
     return {
         version: "1.0",
@@ -1353,6 +1388,8 @@ function runCycle() {
                 REPORT_FILE,
                 report
             );
+
+            syncSupabase(db, now).catch(e => log("SUPABASE SYNC ERROR", e.message));
 
             log(
                 "SNAPSHOT END",
