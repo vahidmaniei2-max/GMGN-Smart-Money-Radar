@@ -858,7 +858,7 @@ function calculateAccumulationScore(coin, historyToken) {
         Number(coin.sells || 0);
 
     // ===============================
-    // HOLDER GROWTH Ã¢â‚¬â€ 20 POINTS
+    // HOLDER GROWTH ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 20 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -892,7 +892,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // MARKET CAP GROWTH Ã¢â‚¬â€ 15 POINTS
+    // MARKET CAP GROWTH ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 15 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -926,7 +926,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // BUY / SELL PRESSURE Ã¢â‚¬â€ 15 POINTS
+    // BUY / SELL PRESSURE ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 15 POINTS
     // ===============================
 
     if (currentBuys > 0) {
@@ -952,7 +952,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // VOLUME GROWTH Ã¢â‚¬â€ 10 POINTS
+    // VOLUME GROWTH ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 10 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -986,7 +986,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // SMART DEGEN Ã¢â‚¬â€ 10 POINTS
+    // SMART DEGEN ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 10 POINTS
     // ===============================
 
     const smartDegen =
@@ -1006,7 +1006,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // RADAR TIME Ã¢â‚¬â€ 5 POINTS
+    // RADAR TIME ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 5 POINTS
     // ===============================
 
     if (
@@ -1622,6 +1622,76 @@ if (req.url.startsWith("/api/sniper-4h-live") && req.method === "GET") {
 }
 /* END 4H_SECOND_CANDLE_SNIPER_EXPERIMENTAL_V1 */
 
+if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
+    try {
+        const cacheFile = path.join(__dirname, "4h-gmgn-rank-cache.json");
+        const historyFile = path.join(__dirname, "range-hunter-history-v1.json");
+        let cache = { rank: [] };
+        let db = { lastSnapshotAt: 0, tokens: {} };
+        try { cache = JSON.parse(fs.readFileSync(cacheFile, "utf8")); } catch (_) {}
+        try { db = JSON.parse(fs.readFileSync(historyFile, "utf8")); } catch (_) {}
+        if (!db || !db.tokens) db = { lastSnapshotAt: 0, tokens: {} };
+        const now = Math.floor(Date.now() / 1000);
+        // Recover listing times for existing Range Hunter records from the GMGN cache.
+        let rangeHunterMetadataUpdated = false;
+        for (const c of (cache.rank || [])) {
+            const address = String(c.address || c.token_address || c.contract_address || c.mint || "");
+            const creationTime = Number(c.creation_timestamp || c.open_timestamp || 0);
+            if (!address || creationTime <= 0 || !db.tokens[address]) continue;
+            if (!Number(db.tokens[address].creationTime)) {
+                db.tokens[address].creationTime = creationTime;
+                rangeHunterMetadataUpdated = true;
+            }
+        }
+        if (rangeHunterMetadataUpdated) {
+            fs.writeFileSync(historyFile, JSON.stringify(db));
+        }
+        if (Date.now() - Number(db.lastSnapshotAt || 0) >= 180000) {
+            for (const c of (cache.rank || [])) {
+                const address = String(c.address || c.token_address || c.contract_address || "");
+                const mc = Number(c.market_cap || c.marketCap || c.mc || 0);
+                const holders = Number(c.holder_count || c.holders || c.holderCount || 0);
+                const price = Number(c.price || c.price_usd || c.priceUsd || 0);
+                if (!address || mc < 50000 || holders < 280 || price <= 0) continue;
+                if (!db.tokens[address]) db.tokens[address] = { address, symbol: c.symbol || "?", samples: [] };
+                const t = db.tokens[address];
+                const creationTime = Number(c.creation_timestamp || c.open_timestamp || 0);
+                if (creationTime > 0) t.creationTime = creationTime;
+                t.samples.push({ time: now, price, mc, holders, volume: Number(c.volume || 0), liquidity: Number(c.liquidity || 0), buys: Number(c.buys || 0), sells: Number(c.sells || 0), swaps: Number(c.swaps || 0) });
+                t.samples = t.samples.filter(x => x.time >= now - 259200).slice(-600);
+            }
+            db.lastSnapshotAt = Date.now();
+            fs.writeFileSync(historyFile, JSON.stringify(db));
+        }
+        const tokens = [];
+        for (const t of Object.values(db.tokens)) {
+            const listingTime = Number(t.creationTime || 0);
+            if (!listingTime || now - listingTime < 864000) continue;
+            const a = (t.samples || []).filter(x => x.time >= now - 259200).sort((x,y) => x.time-y.time);
+            if (!a.length) continue;
+            const prices = a.map(x => x.price);
+            const lo = Math.min(...prices), hi = Math.max(...prices);
+            const span = (a[a.length-1].time-a[0].time)/3600;
+            const delta = a[a.length-1].holders-a[0].holders;
+            const range = lo > 0 ? (hi-lo)/lo*100 : 999;
+            let status = "Collecting Data";
+            if (a.length >= 3 && span >= 0.15) {
+                if (range > 12) status = "Outside Range";
+                else if (delta < 0 && a[a.length-1].price <= lo * 1.03) status = "Breakdown Risk";
+                else if (delta >= Math.max(5, a[0].holders * 0.01)) status = "Range Accumulation";
+                else status = "Quiet/Dead Range";
+            }
+            tokens.push({ symbol:t.symbol, address:t.address, marketCap:a[a.length-1].mc, holders:a[a.length-1].holders, holderDelta:delta, rangePct:+range.toFixed(2), spanHours:+span.toFixed(1), snapshots:a.length, status });
+        }
+        res.writeHead(200, { "Content-Type":"application/json; charset=utf-8", "Cache-Control":"no-store" });
+        res.end(JSON.stringify({ ok:true, total:tokens.length, tokens }));
+    } catch(e) {
+        res.writeHead(500, { "Content-Type":"application/json; charset=utf-8" });
+        res.end(JSON.stringify({ ok:false, error:e.message, total:0, tokens:[] }));
+    }
+    return;
+}
+/* RANGE_HUNTER_V1 */
 if (req.url === "/api/history") {
 
         res.writeHead(200, {
@@ -2067,7 +2137,7 @@ res.end(
                     loadHistory();
 
 
-                    // 4H SHARED GMGN CACHE — raw rank for independent sniper
+                    // 4H SHARED GMGN CACHE â€” raw rank for independent sniper
                     try {
                         require('fs').writeFileSync(
                             require('path').join(__dirname, '4h-gmgn-rank-cache.json'),
@@ -2242,7 +2312,7 @@ saved++;
 
                     saveHistory(history);
 
-                    // PRE-PUMP TRAJECTORY SHADOW â€” READ ONLY ANALYSIS
+                    // PRE-PUMP TRAJECTORY SHADOW Ã¢â‚¬â€ READ ONLY ANALYSIS
                     try {
                         runTrajectoryShadow();
                     } catch (e) {
@@ -2268,7 +2338,7 @@ saved++;
     );
 }
 
-/* 4H SECOND CANDLE SNIPER — MANAGED CHILD PROCESS */
+/* 4H SECOND CANDLE SNIPER â€” MANAGED CHILD PROCESS */
 let fourHSniperProcess = null;
 
 try {
@@ -2313,4 +2383,7 @@ setInterval(
 );
 
 takeSnapshot();
+
+
+
 

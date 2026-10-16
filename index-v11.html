@@ -1552,6 +1552,75 @@ table tbody tr:hover {
   }
 }
 </style>
+<style id="rh-pink-ambience-v1">
+#sniper4hLiveSection {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255,79,163,.14), transparent 65%),
+    linear-gradient(145deg, #171525 0%, #101827 55%, #111827 100%) !important;
+  border: 1px solid rgba(255,79,163,.48) !important;
+  box-shadow:
+    0 0 12px rgba(255,79,163,.12),
+    0 0 30px rgba(255,79,163,.08),
+    inset 0 1px 0 rgba(255,180,220,.08) !important;
+}
+#sniper4hLiveSection thead th {
+  border-bottom-color: rgba(255,79,163,.28) !important;
+}
+#sniper4hLiveSection tbody tr:hover {
+  box-shadow: inset 3px 0 0 #ff4fa3 !important;
+}
+</style>
+<style id="rh-refresh-flash-v1">
+#sniper4hLiveSection .rh-pump-lamp {
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 5px rgba(255,79,163,.65)) !important;
+  transition: filter .2s ease;
+}
+#sniper4hLiveSection .rh-pump-lamp.is-active {
+  opacity: 1 !important;
+  animation: rhPinkPulse 1.15s ease-in-out infinite !important;
+  filter: drop-shadow(0 0 8px #ff35c9) !important;
+}
+#sniper4hLiveSection.rh-is-refreshing .rh-pump-lamp:not(.is-active) {
+  animation: rhRefreshFlash .65s ease-in-out 2 !important;
+  filter: drop-shadow(0 0 8px #35e0c1)
+          drop-shadow(0 0 6px #ff72dc) !important;
+}
+@keyframes rhRefreshFlash {
+  0%,100% { opacity: .65; transform: scale(.94); }
+  50% { opacity: 1; transform: scale(1.10); }
+}
+</style>
+<style id="rh-deep-black-bg-v1">
+#sniper4hLiveSection {
+  background-color: #030205 !important;
+  background-image: none !important;
+  border-color: rgba(255, 53, 201, 0.38) !important;
+  box-shadow: inset 0 0 35px rgba(255, 53, 201, 0.045),
+              0 0 18px rgba(255, 53, 201, 0.08) !important;
+}
+</style>
+<style id="rh-full-table-black-v1">
+#sniper4hLiveSection {
+  background: #030205 !important;
+}
+#sniper4hLiveSection table,
+#sniper4hLiveSection thead,
+#sniper4hLiveSection tbody,
+#sniper4hLiveSection tr,
+#sniper4hLiveSection th,
+#sniper4hLiveSection td {
+  background-color: #030205 !important;
+}
+#sniper4hLiveSection th,
+#sniper4hLiveSection td {
+  border-color: rgba(255, 53, 201, 0.16) !important;
+}
+#sniper4hLiveSection tbody tr:hover,
+#sniper4hLiveSection tbody tr:hover td {
+  background-color: #110817 !important;
+}
+</style>
 </head>
 
 
@@ -1935,6 +2004,8 @@ table tbody tr:hover {
   }
   async function loadRangeHunter() {
     try {
+      body.querySelectorAll(".rh-pump-lamp").forEach(l => l.classList.add("rh-refresh-flash"));
+      document.getElementById("sniper4hLiveSection").classList.add("rh-is-refreshing");
       const r = await fetch("/api/range-hunter?t=" + Date.now(), {cache:"no-store"});
       if (!r.ok) throw new Error("HTTP " + r.status);
       const d = await r.json();
@@ -1967,6 +2038,7 @@ table tbody tr:hover {
         body.innerHTML = '<tr><td colspan="9">هنوز داده‌ای جمع نشده است.</td></tr>';
         return;
       }
+      body.querySelectorAll(".rh-refresh-flash").forEach(l => l.classList.remove("rh-refresh-flash"));
       body.innerHTML = tokens.map((t,i) => {
         const pumpSignal = t.status === "Range Accumulation";
         const color = pumpSignal ? "#ff72dc" :
@@ -1988,7 +2060,9 @@ table tbody tr:hover {
 
           "</tr>";
       }).join("");
+      document.getElementById("sniper4hLiveSection").classList.remove("rh-is-refreshing");
     } catch (e) {
+      document.getElementById("sniper4hLiveSection").classList.remove("rh-is-refreshing");
       status.textContent = "اتصال به Range Hunter برقرار نشد";
       body.innerHTML = '<tr><td colspan="9">داده فعلاً در دسترس نیست.</td></tr>';
     }
@@ -2182,6 +2256,7 @@ async function login() {
         }
 
     } catch (e) {
+      document.getElementById("sniper4hLiveSection").classList.remove("rh-is-refreshing");
 
         console.error("Login error:", e);
 
@@ -3059,6 +3134,7 @@ async function loadWallets() {
         `).join("");
 
     } catch (e) {
+      document.getElementById("sniper4hLiveSection").classList.remove("rh-is-refreshing");
         console.error("Wallet load error:", e);
     }
 }
