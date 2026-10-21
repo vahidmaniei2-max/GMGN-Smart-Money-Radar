@@ -1543,7 +1543,7 @@ table tbody tr:hover {
 }
 .rh-pump-lamp.is-active {
   opacity: 1 !important;
-  filter: drop-shadow(0 0 5px #ff35c9) !important;
+  filter: drop-shadow(0 0 5px #00e5d4) !important;
   animation: rhPinkPulse 1.15s ease-in-out infinite !important;
 }
 @media (max-width: 768px) {
@@ -1579,7 +1579,7 @@ table tbody tr:hover {
 #sniper4hLiveSection .rh-pump-lamp.is-active {
   opacity: 1 !important;
   animation: rhPinkPulse 1.15s ease-in-out infinite !important;
-  filter: drop-shadow(0 0 8px #ff35c9) !important;
+  filter: drop-shadow(0 0 8px #00e5d4) !important;
 }
 #sniper4hLiveSection.rh-is-refreshing .rh-pump-lamp:not(.is-active) {
   animation: rhRefreshFlash .65s ease-in-out 2 !important;
@@ -1998,11 +1998,11 @@ table tbody tr:hover {
 #sniper4hLiveSection .rh-copy-btn{margin-inline-start:6px;padding:4px 8px;border:1px solid rgba(255,114,220,.7);border-radius:7px;background:rgba(255,45,180,.12);color:#ff9be8;cursor:pointer;font-size:11px;font-weight:700}
 #sniper4hLiveSection .rh-copy-btn:hover{background:rgba(255,45,180,.28);box-shadow:0 0 12px rgba(255,80,200,.35)}
 #sniper4hLiveSection .rh-status-cell{white-space:nowrap}
-.rh-pump-lamp{width:38px;height:38px;vertical-align:middle;margin-inline-end:5px;opacity:.18;filter:grayscale(1) brightness(.55)} .rh-pump-lamp.is-active{opacity:1;filter:drop-shadow(0 0 5px #ff35c9);animation:rhPinkPulse 1.15s ease-in-out infinite}
-@keyframes rhPinkPulse{0%,100%{transform:scale(.94);filter:drop-shadow(0 0 4px #ff35c9)}50%{transform:scale(1.08);filter:drop-shadow(0 0 12px #ff35c9)}}
+.rh-pump-lamp{width:38px;height:38px;vertical-align:middle;margin-inline-end:5px;opacity:.18;filter:grayscale(1) brightness(.55)} .rh-pump-lamp.is-active{opacity:1;filter:drop-shadow(0 0 5px #1261d6);animation:rhPinkPulse 1.15s ease-in-out infinite}
+@keyframes rhPinkPulse{0%,100%{transform:scale(.94);filter:drop-shadow(0 0 4px #1261d6)}50%{transform:scale(1.08);filter:drop-shadow(0 0 12px #1261d6)}}
 
 #rhPumpChangeRow{display:flex;align-items:center;gap:12px;margin:0 0 14px;padding:10px 14px;border:1px solid rgba(255,114,220,.35);border-radius:10px;background:rgba(255,45,180,.07)}
-#rhPumpChangeRow .rh-summary-lamp{width:38px;height:38px;flex:0 0 38px;filter:drop-shadow(0 0 5px #ff35c9)}
+#rhPumpChangeRow .rh-summary-lamp{width:38px;height:38px;flex:0 0 38px;filter:drop-shadow(0 0 5px #1261d6)}
 #rhPumpChangeRow .rh-summary-lamp.is-active{animation:rhPinkPulse 1.15s ease-in-out infinite}
 #rhPumpChangeLabel{font-size:13px;font-weight:700;color:#ff9be8}
 #rhPumpChangeStatus{font-size:12px;opacity:.75;margin-top:3px}
@@ -2095,7 +2095,7 @@ table tbody tr:hover {
         const color = pumpSignal ? "#ff72dc" :
           t.status === "Breakdown Risk" ? "#ff7070" :
           t.status === "Quiet/Dead Range" ? "#ffd166" : "#9ca3af";
-        const lamp = '<svg class="rh-pump-lamp" viewBox="0 0 100 100" aria-label="Range accumulation"><defs><radialGradient id="rhGlow"><stop offset="0" stop-color="#ff72dc" stop-opacity=".65"/><stop offset="1" stop-color="#ff72dc" stop-opacity="0"/></radialGradient><linearGradient id="rhGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0fb"/><stop offset=".55" stop-color="#ff72dc"/><stop offset="1" stop-color="#f000a8"/></linearGradient></defs><circle cx="50" cy="43" r="42" fill="url(#rhGlow)"/><path d="M34 57 C22 45 25 25 40 19 C55 11 73 23 72 40 C72 49 66 54 62 61 L61 69 L39 69 L38 61 Z" fill="url(#rhGlass)" stroke="#ffd8f7" stroke-width="2"/><path d="M39 73 L61 73 M40 79 L60 79 M44 85 L56 85" stroke="#ff72dc" stroke-width="5" stroke-linecap="round"/><path d="M39 31 Q44 24 51 26" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M49 50 L49 38 L60 38 M49 50 L59 44" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        const lamp = '<svg class="rh-pump-lamp" viewBox="0 0 100 100" aria-label="Range accumulation"><defs><radialGradient id="rhGlow"><stop offset="0" stop-color="#20e6d2" stop-opacity=".65"/><stop offset="1" stop-color="#20e6d2" stop-opacity="0"/></radialGradient><linearGradient id="rhGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d6fffb"/><stop offset=".55" stop-color="#20e6d2"/><stop offset="1" stop-color="#075e63"/></linearGradient></defs><circle cx="50" cy="43" r="42" fill="url(#rhGlow)"/><path d="M34 57 C22 45 25 25 40 19 C55 11 73 23 72 40 C72 49 66 54 62 61 L61 69 L39 69 L38 61 Z" fill="url(#rhGlass)" stroke="#9bfff5" stroke-width="2"/><path d="M39 73 L61 73 M40 79 L60 79 M44 85 L56 85" stroke="#899b3a" stroke-width="5" stroke-linecap="round"/><path d="M39 31 Q44 24 51 26" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M49 50 L49 38 L60 38 M49 50 L59 44" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
         return "<tr>" +
           "<td>"+(i+1)+"</td>" +
           '<td>'+esc(t.symbol)+' <button type="button" class="rh-copy-btn" data-address="'+esc(t.address)+'" title="Copy contract">⧉</button></td>' +
@@ -2934,13 +2934,13 @@ else if (pumpAlarm === "PUMP_ALERT") {
 else if (pumpAlarm === "WATCH") {
 
     alarmHtml =
-        '<span class="main-radar-crystal-led watch" title="WATCH"></span>';
+        '<svg class="main-radar-svg-lamp watch" viewBox="0 0 100 100" aria-label="WATCH"><circle cx="50" cy="43" r="42" fill="#00ffe1" opacity=".18"/><path d="M34 57 C22 45 25 25 40 19 C55 11 73 23 72 40 C72 49 66 54 62 61 L61 69 L39 69 L38 61 Z" fill="#00cfc2" stroke="#d8fffb" stroke-width="2"/><path d="M39 73 L61 73 M40 79 L60 79 M44 85 L56 85" stroke="#42ffed" stroke-width="5" stroke-linecap="round"/><path d="M39 31 Q44 24 51 26" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M49 50 L49 38 L60 38 M49 50 L59 44" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 }
 else {
 
     alarmHtml =
-        '<span class="main-radar-crystal-led off" title="No Pump"></span>';
+        '<svg class="main-radar-svg-lamp off" viewBox="0 0 100 100" aria-label="No Pump"><circle cx="50" cy="43" r="42" fill="#8291a3" opacity=".07"/><path d="M34 57 C22 45 25 25 40 19 C55 11 73 23 72 40 C72 49 66 54 62 61 L61 69 L39 69 L38 61 Z" fill="#536273" stroke="#8291a3" stroke-width="2"/><path d="M39 73 L61 73 M40 79 L60 79 M44 85 L56 85" stroke="#8291a3" stroke-width="5" stroke-linecap="round"/><path d="M39 31 Q44 24 51 26" fill="none" stroke="#aab5c1" stroke-width="4" stroke-linecap="round"/><path d="M49 50 L49 38 L60 38 M49 50 L59 44" fill="none" stroke="#aab5c1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 }
             var row =
@@ -7103,4 +7103,16 @@ td:has(.main-radar-crystal-led) {
 #sniper4hLiveSection th {
   color: #b9d4ff !important;
 }
+</style>
+
+<style id="main-radar-all-bulb-lamps">.main-radar-svg-lamp.watch{filter:drop-shadow(0 0 4px #00ffe1);animation:mrSvgWatch 1.8s ease-in-out infinite}.main-radar-svg-lamp.off{filter:none;animation:none;opacity:.65}@keyframes mrSvgWatch{0%,100%{transform:scale(.98)}50%{transform:scale(1.03)}}</style>
+
+<style id="rh-dark-blue-lamp-fix">
+#sniper4hLiveSection .rh-pump-lamp.is-active{filter:drop-shadow(0 0 5px #00e5d4)!important;animation:rhDarkBluePulse 1.15s ease-in-out infinite!important}
+#sniper4hLiveSection .rh-pump-lamp{filter:grayscale(1) brightness(.55)}
+#sniper4hLiveSection .rh-pump-lamp.is-active{filter:drop-shadow(0 0 5px #00e5d4)!important}
+#sniper4hLiveSection.rh-is-refreshing .rh-pump-lamp:not(.is-active){filter:drop-shadow(0 0 8px #00e5d4)!important}
+#rhPumpChangeRow .rh-summary-lamp{filter:drop-shadow(0 0 5px #00e5d4)!important}
+#rhPumpChangeRow .rh-summary-lamp.is-active{animation:rhDarkBluePulse 1.15s ease-in-out infinite!important}
+@keyframes rhDarkBluePulse{0%,100%{transform:scale(.94);filter:drop-shadow(0 0 4px #00e5d4)}50%{transform:scale(1.08);filter:drop-shadow(0 0 12px #20e6d2)}}
 </style>
