@@ -1621,6 +1621,36 @@ table tbody tr:hover {
   background-color: #110817 !important;
 }
 </style>
+
+<style id="login-premium-design">
+/* LOGIN PREMIUM DESIGN */
+#loginScreen {
+  background-color:#050b14 !important;
+  background-image:radial-gradient(ellipse at 18% 15%,rgba(0,190,170,.16),transparent 42%),radial-gradient(ellipse at 85% 80%,rgba(45,95,210,.15),transparent 42%),linear-gradient(rgba(65,105,130,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(65,105,130,.055) 1px,transparent 1px) !important;
+  background-size:auto,auto,32px 32px,32px 32px !important;
+}
+#loginScreen .loginBox {
+  width:410px !important;max-width:calc(100% - 32px) !important;
+  padding:30px 28px 26px !important;border:1px solid rgba(80,190,190,.25) !important;
+  border-radius:22px !important;background:linear-gradient(145deg,rgba(13,28,43,.98),rgba(5,13,24,.98)) !important;
+  box-shadow:0 24px 80px rgba(0,0,0,.48),0 0 36px rgba(0,190,170,.07) !important;
+}
+#loginScreen .signatureLogin {color:#f0f8ff !important;letter-spacing:1.5px}
+#loginScreen .loginSubtitle {color:#7f9bad !important;font-size:12px !important;letter-spacing:1.5px !important}
+.login-market-visual {margin:24px 0 22px;padding:14px 13px 10px;border:1px solid #1b3547;border-radius:14px;background:linear-gradient(150deg,rgba(10,29,43,.96),rgba(7,17,29,.96));overflow:hidden}
+.login-market-top,.login-market-footer {display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:8px;letter-spacing:1px;color:#7796a9}
+.login-market-top span {display:flex;align-items:center;gap:6px}
+.login-market-top i {width:6px;height:6px;border-radius:50%;background:#22d6a0;box-shadow:0 0 9px #22d6a0}
+.login-market-top b {font-size:8px;color:#20d6a0;font-weight:600}
+.login-market-chart {display:block;width:100%;height:auto;margin:13px 0 8px}
+.login-market-footer strong {display:grid;place-items:center;width:27px;height:27px;border-radius:50%;font-size:17px;color:#fff;background:linear-gradient(145deg,#ffbd55,#e78320);box-shadow:0 0 18px rgba(240,155,45,.24)}
+#loginScreen input {box-sizing:border-box;width:100%;background:#081522 !important;border:1px solid #20394b !important;border-radius:10px !important;color:#eaf5fc !important;padding:13px 14px !important;outline:none;transition:border-color .2s,box-shadow .2s}
+#loginScreen input:focus {border-color:#18cbb2 !important;box-shadow:0 0 0 3px rgba(24,203,178,.10)}
+#loginScreen .loginButton {width:100%;border:0 !important;border-radius:10px !important;background:linear-gradient(100deg,#08a994,#17cbb2) !important;color:#031510 !important;font-weight:800 !important;letter-spacing:2px !important;box-shadow:0 7px 22px rgba(8,169,148,.2);transition:filter .2s,transform .2s}
+#loginScreen .loginButton:hover {filter:brightness(1.1);transform:translateY(-1px)}
+@media(max-width:480px){#loginScreen .loginBox{padding:24px 20px 22px !important}.login-market-visual{margin:18px 0}}
+</style>
+
 </head>
 
 
@@ -1642,6 +1672,19 @@ table tbody tr:hover {
         <div class="loginSubtitle">
             GMGN Smart Money Radar
         </div>
+<div class="login-market-visual">
+  <div class="login-market-top"><span><i></i> SOLANA MARKET INTELLIGENCE</span><b>RADAR ONLINE</b></div>
+  <svg class="login-market-chart" viewBox="0 0 320 112" role="img" aria-label="Decorative market candlestick chart">
+    <g stroke="#193445" stroke-width="1"><path d="M0 20H320 M0 48H320 M0 76H320 M0 104H320"/></g>
+    <g stroke-width="2">
+      <path stroke="#20d6a0" d="M18 72V42 M38 81V52 M58 66V30 M78 54V21 M98 63V35 M118 48V14 M138 60V29 M158 44V9 M178 53V24 M198 38V12 M218 46V19 M238 31V7 M258 40V15 M278 25V5 M298 32V11"/>
+    </g>
+    <g>
+      <rect x="12" y="50" width="12" height="16" rx="2" fill="#20d6a0"/><rect x="32" y="60" width="12" height="15" rx="2" fill="#f05d72"/><rect x="52" y="40" width="12" height="20" rx="2" fill="#20d6a0"/><rect x="72" y="30" width="12" height="18" rx="2" fill="#20d6a0"/><rect x="92" y="43" width="12" height="14" rx="2" fill="#f05d72"/><rect x="112" y="24" width="12" height="18" rx="2" fill="#20d6a0"/><rect x="132" y="39" width="12" height="16" rx="2" fill="#f05d72"/><rect x="152" y="19" width="12" height="18" rx="2" fill="#20d6a0"/><rect x="172" y="32" width="12" height="15" rx="2" fill="#f05d72"/><rect x="192" y="21" width="12" height="14" rx="2" fill="#20d6a0"/><rect x="212" y="27" width="12" height="14" rx="2" fill="#f05d72"/><rect x="232" y="15" width="12" height="13" rx="2" fill="#20d6a0"/><rect x="252" y="23" width="12" height="13" rx="2" fill="#f05d72"/><rect x="272" y="12" width="12" height="12" rx="2" fill="#20d6a0"/><rect x="292" y="16" width="12" height="12" rx="2" fill="#20d6a0"/>
+    </g>
+  </svg>
+  <div class="login-market-footer"><span>● SMART MONEY TRACKING</span><strong>₿</strong><span>BUILT FOR SOLANA</span></div>
+</div>
 
         <input
             type="text"
@@ -2010,6 +2053,14 @@ table tbody tr:hover {
       if (!r.ok) throw new Error("HTTP " + r.status);
       const d = await r.json();
       const tokens = Array.isArray(d.tokens) ? d.tokens : [];
+      const mainAddresses = new Set(
+        Array.from(document.querySelectorAll("#coins tr[data-address]"))
+          .map(row => String(row.dataset.address || "").trim().toLowerCase())
+          .filter(Boolean)
+      );
+      const displayTokens = tokens.filter(t =>
+        !mainAddresses.has(String(t.address || "").trim().toLowerCase())
+      );
       const hasAccumulation = tokens.some(t => t.status === "Range Accumulation");
       let significantChange = false;
       const currentPumpTokens = new Map();
@@ -2034,12 +2085,12 @@ table tbody tr:hover {
       if (hasAccumulation) pulsePumpChangeLamp("Range accumulation detected");
       else if (significantChange) pulsePumpChangeLamp("Significant token changes detected");
       status.textContent = "تعداد: " + tokens.length + " · بروزرسانی " + new Date().toLocaleTimeString();
-      if (!tokens.length) {
+      if (!displayTokens.length) {
         body.innerHTML = '<tr><td colspan="9">هنوز داده‌ای جمع نشده است.</td></tr>';
         return;
       }
       body.querySelectorAll(".rh-refresh-flash").forEach(l => l.classList.remove("rh-refresh-flash"));
-      body.innerHTML = tokens.map((t,i) => {
+      body.innerHTML = displayTokens.map((t,i) => {
         const pumpSignal = t.status === "Range Accumulation";
         const color = pumpSignal ? "#ff72dc" :
           t.status === "Breakdown Risk" ? "#ff7070" :
@@ -2636,6 +2687,21 @@ async function toggleWatch(address, button) {
 
         updateWatchFilterButton();
 
+        const rhBody = document.getElementById("sniper4hLiveBody");
+        if (rhBody) {
+            const mainAddresses = new Set(
+                Array.from(document.querySelectorAll("#coins tr[data-address]"))
+                    .map(row => String(row.dataset.address || "").trim().toLowerCase())
+                    .filter(Boolean)
+            );
+            rhBody.querySelectorAll("tr").forEach(row => {
+                const btn = row.querySelector(".rh-copy-btn");
+                if (!btn) return;
+                const address = String(btn.getAttribute("data-address") || "").trim().toLowerCase();
+                row.style.display = address && mainAddresses.has(address) ? "none" : "";
+            });
+        }
+
     } catch (error) {
 
         console.error(error);
@@ -2856,13 +2922,13 @@ var sniper = coin.secondCandleSniper || { state: "NO DATA" }; var sniperState = 
 if (pumpAlarm === "STRONG_PUMP") {
 
     alarmHtml =
-        '<span class="main-radar-crystal-led strong" title="STRONG PUMP"></span>';
+        '<svg class="main-radar-svg-lamp strong" viewBox="0 0 100 100" aria-label="STRONG PUMP"><circle cx="50" cy="43" r="42" fill="#00ffe1" opacity=".2"/><path d="M34 57 C22 45 25 25 40 19 C55 11 73 23 72 40 C72 49 66 54 62 61 L61 69 L39 69 L38 61 Z" fill="#00cfc2" stroke="#d8fffb" stroke-width="2"/><path d="M39 73 L61 73 M40 79 L60 79 M44 85 L56 85" stroke="#42ffed" stroke-width="5" stroke-linecap="round"/><path d="M39 31 Q44 24 51 26" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M49 50 L49 38 L60 38 M49 50 L59 44" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 }
 else if (pumpAlarm === "PUMP_ALERT") {
 
     alarmHtml =
-        '<span class="main-radar-crystal-led pump" title="PUMP ALERT"></span>';
+        '<svg class="main-radar-svg-lamp pump" viewBox="0 0 100 100" aria-label="PUMP ALERT"><circle cx="50" cy="43" r="42" fill="#00ffe1" opacity=".2"/><path d="M34 57 C22 45 25 25 40 19 C55 11 73 23 72 40 C72 49 66 54 62 61 L61 69 L39 69 L38 61 Z" fill="#00cfc2" stroke="#d8fffb" stroke-width="2"/><path d="M39 73 L61 73 M40 79 L60 79 M44 85 L56 85" stroke="#42ffed" stroke-width="5" stroke-linecap="round"/><path d="M39 31 Q44 24 51 26" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M49 50 L49 38 L60 38 M49 50 L59 44" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 }
 else if (pumpAlarm === "WATCH") {
@@ -3003,6 +3069,7 @@ else {
     ) +
 "</td>";
 
+            row.dataset.address = String(address || "").trim().toLowerCase();
             row.dataset.watch =
                 currentWatchList[address]
                     ? "1"
@@ -3023,6 +3090,21 @@ else {
         });
 
         updateWatchFilterButton();
+
+        const rhBody = document.getElementById("sniper4hLiveBody");
+        if (rhBody) {
+            const mainAddresses = new Set(
+                Array.from(document.querySelectorAll("#coins tr[data-address]"))
+                    .map(row => String(row.dataset.address || "").trim().toLowerCase())
+                    .filter(Boolean)
+            );
+            rhBody.querySelectorAll("tr").forEach(row => {
+                const btn = row.querySelector(".rh-copy-btn");
+                if (!btn) return;
+                const address = String(btn.getAttribute("data-address") || "").trim().toLowerCase();
+                row.style.display = address && mainAddresses.has(address) ? "none" : "";
+            });
+        }
 
 
         status.textContent =
@@ -6839,6 +6921,105 @@ td:has(.main-radar-crystal-led) {
 })();
 
 </script>
+<script>
+/* RH_DEDUPE_LIVE_OBSERVER_V1 */
+(() => {
+  const mainBody = document.getElementById("coins");
+  const rangeBody = document.getElementById("sniper4hLiveBody");
+  if (!mainBody || !rangeBody) return;
+
+  let scheduled = false;
+  const filterDuplicates = () => {
+    scheduled = false;
+    const mainAddresses = new Set(
+      [...mainBody.querySelectorAll("tr[data-address]")]
+        .map(row => String(row.dataset.address || "").trim().toLowerCase())
+        .filter(Boolean)
+    );
+
+    rangeBody.querySelectorAll("tr").forEach(row => {
+      const btn = row.querySelector(".rh-copy-btn");
+      if (!btn) return;
+      const address = String(btn.getAttribute("data-address") || "").trim().toLowerCase();
+      row.style.display = address && mainAddresses.has(address) ? "none" : "";
+    });
+  };
+
+  const scheduleFilter = () => {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(filterDuplicates);
+  };
+
+  new MutationObserver(scheduleFilter).observe(mainBody, {
+    childList: true, subtree: true, attributes: true, attributeFilter: ["data-address"]
+  });
+  new MutationObserver(scheduleFilter).observe(rangeBody, {
+    childList: true, subtree: true
+  });
+
+  filterDuplicates();
+})();
+</script>
+
+<style id="main-radar-turquoise-pump-lamps">
+/* MAIN RADAR TURQUOISE GLASS LAMPS */
+.main-radar-crystal-led.pump,
+.main-radar-crystal-led.strong {
+  position:relative !important;
+  isolation:isolate;
+  border-radius:50% !important;
+}
+.main-radar-crystal-led.pump {
+  background:radial-gradient(circle at 30% 22%,#fff 0%,#d8fffb 9%,#75fff0 23%,#00d9c3 48%,#008f91 73%,#043c49 100%) !important;
+  border:1px solid #5effef !important;
+  box-shadow:inset 0 1px 2px rgba(255,255,255,.98),inset 0 -3px 5px rgba(0,45,50,.85),0 0 6px #31ffe9,0 0 14px rgba(0,255,225,.95),0 0 24px rgba(0,230,220,.7) !important;
+  animation:mainRadarTurquoisePumpPulse 1s ease-in-out infinite !important;
+}
+.main-radar-crystal-led.strong {
+  background:radial-gradient(circle at 30% 20%,#fff 0%,#fff 10%,#b9fff8 22%,#38ffe8 42%,#00bfb8 68%,#00535e 100%) !important;
+  border:1px solid #c2fff9 !important;
+  box-shadow:inset 0 1px 2px #fff,inset 0 -3px 5px rgba(0,35,45,.9),0 0 8px #9ffff7,0 0 18px #00ffe1,0 0 30px rgba(0,255,230,.95) !important;
+  animation:mainRadarTurquoiseStrongPulse .72s ease-in-out infinite !important;
+}
+.main-radar-crystal-led.pump::before,
+.main-radar-crystal-led.strong::before {
+  content:"" !important;
+  position:absolute !important;
+  inset:1px 2px 45% 2px !important;
+  border-radius:50% 50% 42% 42% !important;
+  background:linear-gradient(135deg,rgba(255,255,255,1),rgba(220,255,252,.72) 30%,rgba(100,255,240,.16) 68%,transparent) !important;
+  pointer-events:none !important;
+}
+.main-radar-crystal-led.pump::after,
+.main-radar-crystal-led.strong::after {
+  content:"" !important;
+  position:absolute !important;
+  inset:-4px !important;
+  border:1px solid rgba(80,255,240,.85) !important;
+  border-radius:50% !important;
+  box-shadow:0 0 8px rgba(0,255,230,.85),0 0 18px rgba(0,230,220,.6) !important;
+  animation:mainRadarTurquoiseHalo .9s ease-in-out infinite !important;
+  pointer-events:none !important;
+}
+.main-radar-crystal-led.strong::after {
+  border-color:rgba(210,255,250,.98) !important;
+  box-shadow:0 0 10px #8ffff5,0 0 24px rgba(0,255,230,.95) !important;
+  animation-duration:.65s !important;
+}
+@keyframes mainRadarTurquoisePumpPulse {
+  0%,100% { transform:scale(1);filter:brightness(1); }
+  50% { transform:scale(1.12);filter:brightness(1.45); }
+}
+@keyframes mainRadarTurquoiseStrongPulse {
+  0%,100% { transform:scale(1);filter:brightness(1.05); }
+  50% { transform:scale(1.17);filter:brightness(1.7); }
+}
+@keyframes mainRadarTurquoiseHalo {
+  0%,100% { opacity:.35;transform:scale(.92); }
+  50% { opacity:1;transform:scale(1.18); }
+}
+</style>
 </body>
 </html>
 
@@ -6900,3 +7081,26 @@ td:has(.main-radar-crystal-led) {
 
 
 
+
+<style id='main-radar-glass-shape-fix'>.main-radar-crystal-led.pump,.main-radar-crystal-led.strong{width:22px!important;height:22px!important;min-width:22px!important;max-width:22px!important;min-height:22px!important;max-height:22px!important;border-radius:50%!important;flex-shrink:0!important}</style>
+
+<style id='main-radar-round-all-lamps'>.main-radar-crystal-led{width:22px!important;height:22px!important;min-width:22px!important;max-width:22px!important;min-height:22px!important;max-height:22px!important;border-radius:50%!important;box-sizing:border-box!important}</style>
+<style id="main-radar-turquoise-svg-lamps">.main-radar-svg-lamp{width:38px;height:38px;vertical-align:middle;overflow:visible;flex-shrink:0}.main-radar-svg-lamp.pump{filter:drop-shadow(0 0 5px #00ffe1) drop-shadow(0 0 10px #00d9c3);animation:mrSvgPump 1.1s ease-in-out infinite}.main-radar-svg-lamp.strong{filter:drop-shadow(0 0 7px #8ffff5) drop-shadow(0 0 15px #00ffe1);animation:mrSvgStrong .72s ease-in-out infinite}@keyframes mrSvgPump{0%,100%{transform:scale(.96)}50%{transform:scale(1.06)}}@keyframes mrSvgStrong{0%,100%{transform:scale(.94)}50%{transform:scale(1.1)}}</style>
+<style id='range-hunter-navy-theme'>
+#sniper4hLiveSection table,
+#sniper4hLiveSection thead,
+#sniper4hLiveSection tbody,
+#sniper4hLiveSection tr,
+#sniper4hLiveSection th,
+#sniper4hLiveSection td {
+  background-color: #0b1730 !important;
+  border-color: #263958 !important;
+}
+#sniper4hLiveSection tbody tr:hover,
+#sniper4hLiveSection tbody tr:hover td {
+  background-color: #142746 !important;
+}
+#sniper4hLiveSection th {
+  color: #b9d4ff !important;
+}
+</style>
