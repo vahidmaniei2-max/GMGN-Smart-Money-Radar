@@ -1741,8 +1741,31 @@ table tbody tr:hover {
     </div>
 </div>
 
+
+<style id="ai-pro-market-visuals">
+#aiAnalyzerPanel{position:relative;overflow:hidden;background:radial-gradient(ellipse at 8% 0%,rgba(0,224,200,.13),transparent 38%),radial-gradient(ellipse at 95% 15%,rgba(36,112,255,.13),transparent 35%),linear-gradient(135deg,#071321 0%,#0b1d30 52%,#081521 100%)!important;border:1px solid rgba(0,229,212,.32)!important;box-shadow:0 12px 38px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.035)!important}
+#aiAnalyzerPanel:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.13;background-image:linear-gradient(rgba(85,200,220,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(85,200,220,.13) 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(to bottom right,#000,transparent 80%)}
+#aiAnalyzerPanel>*{position:relative;z-index:1}
+#aiAnalyzerPanel .ai-market-strip{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:13px 16px;margin:0 0 17px;border:1px solid rgba(93,174,199,.18);border-radius:13px;background:linear-gradient(100deg,rgba(3,13,24,.72),rgba(10,35,48,.62));}
+#aiAnalyzerPanel .ai-market-coin{display:flex;align-items:center;gap:10px;color:#e6f6ff;font-weight:800;letter-spacing:1px}
+#aiAnalyzerPanel .ai-btc-mark{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;font-size:25px;color:#ffd36a;background:radial-gradient(circle at 35% 25%,#604b20,#171d29 72%);border:1px solid rgba(255,211,106,.55);box-shadow:0 0 18px rgba(255,190,60,.12)}
+#aiAnalyzerPanel .ai-market-sub{font-size:10px;letter-spacing:1.5px;color:#7795a8;margin-top:4px}
+#aiAnalyzerPanel .ai-candles{height:48px;display:flex;align-items:center;gap:5px;padding:0 8px}
+#aiAnalyzerPanel .ai-candle{position:relative;width:7px;height:var(--h);border-radius:2px;background:#26d9a0;box-shadow:0 0 8px rgba(38,217,160,.16)}
+#aiAnalyzerPanel .ai-candle:before{content:"";position:absolute;left:3px;top:-7px;bottom:-7px;width:1px;background:inherit;opacity:.85}
+#aiAnalyzerPanel .ai-candle.red{background:#ff617d;box-shadow:0 0 8px rgba(255,97,125,.14)}
+#aiAnalyzerPanel .ai-market-signal{font-size:11px;letter-spacing:1px;color:#42e8d3;display:flex;align-items:center;gap:7px}
+#aiAnalyzerPanel .ai-market-dot{width:7px;height:7px;border-radius:50%;background:#42e8d3;box-shadow:0 0 10px #42e8d3}
+#aiAnalyzerPanel input#aiContractInput:focus{border-color:#00e5d4;box-shadow:0 0 0 3px rgba(0,229,212,.09)}
+@media(max-width:600px){#aiAnalyzerPanel .ai-market-strip{padding:11px}#aiAnalyzerPanel .ai-candles{gap:4px}#aiAnalyzerPanel .ai-market-sub{letter-spacing:.7px}}
+</style>
 <div id="aiAnalyzerPanel" style="margin:18px auto; max-width:1200px; padding:20px; border:1px solid rgba(0,255,220,.28); border-radius:16px; background:linear-gradient(135deg,rgba(8,20,30,.96),rgba(10,30,40,.88)); box-shadow:0 0 25px rgba(0,255,220,.08);">
 
+    <div class="ai-market-strip" aria-hidden="true">
+      <div class="ai-market-coin"><span class="ai-btc-mark">₿</span><div>MARKET INTELLIGENCE<div class="ai-market-sub">SMART MONEY · SOLANA RADAR</div></div></div>
+      <div class="ai-candles"><i class="ai-candle" style="--h:15px"></i><i class="ai-candle" style="--h:25px"></i><i class="ai-candle red" style="--h:18px"></i><i class="ai-candle" style="--h:31px"></i><i class="ai-candle" style="--h:22px"></i><i class="ai-candle red" style="--h:13px"></i><i class="ai-candle" style="--h:36px"></i><i class="ai-candle" style="--h:27px"></i><i class="ai-candle" style="--h:40px"></i><i class="ai-candle" style="--h:32px"></i><i class="ai-candle red" style="--h:20px"></i><i class="ai-candle" style="--h:44px"></i></div>
+      <div class="ai-market-signal"><span class="ai-market-dot"></span> RADAR SYSTEM</div>
+    </div>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:15px;">
         <div>
             <div style="font-size:21px;font-weight:700;color:#00ffe0;">
@@ -1811,6 +1834,22 @@ table tbody tr:hover {
 </div>
 
     <div class="header">
+<div class="gmgn-robot-profile" aria-label="GMGN robot profile">
+  <div class="gmgn-robot-avatar">
+    <svg viewBox="0 0 100 100" role="img" aria-label="Neon robot">
+      <defs><linearGradient id="gmgnRobotMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e526a"/><stop offset="1" stop-color="#10172f"/></linearGradient></defs>
+      <path d="M50 8V19M44 8H56" stroke="#42f5e8" stroke-width="3" stroke-linecap="round"/>
+      <rect x="17" y="24" width="66" height="57" rx="17" fill="url(#gmgnRobotMetal)" stroke="#40e8ef" stroke-width="2.5"/>
+      <path d="M17 43H9V61H18M82 43H91V61H82" fill="#142c43" stroke="#40e8ef" stroke-width="2.5"/>
+      <rect x="27" y="37" width="17" height="13" rx="5" fill="#40f6e8"/><rect x="56" y="37" width="17" height="13" rx="5" fill="#40f6e8"/>
+      <path d="M34 64H66M39 70H61" stroke="#a58cff" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="35" cy="43" r="3" fill="#fff"/><circle cx="64" cy="43" r="3" fill="#fff"/>
+      <path d="M28 83L24 91M72 83L76 91" stroke="#a58cff" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="gmgn-robot-identity"><span>SMART MONEY TERMINAL</span><strong>VAHID1989</strong><small>SOLANA RADAR OPERATOR</small></div>
+  <div class="gmgn-wallet-card"><span class="gmgn-wallet-icon">◈</span><div><small>WALLET PROFILE</small><strong>vahid1989</strong><em>LOCAL PROFILE · NOT CONNECTED</em></div><span class="gmgn-wallet-dot"></span></div>
+</div>
 
         <h1>
             🚀 GMGN Smart Money Radar
@@ -1821,6 +1860,13 @@ table tbody tr:hover {
         </p>
 
         <div class="topSignature">vahid1989</div>
+        <div class="gmgn-header-market-tape" aria-label="Market symbols">
+          <span><b class="coin-btc">₿</b> BITCOIN</span>
+          <span><b class="coin-eth">Ξ</b> ETHEREUM</span>
+          <span><b class="coin-sol">◎</b> SOLANA</span>
+          <span class="candles"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="live">RADAR ONLINE</span>
+        </div>
 
     </div>
 
@@ -2018,7 +2064,7 @@ table tbody tr:hover {
     <div style="overflow-x:auto;">
     <table style="width:100%;min-width:1100px;table-layout:auto;">
       <thead><tr>
-        <th>#</th><th>Token</th><th></th><th>وضعیت</th><th>Market Cap</th><th>Holders</th><th>تغییر هولدر</th><th>عرض رنج</th><th>مدت مشاهده</th><th>Snapshots</th>
+        <th>#</th><th>Token</th><th></th><th>Age</th><th>وضعیت</th><th>Market Cap</th><th>Holders</th><th>تغییر هولدر</th><th>عرض رنج</th><th>مدت مشاهده</th><th>Snapshots</th>
       </tr></thead>
       <tbody id="sniper4hLiveBody"><tr><td colspan="10">در حال جمع‌آوری داده...</td></tr></tbody>
     </table>
@@ -2047,7 +2093,7 @@ table tbody tr:hover {
   }
   async function loadRangeHunter() {
     try {
-      body.querySelectorAll(".rh-pump-lamp").forEach(l => l.classList.add("rh-refresh-flash"));
+      body.querySelectorAll(".rh-pump-lamp").forEach(l => l.classList.remove("rh-refresh-flash"));
       document.getElementById("sniper4hLiveSection").classList.add("rh-is-refreshing");
       const r = await fetch("/api/range-hunter?t=" + Date.now(), {cache:"no-store"});
       if (!r.ok) throw new Error("HTTP " + r.status);
@@ -2061,30 +2107,24 @@ table tbody tr:hover {
       const displayTokens = tokens.filter(t =>
         !mainAddresses.has(String(t.address || "").trim().toLowerCase())
       );
-      const hasAccumulation = tokens.some(t => t.status === "Range Accumulation");
       let significantChange = false;
       const currentPumpTokens = new Map();
       for (const t of tokens) {
         const key = String(t.address || t.symbol || "");
         if (!key) continue;
-        currentPumpTokens.set(key, t);
         const old = previousPumpTokens && previousPumpTokens.get(key);
-        if (!old) continue;
-        const oldMc = Number(old.marketCap || 0), newMc = Number(t.marketCap || 0);
-        const oldH = Number(old.holders || 0), newH = Number(t.holders || 0);
-        const oldRange = Number(old.rangePct || 0), newRange = Number(t.rangePct || 0);
-        if ((oldMc > 0 && Math.abs(newMc - oldMc) / oldMc >= 0.05) ||
-            Math.abs(newH - oldH) >= Math.max(25, oldH * 0.02) ||
-            Math.abs(newRange - oldRange) >= 3 ||
-            old.status !== t.status) {
-          significantChange = true;
-          break;
+        t._rhChanged = false;
+        if (old) {
+          const oldMc = Number(old.marketCap || 0), newMc = Number(t.marketCap || 0);
+          const oldH = Number(old.holders || 0), newH = Number(t.holders || 0);
+          const oldRange = Number(old.rangePct || 0), newRange = Number(t.rangePct || 0);
+          t._rhChanged = (oldMc > 0 && Math.abs(newMc-oldMc)/oldMc >= 0.05) || Math.abs(newH-oldH) >= Math.max(25,oldH*0.02) || Math.abs(newRange-oldRange) >= 3 || old.status !== t.status;
+          if (t._rhChanged) significantChange = true;
         }
+        currentPumpTokens.set(key,t);
       }
       previousPumpTokens = currentPumpTokens;
-      if (hasAccumulation) pulsePumpChangeLamp("Range accumulation detected");
-      else if (significantChange) pulsePumpChangeLamp("Significant token changes detected");
-      status.textContent = "تعداد: " + tokens.length + " · بروزرسانی " + new Date().toLocaleTimeString();
+      if (significantChange) pulsePumpChangeLamp("Significant token changes detected");      status.textContent = "تعداد: " + tokens.length + " · بروزرسانی " + new Date().toLocaleTimeString();
       if (!displayTokens.length) {
         body.innerHTML = '<tr><td colspan="9">هنوز داده‌ای جمع نشده است.</td></tr>';
         return;
@@ -2099,7 +2139,8 @@ table tbody tr:hover {
         return "<tr>" +
           "<td>"+(i+1)+"</td>" +
           '<td>'+esc(t.symbol)+' <button type="button" class="rh-copy-btn" data-address="'+esc(t.address)+'" title="Copy contract">⧉</button></td>' +
-          '<td class="rh-lamp-cell">'+(pumpSignal ? lamp.replace('rh-pump-lamp','rh-pump-lamp is-active') : lamp)+'</td>' +
+          '<td class="rh-lamp-cell">'+(t._rhChanged ? lamp.replace('rh-pump-lamp','rh-pump-lamp is-active') : lamp)+'</td>' +
+          '<td class="rh-age-cell">'+(Number.isFinite(Number(t.ageDays)) ? Number(t.ageDays).toFixed(1)+'d' : '-')+'</td>' +
           '<td class="rh-status-cell" style="color:'+color+'"><span>'+esc(t.status)+'</span></td>' +
           "<td>$"+fmt(t.marketCap)+"</td>" +
           "<td>"+fmt(t.holders)+"</td>" +
@@ -7020,6 +7061,41 @@ td:has(.main-radar-crystal-led) {
   50% { opacity:1;transform:scale(1.18); }
 }
 </style>
+<style id="gmgn-robot-terminal-v1">
+:root{--gmgn-bg:#070d19;--gmgn-panel:#0b1525;--gmgn-line:rgba(76,213,235,.22);--gmgn-cyan:#48eee4;--gmgn-purple:#a78bfa;--gmgn-text:#e7f2ff}
+#appScreen{background:radial-gradient(ellipse at 50% 0%,rgba(22,83,119,.22),transparent 48%),linear-gradient(180deg,#070d19,#09111f 55%,#070c16)!important;color:var(--gmgn-text)}
+#aiAnalyzerPanel{box-sizing:border-box!important;max-width:1440px!important;margin:20px auto 12px!important;padding:clamp(14px,2vw,25px)!important;border:1px solid var(--gmgn-line)!important;border-radius:20px!important;background:linear-gradient(135deg,rgba(12,25,43,.98),rgba(8,17,31,.98))!important;box-shadow:0 0 34px rgba(39,203,220,.07),inset 0 1px rgba(255,255,255,.035)!important;position:relative;overflow:hidden}
+#aiAnalyzerPanel:before{content:"";position:absolute;left:0;top:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#47eee4,#9b7cff,#47eee4,transparent);opacity:.8}
+#aiAnalyzerPanel .ai-market-strip{border-color:rgba(72,238,228,.16)!important;border-radius:13px!important}
+#appScreen>.header{box-sizing:border-box;max-width:1440px;margin:12px auto!important;padding:24px clamp(14px,2.5vw,32px)!important;border:1px solid var(--gmgn-line)!important;border-radius:20px!important;background:radial-gradient(ellipse at 50% 0%,rgba(25,101,128,.2),transparent 65%),linear-gradient(140deg,#0d1b2d,#091321 65%,#101027)!important;box-shadow:0 0 30px rgba(35,193,215,.06),inset 0 1px rgba(255,255,255,.04)!important;position:relative;overflow:hidden}
+#appScreen>.header h1{color:#eafaff!important;text-shadow:0 0 22px rgba(72,238,228,.2);letter-spacing:.3px}
+#appScreen>.header p{color:#91a9c5!important}
+.gmgn-robot-profile{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:0 auto 20px;padding:14px 16px;max-width:1000px;border:1px solid rgba(72,238,228,.16);border-radius:16px;background:linear-gradient(100deg,rgba(10,24,40,.9),rgba(18,23,48,.78));box-shadow:inset 0 0 24px rgba(52,164,197,.04)}
+.gmgn-robot-avatar{width:74px;height:74px;flex:0 0 74px;display:grid;place-items:center;border:1px solid rgba(72,238,228,.42);border-radius:18px;background:radial-gradient(circle,rgba(72,238,228,.13),rgba(9,17,31,.95));box-shadow:0 0 23px rgba(72,238,228,.12)}
+.gmgn-robot-avatar svg{width:65px;height:65px;filter:drop-shadow(0 0 7px rgba(72,238,228,.2))}
+.gmgn-robot-identity{display:flex;flex-direction:column;gap:5px;min-width:190px;text-align:left}
+.gmgn-robot-identity span{font-size:10px;letter-spacing:2px;color:var(--gmgn-cyan)}
+.gmgn-robot-identity strong{font-size:22px;letter-spacing:1px;color:#f0f6ff}
+.gmgn-robot-identity small{font-size:10px;letter-spacing:1px;color:#8198b6}
+.gmgn-wallet-card{display:flex;align-items:center;gap:11px;margin-left:auto;padding:11px 14px;border:1px solid rgba(167,139,250,.25);border-radius:12px;background:rgba(14,20,40,.8);min-width:200px}
+.gmgn-wallet-icon{font-size:27px;color:var(--gmgn-purple);text-shadow:0 0 14px rgba(167,139,250,.45)}
+.gmgn-wallet-card div{display:flex;flex-direction:column;gap:4px}
+.gmgn-wallet-card small{font-size:9px;letter-spacing:1.5px;color:#a6b3d1}
+.gmgn-wallet-card strong{font-size:13px;color:#f0f2ff}
+.gmgn-wallet-card em{font-size:9px;font-style:normal;color:#f0c778}
+.gmgn-wallet-dot{width:7px;height:7px;margin-left:auto;border-radius:50%;background:#f0c778;box-shadow:0 0 9px rgba(240,199,120,.5)}
+#appScreen>.header .gmgn-header-market-tape{display:flex;align-items:center;justify-content:center;gap:clamp(10px,2vw,25px);flex-wrap:wrap;margin-top:18px;padding:12px;border:1px solid rgba(72,238,228,.13);border-radius:12px;background:rgba(4,10,21,.62)}
+#appScreen>.header .gmgn-header-market-tape>span{color:#a9bdd4;font-size:11px;letter-spacing:.7px}
+#appScreen>.header .gmgn-header-market-tape .live{color:#55f0bd;text-shadow:0 0 12px rgba(85,240,189,.35)}
+#appScreen>#status,.status#status{box-sizing:border-box;max-width:1440px;margin:10px auto!important;padding:12px 16px!important;border:1px solid rgba(72,238,228,.15)!important;border-radius:12px!important;background:linear-gradient(90deg,rgba(10,28,42,.95),rgba(10,17,31,.95))!important;color:#a9c9d7!important}
+#appScreen .settings-controls{max-width:1440px;margin:10px auto!important}
+#appScreen .settings-btn{border-radius:10px!important;border:1px solid rgba(72,238,228,.28)!important;background:linear-gradient(135deg,#102a3b,#151c36)!important;color:#b9fff8!important}
+#appScreen #settingsPanel{box-sizing:border-box;max-width:1440px;margin:10px auto!important;border-color:var(--gmgn-line)!important;border-radius:16px!important;background:#0b1525!important}
+#appScreen #sniper4hLiveSection{box-sizing:border-box;border-color:rgba(72,238,228,.18)!important;border-radius:18px!important;background:linear-gradient(145deg,rgba(10,22,38,.98),rgba(8,14,27,.98))!important;box-shadow:0 10px 35px rgba(0,0,0,.15)}
+#appScreen button{transition:filter .18s ease,box-shadow .18s ease}
+#appScreen button:hover{filter:brightness(1.12)}
+@media(max-width:650px){.gmgn-robot-profile{gap:10px;padding:12px}.gmgn-robot-avatar{width:58px;height:58px;flex-basis:58px}.gmgn-robot-avatar svg{width:52px;height:52px}.gmgn-robot-identity strong{font-size:18px}.gmgn-wallet-card{margin:0;width:100%;min-width:0;box-sizing:border-box}#appScreen>.header{padding:16px 12px!important}#aiAnalyzerPanel{margin:12px 8px!important}}
+</style>
 </body>
 </html>
 
@@ -7115,4 +7191,164 @@ td:has(.main-radar-crystal-led) {
 #rhPumpChangeRow .rh-summary-lamp{filter:drop-shadow(0 0 5px #00e5d4)!important}
 #rhPumpChangeRow .rh-summary-lamp.is-active{animation:rhDarkBluePulse 1.15s ease-in-out infinite!important}
 @keyframes rhDarkBluePulse{0%,100%{transform:scale(.94);filter:drop-shadow(0 0 4px #00e5d4)}50%{transform:scale(1.08);filter:drop-shadow(0 0 12px #20e6d2)}}
+</style>
+<style id="rh-lamp-off-unless-changed">
+#sniper4hLiveSection .rh-pump-lamp:not(.is-active){opacity:.18!important;filter:grayscale(1) brightness(.55)!important;animation:none!important}
+#sniper4hLiveSection.rh-is-refreshing .rh-pump-lamp:not(.is-active){opacity:.18!important;filter:grayscale(1) brightness(.55)!important;animation:none!important}
+#sniper4hLiveSection .rh-pump-lamp.is-active{opacity:1!important;filter:drop-shadow(0 0 5px #00e5d4)!important;animation:rhDarkBluePulse 1.15s ease-in-out infinite!important}
+</style>
+<style id="gmgn-global-pro-environment">
+:root{color-scheme:dark}
+body{
+ background-color:#07101f!important;
+ background-image:
+ radial-gradient(ellipse at 12% 0%,rgba(0,188,212,.09),transparent 38%),
+ radial-gradient(ellipse at 90% 12%,rgba(45,100,220,.10),transparent 34%),
+ linear-gradient(rgba(74,113,164,.035) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(74,113,164,.035) 1px,transparent 1px)!important;
+ background-size:auto,auto,32px 32px,32px 32px!important;
+ color:#dce8f8
+}
+.header{
+ background:linear-gradient(135deg,rgba(13,29,52,.97),rgba(8,18,35,.96))!important;
+ border:1px solid rgba(74,126,180,.22)!important;
+ box-shadow:0 12px 35px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.025);
+ border-radius:14px
+}
+#aiAnalyzerPanel,#sniper4hLiveSection{
+ border-color:rgba(75,133,183,.28)!important;
+ box-shadow:0 10px 32px rgba(0,0,0,.18),inset 0 1px rgba(160,210,255,.025)
+}
+#aiAnalyzerPanel{background-color:rgba(9,22,41,.88)!important}
+#sniper4hLiveSection{background-color:rgba(8,20,38,.9)!important}
+button,input,select,textarea{
+ transition:border-color .18s ease,box-shadow .18s ease
+}
+button:hover{
+ box-shadow:0 0 14px rgba(0,190,220,.12)
+}
+input:focus,select:focus,textarea:focus{
+ outline:none!important;border-color:#20bcd0!important;
+ box-shadow:0 0 0 2px rgba(32,188,208,.12)!important
+}
+#sniper4hLiveSection table{
+ border-collapse:separate!important;border-spacing:0 3px!important
+}
+#sniper4hLiveSection thead th{
+ background:#101f36!important;color:#9ec9e9!important;
+ border-bottom:1px solid #24425e!important
+}
+#sniper4hLiveSection tbody tr td{
+ border-top:1px solid rgba(71,111,151,.12)!important;
+ border-bottom:1px solid rgba(71,111,151,.12)!important
+}
+@media(max-width:700px){
+ .header{border-radius:10px}
+}
+</style>
+<style id="gmgn-premium-market-header">
+.header{
+ position:relative!important;isolation:isolate;overflow:hidden;
+ margin:18px 12px 14px!important;padding:28px 18px 24px!important;
+ border:1px solid rgba(53,190,220,.35)!important;border-radius:18px!important;
+ background:radial-gradient(ellipse at 50% 0%,rgba(0,190,220,.20),transparent 65%),linear-gradient(125deg,#050d1b,#0b1930 55%,#071020)!important;
+ box-shadow:0 12px 34px rgba(0,0,0,.28),inset 0 1px rgba(160,225,255,.08)!important
+}
+.header:before{
+ content:"₿     Ξ     ◎     ₿     Ξ     ◎";display:block;
+ color:rgba(82,207,231,.38);font:bold 18px Arial,sans-serif;letter-spacing:13px;
+ margin:0 auto 14px;max-width:700px;white-space:normal;
+ text-shadow:0 0 14px rgba(0,190,220,.22)
+}
+.header:after{
+ content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
+ background:repeating-linear-gradient(0deg,transparent 0 27px,rgba(70,140,180,.055) 28px 29px),
+ linear-gradient(110deg,transparent 15%,rgba(0,220,210,.035),transparent 75%)
+}
+.header h1{
+ position:relative;color:#e4f8ff!important;font-size:clamp(23px,3vw,34px)!important;
+ font-weight:800;letter-spacing:.3px;text-shadow:0 0 18px rgba(0,200,255,.3);
+ margin:0!important
+}
+.header p{
+ color:#91b9d2!important;margin:10px 0 14px!important;letter-spacing:.5px
+}
+.header .topSignature{
+ display:inline-block!important;color:#ffd879!important;font-size:15px!important;
+ font-weight:700;letter-spacing:2px;margin-top:8px!important;padding:7px 16px;
+ border:1px solid rgba(255,207,100,.3);border-radius:30px;
+ background:rgba(255,190,65,.06);box-shadow:0 0 18px rgba(255,190,65,.07);
+ text-shadow:0 0 10px rgba(255,200,90,.22)
+}
+.gmgn-header-market-tape{
+ display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;
+ margin:16px auto 0;padding-top:12px;max-width:760px;
+ border-top:1px solid rgba(93,153,190,.2);
+ color:#9bb8d0;font:600 11px Arial,sans-serif;letter-spacing:1.2px
+}
+.gmgn-header-market-tape span{display:inline-flex;align-items:center;gap:6px}
+.gmgn-header-market-tape b{font-size:14px;color:#e5f7ff}
+.gmgn-header-market-tape .up{color:#39e6a1}
+.gmgn-header-market-tape .down{color:#ff6d85}
+.gmgn-header-market-tape .live{color:#42edbd}
+.gmgn-header-market-tape .live:before{
+ content:"";width:7px;height:7px;border-radius:50%;background:#42edbd;
+ box-shadow:0 0 9px #42edbd
+}
+@media(max-width:600px){
+ .header{margin:10px 5px!important;padding:22px 10px!important}
+ .header:before{font-size:15px;letter-spacing:7px}
+ .gmgn-header-market-tape{gap:10px;font-size:10px}
+}
+</style>
+<style id="gmgn-header-tape-fix">
+.gmgn-header-market-tape{display:flex;justify-content:center;align-items:center;gap:22px;flex-wrap:wrap;margin:20px auto 0;padding:14px 8px 0;border-top:1px solid #203c55;font:600 11px Arial,sans-serif;letter-spacing:1px;color:#a9c5db}
+.gmgn-header-market-tape span{display:inline-flex;align-items:center;gap:6px}
+.gmgn-header-market-tape b{font-size:17px}
+.gmgn-header-market-tape .coin-btc{color:#f4b942;text-shadow:0 0 10px #f4b94255}
+.gmgn-header-market-tape .coin-eth{color:#a6a3ff}
+.gmgn-header-market-tape .coin-sol{color:#65e7bd}
+.gmgn-header-market-tape .candles{height:27px;gap:4px;align-items:center}
+.gmgn-header-market-tape .candles i{display:block;position:relative;width:5px;height:15px;background:#37e5a0;border-radius:1px;box-shadow:0 0 5px #37e5a044}
+.gmgn-header-market-tape .candles i:nth-child(2n){background:#ff647f}
+.gmgn-header-market-tape .live{color:#43edbd}
+.gmgn-header-market-tape .live:before{content:"";width:7px;height:7px;border-radius:50%;background:#43edbd;box-shadow:0 0 9px #43edbd}
+@media(max-width:600px){.gmgn-header-market-tape{gap:12px;font-size:10px}.gmgn-header-market-tape .candles{display:none}}
+</style>
+<style id="range-hunter-premium-panel">
+#sniper4hLiveSection{
+  position:relative!important;
+  overflow:hidden!important;
+  margin:24px 12px!important;
+  padding:22px!important;
+  border:1px solid rgba(0,220,255,.42)!important;
+  border-radius:20px!important;
+  background:linear-gradient(145deg,#0b1830 0%,#0a1224 48%,#101b32 100%)!important;
+  box-shadow:0 14px 38px rgba(0,0,0,.32),inset 0 1px 0 rgba(115,220,255,.12),0 0 22px rgba(0,190,220,.07)!important;
+}
+#sniper4hLiveSection:before{
+  content:"";
+  display:block;
+  height:2px;
+  margin:-22px -22px 20px;
+  background:linear-gradient(90deg,transparent,#00d9ff 25%,#4c83ff 70%,transparent);
+  opacity:.85;
+}
+#sniper4hLiveSection table{
+  border-collapse:separate!important;
+  border-spacing:0 5px!important;
+}
+#sniper4hLiveSection th{
+  background:rgba(17,36,62,.92)!important;
+  color:#78dff4!important;
+  border-bottom:1px solid rgba(0,220,255,.22)!important;
+}
+#sniper4hLiveSection td{
+  background:rgba(16,30,51,.72)!important;
+  border-top:1px solid rgba(130,190,220,.055)!important;
+  border-bottom:1px solid rgba(130,190,220,.055)!important;
+}
+#sniper4hLiveSection tr:hover td{
+  background:rgba(0,175,210,.10)!important;
+}
 </style>

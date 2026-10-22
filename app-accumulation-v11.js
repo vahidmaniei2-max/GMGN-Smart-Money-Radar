@@ -1632,11 +1632,12 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
         try { db = JSON.parse(fs.readFileSync(historyFile, "utf8")); } catch (_) {}
         if (!db || !db.tokens) db = { lastSnapshotAt: 0, tokens: {} };
         const now = Math.floor(Date.now() / 1000);
+        const normalizeTimestamp = (v) => { let n = Number(v || 0); if (n > 1000000000000) n = Math.floor(n / 1000); return n; };
         // Recover listing times for existing Range Hunter records from the GMGN cache.
         let rangeHunterMetadataUpdated = false;
         for (const c of (cache.rank || [])) {
             const address = String(c.address || c.token_address || c.contract_address || c.mint || "");
-            const creationTime = Number(c.creation_timestamp || c.open_timestamp || 0);
+            const creationTime = normalizeTimestamp(c.creation_timestamp || c.open_timestamp || 0);
             if (!address || creationTime <= 0 || !db.tokens[address]) continue;
             if (!Number(db.tokens[address].creationTime)) {
                 db.tokens[address].creationTime = creationTime;
@@ -1655,7 +1656,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                 if (!address || mc < 50000 || holders < 280 || price <= 0) continue;
                 if (!db.tokens[address]) db.tokens[address] = { address, symbol: c.symbol || "?", samples: [] };
                 const t = db.tokens[address];
-                const creationTime = Number(c.creation_timestamp || c.open_timestamp || 0);
+                const creationTime = normalizeTimestamp(c.creation_timestamp || c.open_timestamp || 0);
                 if (creationTime > 0) t.creationTime = creationTime;
                 t.samples.push({ time: now, price, mc, holders, volume: Number(c.volume || 0), liquidity: Number(c.liquidity || 0), buys: Number(c.buys || 0), sells: Number(c.sells || 0), swaps: Number(c.swaps || 0) });
                 t.samples = t.samples.filter(x => x.time >= now - 259200).slice(-600);
@@ -1665,8 +1666,9 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
         }
         const tokens = [];
         for (const t of Object.values(db.tokens)) {
-            const listingTime = Number(t.creationTime || 0);
-            if (!listingTime || now - listingTime < 864000) continue;
+            const listingTime = normalizeTimestamp(t.creationTime);
+            const ageSeconds = now - listingTime;
+            if (!listingTime || ageSeconds < 3 * 86400 || ageSeconds > 15 * 86400) continue;
             const a = (t.samples || []).filter(x => x.time >= now - 259200).sort((x,y) => x.time-y.time);
             if (!a.length) continue;
             const prices = a.map(x => x.price);
@@ -1681,7 +1683,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                 else if (delta >= Math.max(5, a[0].holders * 0.01)) status = "Range Accumulation";
                 else status = "Quiet/Dead Range";
             }
-            tokens.push({ symbol:t.symbol, address:t.address, marketCap:a[a.length-1].mc, holders:a[a.length-1].holders, holderDelta:delta, rangePct:+range.toFixed(2), spanHours:+span.toFixed(1), snapshots:a.length, status });
+            tokens.push({ symbol:t.symbol, address:t.address, ageDays:+(ageSeconds/86400).toFixed(2), marketCap:a[a.length-1].mc, holders:a[a.length-1].holders, holderDelta:delta, rangePct:+range.toFixed(2), spanHours:+span.toFixed(1), snapshots:a.length, status });
         }
         res.writeHead(200, { "Content-Type":"application/json; charset=utf-8", "Cache-Control":"no-store" });
         res.end(JSON.stringify({ ok:true, total:tokens.length, tokens }));
@@ -2184,8 +2186,8 @@ res.end(
                                 : 0;
 
                         if (
-                            ageDays < MIN_AGE_DAYS ||
-                            ageDays > MAX_AGE_DAYS ||
+                            ageDays < 5 ||
+                            ageDays > 20 ||
                             marketCap < MIN_MC ||
                             marketCap > MAX_MC ||
                             holders < MIN_HOLDERS ||
