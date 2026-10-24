@@ -1835,20 +1835,47 @@ table tbody tr:hover {
 
     <div class="header">
 <div class="gmgn-robot-profile" aria-label="GMGN robot profile">
-  <div class="gmgn-robot-avatar">
-    <svg viewBox="0 0 100 100" role="img" aria-label="Neon robot">
-      <defs><linearGradient id="gmgnRobotMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e526a"/><stop offset="1" stop-color="#10172f"/></linearGradient></defs>
-      <path d="M50 8V19M44 8H56" stroke="#42f5e8" stroke-width="3" stroke-linecap="round"/>
-      <rect x="17" y="24" width="66" height="57" rx="17" fill="url(#gmgnRobotMetal)" stroke="#40e8ef" stroke-width="2.5"/>
-      <path d="M17 43H9V61H18M82 43H91V61H82" fill="#142c43" stroke="#40e8ef" stroke-width="2.5"/>
-      <rect x="27" y="37" width="17" height="13" rx="5" fill="#40f6e8"/><rect x="56" y="37" width="17" height="13" rx="5" fill="#40f6e8"/>
-      <path d="M34 64H66M39 70H61" stroke="#a58cff" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="35" cy="43" r="3" fill="#fff"/><circle cx="64" cy="43" r="3" fill="#fff"/>
-      <path d="M28 83L24 91M72 83L76 91" stroke="#a58cff" stroke-width="3" stroke-linecap="round"/>
-    </svg>
-  </div>
+  <div class="gmgn-robot-avatar" id="gmgn-human-robot-v1">
+  <svg viewBox="0 0 100 100" role="img" aria-label="Humanoid neon robot">
+    <defs>
+      <linearGradient id="humanRobotMetal" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#65f6ed"/>
+        <stop offset=".32" stop-color="#28677b"/>
+        <stop offset=".72" stop-color="#152b42"/>
+        <stop offset="1" stop-color="#080f20"/>
+      </linearGradient>
+      <linearGradient id="humanRobotFace" x1="0" y1="0" x2=".9" y2="1">
+        <stop offset="0" stop-color="#294c65"/>
+        <stop offset="1" stop-color="#101a2d"/>
+      </linearGradient>
+    </defs>
+    <path d="M50 5 L50 13 M44 7 L56 7" stroke="#50fff0" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M30 20 Q50 10 70 20 L82 37 L77 70 L63 85 L37 85 L23 70 L18 37 Z"
+      fill="url(#humanRobotMetal)" stroke="#52e9e6" stroke-width="2.2" stroke-linejoin="round"/>
+    <path d="M30 29 Q50 18 70 29 L72 57 Q69 72 50 78 Q31 72 28 57 Z"
+      fill="url(#humanRobotFace)" stroke="#367c91" stroke-width="1.4"/>
+    <path d="M28 39 L17 34 L17 54 L29 58 M72 39 L83 34 L83 54 L71 58"
+      fill="#152c40" stroke="#4bece5" stroke-width="2"/>
+    <path d="M32 43 Q40 35 46 43 L44 49 L33 49 Z" fill="#46fff0"/>
+    <path d="M54 43 Q62 35 68 43 L67 49 L56 49 Z" fill="#46fff0"/>
+    <path d="M50 47 L45 59 L51 62 L56 59" fill="none" stroke="#70d9e5" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M39 68 Q50 73 61 68" fill="none" stroke="#b7a0ff" stroke-width="3" stroke-linecap="round"/>
+    <path d="M34 80 L30 91 M66 80 L70 91" stroke="#43e8e5" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="39" cy="43" r="2" fill="#fff"/>
+    <circle cx="61" cy="43" r="2" fill="#fff"/>
+    <path d="M24 28 L31 23 M76 28 L69 23" stroke="#ffd76a" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+</div>
   <div class="gmgn-robot-identity"><span>SMART MONEY TERMINAL</span><strong>VAHID1989</strong><small>SOLANA RADAR OPERATOR</small></div>
-  <div class="gmgn-wallet-card"><span class="gmgn-wallet-icon">◈</span><div><small>WALLET PROFILE</small><strong>vahid1989</strong><em>LOCAL PROFILE · NOT CONNECTED</em></div><span class="gmgn-wallet-dot"></span></div>
+  <div class="gmgn-wallet-card"><span class="gmgn-wallet-icon" aria-label="Wallet" title="Wallet">
+<svg viewBox="0 0 32 32" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M5 9.5A3.5 3.5 0 0 1 8.5 6H25a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+<path d="M6 9h19a3 3 0 0 1 3 3v12a2 2 0 0 1-2 2H7a3 3 0 0 1-3-3V10.5A1.5 1.5 0 0 1 5.5 9Z" fill="#0a2030" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M21 15h7v6h-7a3 3 0 0 1 0-6Z" fill="#103846" stroke="currentColor" stroke-width="1.6"/>
+<circle cx="22" cy="18" r="1" fill="currentColor"/>
+<path d="M9 13h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".65"/>
+</svg>
+</span><div><small>WALLET PROFILE</small><strong>vahid1989</strong><em>LOCAL PROFILE · NOT CONNECTED</em></div><span class="gmgn-wallet-dot"></span></div>
 </div>
 
         <h1>
@@ -2056,7 +2083,20 @@ table tbody tr:hover {
 <div id="sniper4hLiveSection" style="margin-top:24px;padding:18px;border:1px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(255,255,255,.025);">
   <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
     <div>
-      <div style="font-size:18px;font-weight:700;">🎯 RANGE HUNTER</div>
+      <style id="range-hunter-turquoise-header-v1">
+#sniper4hLiveSection > div:first-of-type {
+  background: linear-gradient(110deg,rgba(4,48,66,.98),rgba(0,137,151,.94),rgba(16,80,112,.96)) !important;
+  border: 1px solid rgba(75,255,239,.72) !important;
+  border-radius: 12px !important;
+  padding: 14px 16px !important;
+  box-shadow: inset 0 1px 0 rgba(210,255,255,.14), 0 0 16px rgba(0,230,220,.16) !important;
+}
+#sniper4hLiveSection > div:first-of-type > div:first-child > div:first-child {
+  color: #a5fff5 !important;
+  text-shadow: 0 0 10px rgba(0,255,235,.28) !important;
+}
+</style>
+<div style="font-size:18px;font-weight:700;">🎯 RANGE HUNTER</div>
       <div style="font-size:12px;opacity:.7;margin-top:4px;">رصد رنج قیمت، انباشت هولدر و ریسک شکست · نمونه‌برداری هر ۳ دقیقه</div>
     </div>
     <div id="sniper4hLiveStatus" style="font-size:12px;opacity:.7;">در انتظار داده...</div>
@@ -7015,13 +7055,13 @@ td:has(.main-radar-crystal-led) {
   background:radial-gradient(circle at 30% 22%,#fff 0%,#d8fffb 9%,#75fff0 23%,#00d9c3 48%,#008f91 73%,#043c49 100%) !important;
   border:1px solid #5effef !important;
   box-shadow:inset 0 1px 2px rgba(255,255,255,.98),inset 0 -3px 5px rgba(0,45,50,.85),0 0 6px #31ffe9,0 0 14px rgba(0,255,225,.95),0 0 24px rgba(0,230,220,.7) !important;
-  animation:mainRadarTurquoisePumpPulse 1s ease-in-out infinite !important;
+  animation:mainRadarTurquoisePumpPulse 2s ease-in-out infinite !important;
 }
 .main-radar-crystal-led.strong {
   background:radial-gradient(circle at 30% 20%,#fff 0%,#fff 10%,#b9fff8 22%,#38ffe8 42%,#00bfb8 68%,#00535e 100%) !important;
   border:1px solid #c2fff9 !important;
   box-shadow:inset 0 1px 2px #fff,inset 0 -3px 5px rgba(0,35,45,.9),0 0 8px #9ffff7,0 0 18px #00ffe1,0 0 30px rgba(0,255,230,.95) !important;
-  animation:mainRadarTurquoiseStrongPulse .72s ease-in-out infinite !important;
+  animation:mainRadarTurquoiseStrongPulse 2s ease-in-out infinite !important;
 }
 .main-radar-crystal-led.pump::before,
 .main-radar-crystal-led.strong::before {
@@ -7095,6 +7135,121 @@ td:has(.main-radar-crystal-led) {
 #appScreen button{transition:filter .18s ease,box-shadow .18s ease}
 #appScreen button:hover{filter:brightness(1.12)}
 @media(max-width:650px){.gmgn-robot-profile{gap:10px;padding:12px}.gmgn-robot-avatar{width:58px;height:58px;flex-basis:58px}.gmgn-robot-avatar svg{width:52px;height:52px}.gmgn-robot-identity strong{font-size:18px}.gmgn-wallet-card{margin:0;width:100%;min-width:0;box-sizing:border-box}#appScreen>.header{padding:16px 12px!important}#aiAnalyzerPanel{margin:12px 8px!important}}
+</style>
+<style id="range-only-view">
+#appScreen > #status,
+#appScreen > .settings-controls,
+#appScreen > #settingsPanel,
+#appScreen > .watch-controls,
+#appScreen > #walletPanel,
+#appScreen > .container,
+#mobileMenuButton,
+#mobileMenuOverlay { display: none !important; }
+#sniper4hLiveSection { display: block !important; }
+</style>
+<style id="gmgn-navy-pro-theme">
+/* GMGN-NAVY-PRO-THEME-V1 */
+html, body {
+  background-color: #081426 !important;
+}
+body {
+  background-image:
+    radial-gradient(ellipse at 12% 0%, rgba(20,75,112,.20), transparent 48%),
+    radial-gradient(ellipse at 90% 35%, rgba(0,190,180,.055), transparent 42%),
+    linear-gradient(145deg,#081426 0%,#0a1729 52%,#07111f 100%) !important;
+  color: #dce8f5 !important;
+}
+#appScreen {
+  background: transparent !important;
+}
+#appScreen > .header {
+  background: linear-gradient(145deg,rgba(13,34,56,.96),rgba(9,22,40,.97)) !important;
+  border: 1px solid rgba(85,190,220,.22) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 38px rgba(0,0,0,.22), inset 0 1px 0 rgba(180,225,255,.045) !important;
+}
+#aiAnalyzerPanel {
+  background: linear-gradient(145deg,rgba(14,32,53,.97),rgba(9,21,38,.98)) !important;
+  border-color: rgba(76,185,211,.24) !important;
+  box-shadow: 0 10px 32px rgba(0,0,0,.18) !important;
+}
+#sniper4hLiveSection {
+  background: linear-gradient(145deg,#0c1b2e 0%,#091627 100%) !important;
+  border: 1px solid rgba(68,190,207,.24) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 12px 36px rgba(0,0,0,.22), inset 0 1px 0 rgba(180,225,255,.035) !important;
+}
+#sniper4hLiveSection table {
+  background: transparent !important;
+}
+</style>
+<style id="gmgn-original-background">
+/* GMGN-ORIGINAL-BACKGROUND-V1 */
+html, body {
+  background-color: #040b14 !important;
+}
+body {
+  background: radial-gradient(circle at top, #10283d 0%, #07111f 45%, #040b14 100%) !important;
+  color: white;
+}
+#appScreen {
+  background: transparent !important;
+}
+</style>
+<style id="gmgn-gold-robot-upgrade">
+.gmgn-robot-identity strong {
+  color: #ffd76a !important;
+  text-shadow: 0 0 5px rgba(255,205,75,.75), 0 0 16px rgba(255,174,35,.4) !important;
+  animation: gmgnGoldBlink 1.8s ease-in-out infinite !important;
+}
+@keyframes gmgnGoldBlink {
+  0%,100% { opacity:1; text-shadow:0 0 5px rgba(255,205,75,.65),0 0 13px rgba(255,174,35,.3); }
+  50% { opacity:.72; text-shadow:0 0 10px #ffd76a,0 0 24px rgba(255,174,35,.8); }
+}
+.gmgn-robot-profile { position:relative; }
+.gmgn-right-robot {
+  width:82px; height:82px; flex:0 0 82px;
+  display:grid; place-items:center; position:relative;
+}
+.gmgn-right-robot .gmgn-orbit {
+  position:absolute; inset:4px; border:1px solid rgba(0,238,226,.65);
+  border-radius:50%; box-shadow:0 0 12px rgba(0,238,226,.18);
+  animation:gmgnOrbitSpin 7s linear infinite;
+}
+.gmgn-right-robot .gmgn-orbit:before {
+  content:""; position:absolute; width:6px; height:6px; top:7px; left:10px;
+  border-radius:50%; background:#ffd76a; box-shadow:0 0 9px #ffd76a;
+}
+.gmgn-right-robot svg {
+  width:62px; height:62px; position:relative; z-index:1;
+  filter:drop-shadow(0 0 8px rgba(0,238,226,.55));
+  animation:gmgnRobotFloat 2.8s ease-in-out infinite;
+}
+@keyframes gmgnOrbitSpin { to { transform:rotate(360deg); } }
+@keyframes gmgnRobotFloat { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-4px) } }
+@media(max-width:650px) {
+  .gmgn-right-robot { width:64px;height:64px;flex-basis:64px; }
+  .gmgn-right-robot svg { width:49px;height:49px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .gmgn-robot-identity strong,.gmgn-right-robot * { animation:none!important; }
+}
+</style>
+<style id="permanent-turquoise-panel-v1">
+body {
+  background: radial-gradient(circle at 50% 0%, #10283d 0%, #07111f 28%, transparent 58%), linear-gradient(180deg, #07111f 0%, #087e8b 65%, #49c5d9 100%) !important;
+}
+#sniper4hLiveSection {
+  background: linear-gradient(145deg, rgba(8,70,88,.96), rgba(20,135,155,.94)) !important;
+}
+</style>
+<style id="permanent-turquoise-panel-v2">
+html body {
+  background: radial-gradient(circle at 50% 0%, #10283d 0%, #07111f 28%, transparent 58%), linear-gradient(180deg, #07111f 0%, #087e8b 65%, #49c5d9 100%) !important;
+}
+html body #sniper4hLiveSection {
+  background: linear-gradient(145deg, rgba(8,70,88,.96), rgba(20,135,155,.94)) !important;
+}
 </style>
 </body>
 </html>
@@ -7200,14 +7355,10 @@ td:has(.main-radar-crystal-led) {
 <style id="gmgn-global-pro-environment">
 :root{color-scheme:dark}
 body{
- background-color:#07101f!important;
- background-image:
- radial-gradient(ellipse at 12% 0%,rgba(0,188,212,.09),transparent 38%),
- radial-gradient(ellipse at 90% 12%,rgba(45,100,220,.10),transparent 34%),
- linear-gradient(rgba(74,113,164,.035) 1px,transparent 1px),
- linear-gradient(90deg,rgba(74,113,164,.035) 1px,transparent 1px)!important;
- background-size:auto,auto,32px 32px,32px 32px!important;
- color:#dce8f8
+ margin:0;
+ background:radial-gradient(circle at top,#10283d 0%,#07111f 45%,#040b14 100%) !important;
+ color:#dce8f8;
+ font-family:Tahoma,Arial,sans-serif;
 }
 .header{
  background:linear-gradient(135deg,rgba(13,29,52,.97),rgba(8,18,35,.96))!important;
@@ -7350,5 +7501,74 @@ input:focus,select:focus,textarea:focus{
 }
 #sniper4hLiveSection tr:hover td{
   background:rgba(0,175,210,.10)!important;
+}
+</style>
+
+
+<style id="gmgn-clean-professional-header">
+#appScreen > .header .gmgn-header-market-tape { display:none!important; }
+#appScreen>.header .topSignature {
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+  margin:14px auto 4px!important;
+  padding:10px 28px!important;
+  border:1px solid rgba(72,238,228,.38)!important;
+  border-radius:12px!important;
+  background:linear-gradient(135deg,rgba(10,45,60,.72),rgba(7,24,42,.78))!important;
+  color:#8ffcf0!important;
+  font-family:Arial,sans-serif!important;
+  font-size:20px!important;
+  font-weight:700!important;
+  letter-spacing:2.5px!important;
+  text-shadow:0 0 12px rgba(72,238,228,.22)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 0 16px rgba(0,200,220,.07)!important;
+}
+</style>
+
+
+<style id="gmgn-robot-wallet-premium">
+.gmgn-robot-profile{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:22px!important;
+  max-width:1100px!important;
+  padding:20px 24px!important;
+  border:1px solid rgba(72,238,228,.32)!important;
+  border-radius:18px!important;
+  background:linear-gradient(115deg,rgba(8,34,49,.94),rgba(12,24,43,.94),rgba(23,20,48,.9))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 8px 28px rgba(0,0,0,.18),0 0 20px rgba(0,210,220,.06)!important;
+}
+.gmgn-robot-avatar{
+  width:88px!important;height:88px!important;flex:0 0 88px!important;
+  border-radius:22px!important;
+  border:1px solid rgba(72,238,228,.58)!important;
+  background:radial-gradient(circle,rgba(72,238,228,.2),rgba(9,17,31,.98))!important;
+  box-shadow:0 0 24px rgba(0,220,220,.14),inset 0 0 18px rgba(72,238,228,.08)!important;
+}
+.gmgn-robot-avatar svg{width:76px!important;height:76px!important}
+.gmgn-robot-identity{flex:1!important;gap:7px!important}
+.gmgn-robot-identity span{font-size:10px!important;letter-spacing:2.4px!important;color:#70eee5!important}
+.gmgn-robot-identity strong{font-size:27px!important;letter-spacing:2px!important;text-shadow:0 0 16px rgba(72,238,228,.16)!important}
+.gmgn-robot-identity small{font-size:10px!important;letter-spacing:1.5px!important}
+.gmgn-wallet-card{
+  margin-left:0!important;min-width:215px!important;
+  padding:15px 17px!important;border-radius:14px!important;
+  border:1px solid rgba(72,238,228,.26)!important;
+  background:linear-gradient(135deg,rgba(7,24,40,.94),rgba(24,26,51,.9))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05)!important;
+}
+.gmgn-wallet-icon{color:#73eee4!important;text-shadow:0 0 12px rgba(72,238,228,.3)!important}
+.gmgn-wallet-card small{letter-spacing:1.7px!important}
+.gmgn-wallet-card em{color:#9bb5c8!important;font-size:9px!important}
+.gmgn-wallet-dot{background:#9bb5c8!important;box-shadow:0 0 8px rgba(155,181,200,.35)!important}
+@media(max-width:650px){
+  .gmgn-robot-profile{justify-content:center!important;padding:14px!important;gap:12px!important}
+  .gmgn-robot-avatar{width:64px!important;height:64px!important;flex-basis:64px!important}
+  .gmgn-robot-avatar svg{width:56px!important;height:56px!important}
+  .gmgn-robot-identity{min-width:150px!important}
+  .gmgn-robot-identity strong{font-size:21px!important}
+  .gmgn-wallet-card{width:100%!important;min-width:0!important;box-sizing:border-box!important}
 }
 </style>
