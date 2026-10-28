@@ -1662,6 +1662,10 @@ table tbody tr:hover {
      ========================= -->
 
 <div id="loginScreen">
+<div id="login-live-clock" class="cyber-clock" aria-label="Local time">
+  <span class="cyber-clock-label">LOCAL TIME</span>
+  <strong class="cyber-clock-digits">--:--:--</strong>
+</div>
 
     <div class="loginBox">
 
@@ -1723,6 +1727,7 @@ table tbody tr:hover {
 
 <div id="appScreen">
 
+
 <div id="mobileMenuButton" onclick="toggleMobileMenu()" aria-label="Menu">
     ☰
 </div>
@@ -1761,7 +1766,7 @@ table tbody tr:hover {
 </style>
 <div id="aiAnalyzerPanel" style="margin:18px auto; max-width:1200px; padding:20px; border:1px solid rgba(0,255,220,.28); border-radius:16px; background:linear-gradient(135deg,rgba(8,20,30,.96),rgba(10,30,40,.88)); box-shadow:0 0 25px rgba(0,255,220,.08);">
 
-    <div class="ai-market-strip" aria-hidden="true">
+    <div class="ai-market-strip"><div id="radar-live-clock" class="cyber-clock radar-clock" aria-label="Radar local time"><span class="cyber-clock-label">SMART MONEY TERMINAL · LIVE TIME</span><strong class="cyber-clock-digits">--:--:--</strong></div>
       <div class="ai-market-coin"><span class="ai-btc-mark">₿</span><div>MARKET INTELLIGENCE<div class="ai-market-sub">SMART MONEY · SOLANA RADAR</div></div></div>
       <div class="ai-candles"><i class="ai-candle" style="--h:15px"></i><i class="ai-candle" style="--h:25px"></i><i class="ai-candle red" style="--h:18px"></i><i class="ai-candle" style="--h:31px"></i><i class="ai-candle" style="--h:22px"></i><i class="ai-candle red" style="--h:13px"></i><i class="ai-candle" style="--h:36px"></i><i class="ai-candle" style="--h:27px"></i><i class="ai-candle" style="--h:40px"></i><i class="ai-candle" style="--h:32px"></i><i class="ai-candle red" style="--h:20px"></i><i class="ai-candle" style="--h:44px"></i></div>
       <div class="ai-market-signal"><span class="ai-market-dot"></span> RADAR SYSTEM</div>
@@ -1836,35 +1841,28 @@ table tbody tr:hover {
     <div class="header">
 <div class="gmgn-robot-profile" aria-label="GMGN robot profile">
   <div class="gmgn-robot-avatar" id="gmgn-human-robot-v1">
-  <svg viewBox="0 0 100 100" role="img" aria-label="Humanoid neon robot">
-    <defs>
-      <linearGradient id="humanRobotMetal" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#65f6ed"/>
-        <stop offset=".32" stop-color="#28677b"/>
-        <stop offset=".72" stop-color="#152b42"/>
-        <stop offset="1" stop-color="#080f20"/>
-      </linearGradient>
-      <linearGradient id="humanRobotFace" x1="0" y1="0" x2=".9" y2="1">
-        <stop offset="0" stop-color="#294c65"/>
-        <stop offset="1" stop-color="#101a2d"/>
-      </linearGradient>
-    </defs>
-    <path d="M50 5 L50 13 M44 7 L56 7" stroke="#50fff0" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M30 20 Q50 10 70 20 L82 37 L77 70 L63 85 L37 85 L23 70 L18 37 Z"
-      fill="url(#humanRobotMetal)" stroke="#52e9e6" stroke-width="2.2" stroke-linejoin="round"/>
-    <path d="M30 29 Q50 18 70 29 L72 57 Q69 72 50 78 Q31 72 28 57 Z"
-      fill="url(#humanRobotFace)" stroke="#367c91" stroke-width="1.4"/>
-    <path d="M28 39 L17 34 L17 54 L29 58 M72 39 L83 34 L83 54 L71 58"
-      fill="#152c40" stroke="#4bece5" stroke-width="2"/>
-    <path d="M32 43 Q40 35 46 43 L44 49 L33 49 Z" fill="#46fff0"/>
-    <path d="M54 43 Q62 35 68 43 L67 49 L56 49 Z" fill="#46fff0"/>
-    <path d="M50 47 L45 59 L51 62 L56 59" fill="none" stroke="#70d9e5" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M39 68 Q50 73 61 68" fill="none" stroke="#b7a0ff" stroke-width="3" stroke-linecap="round"/>
-    <path d="M34 80 L30 91 M66 80 L70 91" stroke="#43e8e5" stroke-width="3" stroke-linecap="round"/>
-    <circle cx="39" cy="43" r="2" fill="#fff"/>
-    <circle cx="61" cy="43" r="2" fill="#fff"/>
-    <path d="M24 28 L31 23 M76 28 L69 23" stroke="#ffd76a" stroke-width="2" stroke-linecap="round"/>
-  </svg>
+  <svg viewBox="0 0 100 100" role="img" aria-label="Neon smartphone with crypto chart">
+<defs>
+<linearGradient id="phoneMetal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b5fff7"/><stop offset=".45" stop-color="#287e88"/><stop offset="1" stop-color="#102538"/></linearGradient>
+<linearGradient id="phoneScreen" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#102c37"/><stop offset="1" stop-color="#050d17"/></linearGradient>
+</defs>
+<rect x="25" y="5" width="50" height="90" rx="10" fill="url(#phoneMetal)" stroke="#70fff0" stroke-width="1.8"/>
+<rect x="29" y="13" width="42" height="73" rx="5" fill="url(#phoneScreen)" stroke="#2b6573" stroke-width="1"/>
+<rect x="42" y="8.5" width="16" height="2" rx="1" fill="#07141e"/>
+<circle cx="50" cy="90.5" r="1.8" fill="#75fff0"/>
+<g stroke="#39717b" stroke-width=".6" opacity=".65"><path d="M33 30H67 M33 42H67 M33 54H67 M33 66H67 M40 22V76 M51 22V76 M62 22V76"/></g>
+<path d="M34 63L41 54L47 59L54 42L60 47L67 31" fill="none" stroke="#54f6dc" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+<g stroke-width="1.5">
+<path d="M37 42V58" stroke="#35e7a1"/><rect x="35" y="46" width="4" height="7" rx=".7" fill="#35e7a1"/>
+<path d="M44 34V51" stroke="#ff647c"/><rect x="42" y="38" width="4" height="8" rx=".7" fill="#ff647c"/>
+<path d="M51 36V49" stroke="#35e7a1"/><rect x="49" y="39" width="4" height="7" rx=".7" fill="#35e7a1"/>
+<path d="M58 27V43" stroke="#35e7a1"/><rect x="56" y="31" width="4" height="8" rx=".7" fill="#35e7a1"/>
+<path d="M65 24V37" stroke="#ff647c"/><rect x="63" y="27" width="4" height="6" rx=".7" fill="#ff647c"/>
+</g>
+<circle cx="67" cy="31" r="2.2" fill="#8bfff0" stroke="#07141e" stroke-width="1"/>
+<path d="M33 72H67" stroke="#53e8d8" stroke-width=".8" opacity=".7"/>
+<circle cx="37" cy="78" r="1.5" fill="#39e8b0"/><path d="M42 78H55" stroke="#b6d8e1" stroke-width="1.2" stroke-linecap="round"/><path d="M59 78H66" stroke="#39e8b0" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
 </div>
   <div class="gmgn-robot-identity"><span>SMART MONEY TERMINAL</span><strong>VAHID1989</strong><small>SOLANA RADAR OPERATOR</small></div>
   <div class="gmgn-wallet-card"><span class="gmgn-wallet-icon" aria-label="Wallet" title="Wallet">
@@ -1898,7 +1896,42 @@ table tbody tr:hover {
     </div>
 
 
-    <div
+    <section id="gmgn-neon-center-v1" aria-label="GMGN Neon Radar">
+  <div class="gnc-grid"></div>
+  <div class="gnc-orbit gnc-orbit-a"></div>
+  <div class="gnc-orbit gnc-orbit-b"></div>
+  <div class="gnc-scan"></div>
+
+
+  <div class="gnc-content">
+
+    <div class="gnc-mascot" aria-hidden="true">
+      <svg viewBox="0 0 120 95">
+        <defs><linearGradient id="gnc-frog" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a7ffcb"/><stop offset=".5" stop-color="#19f58a"/><stop offset="1" stop-color="#007b54"/></linearGradient></defs>
+        <path d="M23 37 Q15 13 36 14 Q48 14 52 28 L68 28 Q73 14 86 14 Q106 15 97 38 Q111 52 98 72 Q83 91 60 87 Q32 88 20 69 Q10 52 23 37Z" fill="url(#gnc-frog)" stroke="#7dffca" stroke-width="2"/>
+        <path d="M25 39 Q38 29 53 38 L49 49 L28 48Z M68 38 Q83 29 96 39 L92 49 L71 49Z" fill="#02110d" stroke="#31f5d0" stroke-width="2"/>
+        <path d="M29 39 L48 40 M72 40 L92 39" stroke="#d9fff0" stroke-width="3" stroke-linecap="round"/>
+        <path d="M39 62 Q60 73 82 61 Q72 82 52 78Z" fill="#063b2b" stroke="#2aff9a" stroke-width="2"/>
+        <path d="M43 65 Q60 70 78 64" fill="none" stroke="#baffd9" stroke-width="2"/>
+      </svg>
+    </div>
+    <div class="gnc-wordmark">GMGN</div>
+    <div class="gnc-subtitle">SMART MONEY <span>RADAR</span></div>
+    <div class="gnc-chart">
+      <svg viewBox="0 0 640 150" preserveAspectRatio="none" role="img" aria-label="Decorative rising candlestick chart">
+        <defs><linearGradient id="gnc-chart-fill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#39ff88" stop-opacity=".28"/><stop offset="1" stop-color="#39ff88" stop-opacity="0"/></linearGradient></defs>
+        <path d="M0 130 L45 117 L90 122 L135 95 L180 106 L225 75 L270 85 L315 60 L360 68 L405 38 L450 48 L495 24 L540 33 L590 8 L640 15 L640 150 L0 150Z" fill="url(#gnc-chart-fill)"/>
+        <g stroke="#39ff88" stroke-width="2" fill="#12c978">
+          <path d="M30 91V128 M74 85V119 M118 96V134 M162 66V108 M206 72V113 M250 52V93 M294 61V102 M338 35V80 M382 42V88 M426 20V62 M470 28V73 M514 9V48 M558 12V54 M602 2V36"/>
+          <rect x="22" y="101" width="16" height="17" rx="2"/><rect x="66" y="94" width="16" height="17" rx="2"/><rect x="110" y="108" width="16" height="15" rx="2"/><rect x="154" y="77" width="16" height="20" rx="2"/><rect x="198" y="82" width="16" height="23" rx="2"/><rect x="242" y="61" width="16" height="23" rx="2"/><rect x="286" y="69" width="16" height="23" rx="2"/><rect x="330" y="44" width="16" height="24" rx="2"/><rect x="374" y="51" width="16" height="25" rx="2"/><rect x="418" y="29" width="16" height="22" rx="2"/><rect x="462" y="36" width="16" height="24" rx="2"/><rect x="506" y="17" width="16" height="21" rx="2"/><rect x="550" y="18" width="16" height="24" rx="2"/><rect x="594" y="8" width="16" height="20" rx="2"/>
+        </g>
+        <path d="M8 124 L95 113 L142 119 L188 88 L232 97 L278 68 L322 80 L367 52 L410 60 L454 32 L499 43 L544 18 L588 25 L628 5" fill="none" stroke="#31f5d0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M609 5 L628 5 L626 23" fill="none" stroke="#31f5d0" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+  </div>
+</section><div
         class="status"
         id="status"
     >
@@ -2104,9 +2137,9 @@ table tbody tr:hover {
     <div style="overflow-x:auto;">
     <table style="width:100%;min-width:1100px;table-layout:auto;">
       <thead><tr>
-        <th>#</th><th>Token</th><th></th><th>Age</th><th>وضعیت</th><th>Market Cap</th><th>Holders</th><th>تغییر هولدر</th><th>عرض رنج</th><th>مدت مشاهده</th><th>Snapshots</th>
+        <th>#</th><th>Token</th><th></th><th>Age</th><th>Status</th><th>Market Cap</th><th>Holders</th><th>Holder Change</th><th>Range Width</th><th>Tracking Time</th><th>Snapshots</th>
       </tr></thead>
-      <tbody id="sniper4hLiveBody"><tr><td colspan="10">در حال جمع‌آوری داده...</td></tr></tbody>
+      <tbody id="sniper4hLiveBody"><tr><td colspan="11">Collecting data...</td></tr></tbody>
     </table>
   </div>
 </div>
@@ -2115,7 +2148,7 @@ table tbody tr:hover {
   const body = document.getElementById("sniper4hLiveBody");
   const status = document.getElementById("sniper4hLiveStatus");
   const esc = v => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const fmt = v => Number(v || 0).toLocaleString("en-US", {maximumFractionDigits: 2});
+  const fmt = v => v == null || v === "" || !Number.isFinite(Number(v)) ? "—" : Number(v).toLocaleString("en-US", {maximumFractionDigits: 2});
   const pumpChangeLamp = document.getElementById("rhPumpChangeLamp");
   const pumpChangeStatus = document.getElementById("rhPumpChangeStatus");
   let previousPumpTokens = null;
@@ -2180,13 +2213,13 @@ table tbody tr:hover {
           "<td>"+(i+1)+"</td>" +
           '<td>'+esc(t.symbol)+' <button type="button" class="rh-copy-btn" data-address="'+esc(t.address)+'" title="Copy contract">⧉</button></td>' +
           '<td class="rh-lamp-cell">'+(t._rhChanged ? lamp.replace('rh-pump-lamp','rh-pump-lamp is-active') : lamp)+'</td>' +
-          '<td class="rh-age-cell">'+(Number.isFinite(Number(t.ageDays)) ? Number(t.ageDays).toFixed(1)+'d' : '-')+'</td>' +
+          '<td class="rh-age-cell">'+(t.ageDays != null && t.ageDays !== "" && Number.isFinite(Number(t.ageDays)) ? Number(t.ageDays).toFixed(1)+'d' : '-')+'</td>' +
           '<td class="rh-status-cell" style="color:'+color+'"><span>'+esc(t.status)+'</span></td>' +
           "<td>$"+fmt(t.marketCap)+"</td>" +
           "<td>"+fmt(t.holders)+"</td>" +
           "<td>"+(Number(t.holderDelta)>0?"+":"")+fmt(t.holderDelta)+"</td>" +
-          "<td>"+fmt(t.rangePct)+"%</td>" +
-          "<td>"+fmt(t.spanHours)+"h</td>" +
+          "<td>"+(t.rangePct == null ? "—" : fmt(t.rangePct)+"%")+"</td>" +
+          "<td>"+(t.spanHours == null ? "—" : fmt(t.spanHours)+"h")+"</td>" +
           "<td>"+fmt(t.snapshots)+"</td>" +
 
 
@@ -7251,6 +7284,387 @@ html body #sniper4hLiveSection {
   background: linear-gradient(145deg, rgba(8,70,88,.96), rgba(20,135,155,.94)) !important;
 }
 </style>
+<style id="gmgn-neon-black-unified">
+:root {
+  color-scheme: dark;
+  --neon-cyan:#31f5d0;
+  --neon-green:#39ff88;
+  --neon-muted:#8ba9a5;
+  --neon-panel:#080c0c;
+  --neon-border:rgba(49,245,208,.23);
+}
+html,body {
+  background:#020404!important;
+  color:#e4fff7!important;
+}
+body {
+  background-image:
+    radial-gradient(ellipse at 50% -15%,rgba(0,255,153,.10),transparent 48%),
+    linear-gradient(rgba(49,245,208,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(49,245,208,.018) 1px,transparent 1px)!important;
+  background-size:auto,32px 32px,32px 32px!important;
+}
+#appScreen {
+  background:transparent!important;
+  color:#e4fff7!important;
+}
+#appScreen h1,#appScreen h2,#appScreen h3 {
+  color:#dffff6!important;
+  text-shadow:0 0 14px rgba(49,245,208,.12);
+}
+#sniper4hLiveSection,#walletPanel,#settingsPanel,#aiAnalyzerPanel {
+  background:linear-gradient(145deg,rgba(8,18,17,.97),rgba(3,8,8,.98))!important;
+  border:1px solid var(--neon-border)!important;
+  border-radius:14px!important;
+  box-shadow:0 0 22px rgba(0,255,153,.055),inset 0 1px rgba(255,255,255,.025)!important;
+}
+#sniper4hLiveSection {
+  overflow-x:auto;
+}
+#appScreen table {
+  border-collapse:separate!important;
+  border-spacing:0!important;
+  background:rgba(2,6,6,.85)!important;
+  color:#d9f8ee!important;
+}
+#appScreen thead th {
+  background:#0b1714!important;
+  color:var(--neon-cyan)!important;
+  border-bottom:1px solid rgba(49,245,208,.35)!important;
+  text-transform:uppercase;
+  letter-spacing:.035em;
+}
+#appScreen tbody td {
+  border-bottom:1px solid rgba(49,245,208,.09)!important;
+}
+#appScreen tbody tr {
+  transition:background .18s ease,box-shadow .18s ease;
+}
+#appScreen tbody tr:hover {
+  background:rgba(49,245,208,.055)!important;
+  box-shadow:inset 3px 0 var(--neon-cyan);
+}
+#appScreen button,#appScreen input,#appScreen select,#appScreen textarea {
+  border-color:rgba(49,245,208,.28)!important;
+  border-radius:8px;
+}
+#appScreen button {
+  transition:filter .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+#appScreen button:hover {
+  filter:brightness(1.16);
+  box-shadow:0 0 13px rgba(49,245,208,.17);
+}
+#appScreen input,#appScreen select,#appScreen textarea {
+  background:#050a09!important;
+  color:#e4fff7!important;
+}
+#loginScreen {
+  background:
+    radial-gradient(ellipse at 50% 35%,rgba(0,255,153,.10),transparent 52%),
+    #020404!important;
+}
+#loginScreen input {
+  background:#060b09!important;
+  color:#e4fff7!important;
+  border:1px solid rgba(49,245,208,.35)!important;
+  border-radius:9px!important;
+  box-shadow:inset 0 0 12px rgba(0,255,153,.025);
+}
+#loginScreen button {
+  border-color:rgba(49,245,208,.45)!important;
+  box-shadow:0 0 16px rgba(0,255,153,.08);
+}
+#sniper4hLiveSection th {
+  white-space:nowrap;
+}
+#sniper4hLiveSection td {
+  font-variant-numeric:tabular-nums;
+}
+@media(max-width:700px) {
+  #sniper4hLiveSection {
+    padding:10px!important;
+    border-radius:10px!important;
+  }
+  #appScreen table {
+    font-size:12px;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  #appScreen button,#appScreen tbody tr {
+    transition:none!important;
+  }
+}
+</style>
+<style id="gmgn-neon-coins-v2">
+#appScreen table:has(#coins),#appScreen table:has(#sniper4hLiveBody){
+ background:#030706!important;color:#e4fff7!important;
+ border:1px solid rgba(49,245,208,.3)!important;
+ border-radius:12px!important;overflow:hidden!important;
+ box-shadow:0 0 20px rgba(0,255,153,.07)!important;
+}
+#appScreen #coins tr,#appScreen #sniper4hLiveBody tr{
+ background:#050a08!important;color:#e4fff7!important;
+}
+#appScreen #coins td,#appScreen #sniper4hLiveBody td{
+ background:transparent!important;color:#dffcf2!important;
+ border-bottom:1px solid rgba(49,245,208,.12)!important;
+ padding-top:12px!important;padding-bottom:12px!important;
+}
+#appScreen #coins tr:hover,#appScreen #sniper4hLiveBody tr:hover{
+ background:rgba(0,255,153,.09)!important;
+ box-shadow:inset 3px 0 #31f5d0!important;
+}
+#appScreen table:has(#coins) thead th,
+#appScreen table:has(#sniper4hLiveBody) thead th{
+ background:#0a1712!important;color:#39ffb0!important;
+ border-bottom:1px solid #31f5d0!important;
+ text-shadow:0 0 8px rgba(49,245,208,.2)!important;
+}
+#appScreen #coins a,#appScreen #sniper4hLiveBody a{
+ color:#31f5d0!important;
+}
+#appScreen #coins button,#appScreen #sniper4hLiveBody button{
+ background:#07140f!important;color:#39ffb0!important;
+ border:1px solid rgba(49,245,208,.45)!important;
+}
+#appScreen #coins td:first-child{
+ color:#39ffb0!important;
+}
+#appScreen #coins td,#appScreen #sniper4hLiveBody td{
+ transition:background .18s ease,color .18s ease;
+}
+</style>
+<style id="gmgn-neon-center-v1">
+#gmgn-neon-center-v1{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;min-height:370px;margin:18px 0 24px;padding:30px 14px;overflow:hidden;border:1px solid rgba(49,245,208,.32);border-radius:16px;background:radial-gradient(ellipse at 50% 68%,rgba(0,255,125,.13),transparent 39%),radial-gradient(ellipse at 50% 0%,rgba(0,220,210,.11),transparent 60%),#020706;color:#dffff4;box-shadow:0 0 30px rgba(0,255,153,.07),inset 0 0 35px rgba(0,255,153,.035)}
+#gmgn-neon-center-v1 .gnc-grid{position:absolute;inset:0;z-index:-2;background-image:linear-gradient(rgba(49,245,208,.065) 1px,transparent 1px),linear-gradient(90deg,rgba(49,245,208,.065) 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(transparent,#000 25%,#000 85%,transparent)}
+#gmgn-neon-center-v1 .gnc-orbit{position:absolute;left:50%;top:48%;border:1px solid rgba(49,245,208,.22);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}
+#gmgn-neon-center-v1 .gnc-orbit-a{width:330px;height:330px;max-width:85vw;max-height:85vw;box-shadow:0 0 22px rgba(0,255,153,.06),inset 0 0 22px rgba(0,255,153,.04)}
+#gmgn-neon-center-v1 .gnc-orbit-b{width:270px;height:270px;max-width:70vw;max-height:70vw;border-style:dashed;border-color:rgba(49,245,208,.28)}
+#gmgn-neon-center-v1 .gnc-scan{position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,#31f5d0,transparent);box-shadow:0 0 14px #31f5d0;opacity:.7;animation:gnc-sweep 7s linear infinite;pointer-events:none}
+#gmgn-neon-center-v1 .gnc-content{position:relative;z-index:1;width:min(660px,100%);text-align:center}
+#gmgn-neon-center-v1 .gnc-kicker{font:600 10px/1.5 Arial,sans-serif;letter-spacing:.22em;color:#31f5d0;text-shadow:0 0 10px rgba(49,245,208,.35)}
+#gmgn-neon-center-v1 .gnc-kicker span{display:inline-block;width:24px;height:1px;margin:0 8px 3px;background:#31f5d0;box-shadow:0 0 8px #31f5d0}
+#gmgn-neon-center-v1 .gnc-mascot{width:82px;height:67px;margin:7px auto -2px;filter:drop-shadow(0 0 12px rgba(0,255,120,.42))}
+#gmgn-neon-center-v1 .gnc-mascot svg{width:100%;height:100%;overflow:visible}
+#gmgn-neon-center-v1 .gnc-wordmark{font:900 clamp(58px,10vw,100px)/.95 Arial,Helvetica,sans-serif;letter-spacing:.045em;color:#eafff7;-webkit-text-stroke:1px #39ffb0;text-shadow:0 0 5px #fff,0 0 13px #39ff88,0 0 30px rgba(0,255,153,.7),0 5px 0 #08734b;transform:perspective(350px) rotateX(5deg)}
+#gmgn-neon-center-v1 .gnc-subtitle{margin-top:13px;font:700 clamp(11px,2vw,15px)/1.5 Arial,sans-serif;letter-spacing:.24em;color:#31f5d0;text-shadow:0 0 12px rgba(49,245,208,.35)}
+#gmgn-neon-center-v1 .gnc-subtitle span{color:#39ff88}
+#gmgn-neon-center-v1 .gnc-chart{width:min(570px,94%);height:108px;margin:4px auto 0;opacity:.88;filter:drop-shadow(0 0 5px rgba(49,245,208,.22))}
+#gmgn-neon-center-v1 .gnc-chart svg{width:100%;height:100%;overflow:visible}
+#gmgn-neon-center-v1 .gnc-footer{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:5px;font:700 9px/1.5 Arial,sans-serif;letter-spacing:.16em;color:#8cbab0}
+#gmgn-neon-center-v1 .gnc-live-dot{width:6px;height:6px;border-radius:50%;background:#39ff88;box-shadow:0 0 10px #39ff88;animation:gnc-pulse 1.8s ease-in-out infinite}
+#gmgn-neon-center-v1 .gnc-divider{color:#31f5d0}
+#gmgn-neon-center-v1 .gnc-side{position:absolute;top:44%;font:700 9px/2.8 Arial,sans-serif;letter-spacing:.12em;color:#31f5d0;opacity:.78}
+#gmgn-neon-center-v1 .gnc-side b,#gmgn-neon-center-v1 .gnc-side i{color:#39ff88;font-style:normal}
+#gmgn-neon-center-v1 .gnc-side-left{left:22px;text-align:left}
+#gmgn-neon-center-v1 .gnc-side-right{right:22px;text-align:right}
+@keyframes gnc-sweep{from{transform:translateY(0)}to{transform:translateY(370px)}}
+@keyframes gnc-pulse{50%{opacity:.4;box-shadow:0 0 3px #39ff88}}
+@media(max-width:650px){#gmgn-neon-center-v1{min-height:315px;padding:25px 8px;margin:12px 0 18px}#gmgn-neon-center-v1 .gnc-side{display:none}#gmgn-neon-center-v1 .gnc-orbit-a{width:260px;height:260px}#gmgn-neon-center-v1 .gnc-orbit-b{width:220px;height:220px}#gmgn-neon-center-v1 .gnc-chart{height:82px}#gmgn-neon-center-v1 .gnc-kicker{font-size:8px;letter-spacing:.12em}#gmgn-neon-center-v1 .gnc-kicker span{width:12px;margin-left:3px;margin-right:3px}#gmgn-neon-center-v1 .gnc-footer{font-size:8px;letter-spacing:.08em}}
+@media(prefers-reduced-motion:reduce){#gmgn-neon-center-v1 .gnc-scan,#gmgn-neon-center-v1 .gnc-live-dot{animation:none!important}}
+</style>
+<style id="phone-avatar-final-v2">
+#appScreen .gmgn-robot-profile .gmgn-robot-avatar{
+width:110px!important;height:110px!important;flex:0 0 110px!important;
+border:0!important;border-radius:0!important;background:transparent!important;
+box-shadow:none!important;padding:0!important;
+}
+#appScreen .gmgn-robot-profile .gmgn-robot-avatar svg{
+width:110px!important;height:110px!important;filter:drop-shadow(0 0 9px rgba(72,238,228,.25))!important;
+}
+@media(max-width:650px){
+#appScreen .gmgn-robot-profile .gmgn-robot-avatar{width:94px!important;height:94px!important;flex-basis:94px!important}
+#appScreen .gmgn-robot-profile .gmgn-robot-avatar svg{width:94px!important;height:94px!important}
+}
+</style>
+<style id="cyber-live-clocks-style">
+.cyber-clock{
+  font-family:Consolas,"Courier New",monospace;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;padding:12px 22px;border:1px solid #28616b;border-radius:10px;
+  background:linear-gradient(145deg,#102333,#050c16);
+  box-shadow:0 0 22px rgba(40,230,215,.09),inset 0 0 15px rgba(40,230,215,.035);
+  color:#72ffeb;text-align:center;box-sizing:border-box;
+}
+#login-live-clock{
+  position:absolute;top:clamp(16px,5vh,48px);left:50%;
+  transform:translateX(-50%);min-width:210px;z-index:5;
+}
+.cyber-clock-label{font-size:9px;letter-spacing:2px;color:#8db9c7}
+.cyber-clock-digits{font-size:clamp(24px,4vw,32px);font-weight:700;letter-spacing:3px;font-variant-numeric:tabular-nums;text-shadow:0 0 12px rgba(80,255,230,.28)}
+.radar-clock{width:max-content;max-width:100%;margin:10px auto 18px;padding:10px 24px}
+.radar-clock .cyber-clock-digits{font-size:clamp(23px,3vw,30px)}
+@media(max-width:650px){
+  #login-live-clock{top:14px;min-width:190px;padding:9px 16px}
+  #login-live-clock .cyber-clock-digits{font-size:24px}
+  .radar-clock{margin:8px auto 14px;padding:9px 15px}
+}
+</style>
+<script id="cyber-live-clocks-script">
+(function(){
+  function updateCyberClocks(){
+    var now=new Date();
+    var time=[now.getHours(),now.getMinutes(),now.getSeconds()]
+      .map(function(n){return String(n).padStart(2,"0");}).join(":");
+    document.querySelectorAll(".cyber-clock-digits").forEach(function(el){el.textContent=time;});
+  }
+  updateCyberClocks();
+  setInterval(updateCyberClocks,1000);
+})();
+</script>
+<style id="cyber-clock-corner-frame-v1">
+#loginScreen #login-live-clock,
+#appScreen #radar-live-clock{
+position:absolute!important;top:16px!important;left:16px!important;right:auto!important;
+transform:none!important;margin:0!important;width:250px!important;max-width:calc(100vw - 32px)!important;
+box-sizing:border-box!important;padding:15px 18px!important;text-align:left!important;
+border:1px solid rgba(52,245,226,.7)!important;border-radius:12px!important;
+background:linear-gradient(135deg,rgba(5,23,36,.97),rgba(7,13,29,.96))!important;
+box-shadow:0 0 18px rgba(0,235,220,.13),inset 0 0 18px rgba(0,235,220,.045)!important;
+z-index:9999!important;overflow:hidden!important;
+}
+#loginScreen #login-live-clock::before,
+#appScreen #radar-live-clock::before{
+content:"";position:absolute;inset:4px;border:1px solid rgba(52,245,226,.16);
+border-radius:8px;pointer-events:none;
+}
+#loginScreen #login-live-clock .cyber-clock-digits,
+#appScreen #radar-live-clock .cyber-clock-digits{
+position:relative;display:block!important;margin-top:7px!important;
+font-family:Consolas,"Courier New",monospace!important;font-size:29px!important;
+font-weight:700!important;letter-spacing:3px!important;line-height:1.25!important;
+color:#7cfff0!important;text-shadow:0 0 10px rgba(0,255,224,.45)!important;
+font-variant-numeric:tabular-nums!important;
+}
+#loginScreen #login-live-clock .cyber-clock-label,
+#appScreen #radar-live-clock .cyber-clock-label{
+position:relative;color:#8baebc!important;font-size:10px!important;
+letter-spacing:2px!important;text-transform:uppercase!important;
+}
+#loginScreen #login-live-clock svg.clock-frame-svg,
+#appScreen #radar-live-clock svg.clock-frame-svg{
+position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
+}
+@media(max-width:650px){
+#loginScreen #login-live-clock{top:12px!important;left:12px!important;width:218px!important;padding:12px 14px!important}
+#appScreen #radar-live-clock{top:12px!important;left:12px!important;width:218px!important;padding:12px 14px!important}
+#loginScreen #login-live-clock .cyber-clock-digits,
+#appScreen #radar-live-clock .cyber-clock-digits{font-size:24px!important}
+}
+</style>
+<script id="cyber-clock-frame-svg-v1">
+(function(){
+document.querySelectorAll("#loginScreen #login-live-clock,#appScreen #radar-live-clock").forEach(function(el){
+if(el.querySelector(".clock-frame-svg"))return;
+var svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+svg.setAttribute("class","clock-frame-svg");svg.setAttribute("viewBox","0 0 250 90");svg.setAttribute("preserveAspectRatio","none");
+svg.innerHTML='<path d="M2 20V2H28 M222 2H248V20 M2 70V88H28 M222 88H248V70" fill="none" stroke="#43f5e4" stroke-width="1.5" opacity=".9"/><circle cx="12" cy="12" r="2" fill="#8afff2"/><circle cx="238" cy="12" r="2" fill="#8afff2"/>';
+el.appendChild(svg);
+});
+})();
+</script>
+<style id="radar-clock-market-inline-final">
+#appScreen #aiAnalyzerPanel .ai-market-strip #radar-live-clock{
+ position:relative!important;inset:auto!important;transform:none!important;
+ display:flex!important;flex-direction:row!important;align-items:center!important;
+ gap:7px!important;width:auto!important;max-width:none!important;flex:0 0 auto!important;
+ margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;text-align:left!important;
+ white-space:nowrap!important;order:0!important;
+}
+#appScreen #aiAnalyzerPanel .ai-market-strip #radar-live-clock .cyber-clock-label{
+ display:none!important;
+}
+#appScreen #aiAnalyzerPanel .ai-market-strip #radar-live-clock .cyber-clock-digits{
+ font-size:15px!important;line-height:1.2!important;letter-spacing:1px!important;
+ color:#55f8e8!important;text-shadow:0 0 10px rgba(0,240,220,.28)!important;
+}
+#appScreen #aiAnalyzerPanel .ai-market-strip #radar-live-clock::before{
+ content:"♥"!important;position:static!important;inset:auto!important;
+ display:inline-block!important;width:auto!important;height:auto!important;
+ padding:0!important;border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;
+ color:#35f5df!important;font-size:17px!important;line-height:1!important;
+}
+#appScreen #aiAnalyzerPanel .ai-market-strip #radar-live-clock svg.clock-frame-svg{
+ display:none!important;
+}
+@media(max-width:600px){
+ #appScreen #aiAnalyzerPanel .ai-market-strip #radar-live-clock .cyber-clock-digits{
+  font-size:13px!important;
+ }
+}
+</style>
+<style id="radar-clock-neon-highlight">
+@keyframes radarClockNeonPulse {
+  0%,100% {
+    color:#65fff0;
+    text-shadow:0 0 5px rgba(53,245,223,.48),0 0 12px rgba(53,245,223,.22);
+    opacity:1;
+  }
+  50% {
+    color:#d8fffb;
+    text-shadow:0 0 8px #35f5df,0 0 19px rgba(53,245,223,.78),0 0 28px rgba(53,245,223,.35);
+    opacity:.82;
+  }
+}
+#appScreen #aiAnalyzerPanel .ai-market-strip #radar-live-clock .cyber-clock-digits {
+  animation:radarClockNeonPulse 2s ease-in-out infinite!important;
+}
+#appScreen #aiAnalyzerPanel .ai-market-strip #radar-live-clock::before {
+  animation:radarClockNeonPulse 1.7s ease-in-out infinite!important;
+}
+@media(prefers-reduced-motion:reduce) {
+  #appScreen #aiAnalyzerPanel .ai-market-strip #radar-live-clock .cyber-clock-digits,
+  #appScreen #aiAnalyzerPanel .ai-market-strip #radar-live-clock::before {
+    animation:none!important;
+  }
+}
+</style>
+<style id="login-clock-digital-v2">
+#loginScreen #login-live-clock {
+  width:165px!important;
+  max-width:calc(100vw - 32px)!important;
+  padding:10px 13px!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  gap:5px!important;
+  border:1px solid rgba(53,245,223,.48)!important;
+  border-radius:8px!important;
+  background:linear-gradient(145deg,rgba(3,12,20,.97),rgba(7,25,35,.96))!important;
+  box-shadow:0 0 13px rgba(53,245,223,.10),inset 0 1px rgba(255,255,255,.035)!important;
+  text-align:left!important;
+}
+#loginScreen #login-live-clock .cyber-clock-label {
+  font-size:8px!important;
+  letter-spacing:1px!important;
+  color:#7baeb7!important;
+  line-height:1.4!important;
+}
+#loginScreen #login-live-clock .cyber-clock-digits {
+  font-size:22px!important;
+  line-height:1.2!important;
+  letter-spacing:2px!important;
+  font-weight:700!important;
+  color:#54f8e7!important;
+  text-shadow:0 0 8px rgba(53,245,223,.35)!important;
+}
+#loginScreen #login-live-clock svg.clock-frame-svg {
+  display:none!important;
+}
+@media(max-width:600px) {
+  #loginScreen #login-live-clock {
+    width:145px!important;
+    padding:8px 10px!important;
+  }
+  #loginScreen #login-live-clock .cyber-clock-digits {
+    font-size:19px!important;
+  }
+}
+</style>
 </body>
 </html>
 
@@ -7570,5 +7984,154 @@ input:focus,select:focus,textarea:focus{
   .gmgn-robot-identity{min-width:150px!important}
   .gmgn-robot-identity strong{font-size:21px!important}
   .gmgn-wallet-card{width:100%!important;min-width:0!important;box-sizing:border-box!important}
+}
+</style>
+
+<style id='gmgn-hide-tiny-labels'>#gmgn-neon-center-v1 .gnc-side,#gmgn-neon-center-v1 .gnc-kicker,#gmgn-neon-center-v1 .gnc-footer{display:none!important}</style>
+
+<style id='fix-visible-style-tag'>style#gmgn-neon-center-v1{display:none!important}</style>
+
+<style id="gmgn-neon-identity-clean">
+.gmgn-robot-identity strong{
+  color:#dffffb!important;
+  animation:none!important;
+  text-shadow:0 0 10px rgba(0,230,208,.22)!important;
+}
+.gmgn-wallet-card{
+  background:linear-gradient(135deg,#080f12,#0b191b)!important;
+  border:1px solid rgba(0,230,208,.28)!important;
+  border-radius:12px!important;
+  box-shadow:0 4px 18px rgba(0,0,0,.18)!important;
+}
+.gmgn-wallet-icon{color:#00e6d0!important}
+.gmgn-wallet-card strong{color:#e5fffc!important}
+.gmgn-wallet-card small{color:#71bcb5!important}
+.gmgn-wallet-card em{color:#779a98!important}
+.gmgn-wallet-dot{background:#00d9bd!important;box-shadow:0 0 7px rgba(0,230,208,.4)!important}
+</style>
+
+<style id="gmgn-header-neon-unify">
+#appScreen > .header{
+  background:linear-gradient(145deg,#070d0f,#0a1719)!important;
+  border-color:rgba(0,230,208,.22)!important;
+}
+.gmgn-robot-profile{
+  background:linear-gradient(115deg,#080f11,#0b191b,#0c2021)!important;
+  border-color:rgba(0,230,208,.22)!important;
+  box-shadow:0 5px 22px rgba(0,0,0,.16)!important;
+}
+</style>
+
+
+<!-- TEAL WAVES BACKGROUND + COMPACT HEART CLOCKS -->
+<style id="teal-waves-clock-refresh">
+/* Login background only; preserve login box and its contents */
+#loginScreen {
+  background-color: #09151b !important;
+  background-image:
+    radial-gradient(ellipse at 12% 22%, rgba(0,210,190,.20), transparent 42%),
+    radial-gradient(ellipse at 88% 72%, rgba(20,125,145,.22), transparent 46%),
+    repeating-linear-gradient(160deg, transparent 0 54px, rgba(65,210,205,.025) 55px 56px, transparent 57px 105px),
+    linear-gradient(135deg, #101b21 0%, #0b2024 48%, #101923 100%) !important;
+  background-size: auto, auto, 220% 220%, auto !important;
+}
+
+/* Smaller premium clock frames */
+#loginScreen #login-live-clock,
+#appScreen #radar-live-clock {
+  box-sizing: border-box !important;
+  width: 176px !important;
+  min-width: 0 !important;
+  padding: 8px 12px !important;
+  gap: 3px !important;
+  border: 1px solid rgba(42,220,202,.48) !important;
+  border-radius: 15px !important;
+  background: linear-gradient(135deg, rgba(12,35,42,.96), rgba(8,19,29,.96)) !important;
+  box-shadow: 0 7px 24px rgba(0,0,0,.24), 0 0 16px rgba(0,220,200,.09), inset 0 1px rgba(255,255,255,.07) !important;
+}
+#loginScreen #login-live-clock .cyber-clock-digits,
+#appScreen #radar-live-clock .cyber-clock-digits {
+  margin-top: 2px !important;
+  font-size: 20px !important;
+  letter-spacing: 2px !important;
+  line-height: 1.2 !important;
+}
+#loginScreen #login-live-clock .cyber-clock-label,
+#appScreen #radar-live-clock .cyber-clock-label {
+  font-size: 8px !important;
+  letter-spacing: 1.1px !important;
+}
+#appScreen #radar-live-clock::before {
+  content: "\2665" !important;
+  color: #45e6d1 !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+  text-shadow: 0 0 9px rgba(69,230,209,.45) !important;
+}
+@media(max-width:650px) {
+  #loginScreen #login-live-clock {
+    width: 150px !important;
+    padding: 7px 9px !important;
+  }
+  #appScreen #radar-live-clock {
+    width: 158px !important;
+    padding: 7px 9px !important;
+  }
+  #loginScreen #login-live-clock .cyber-clock-digits,
+  #appScreen #radar-live-clock .cyber-clock-digits {
+    font-size: 18px !important;
+  }
+}
+</style>
+
+<style id="radar-clock-pill-v3">
+#appScreen #radar-live-clock {
+  width: 150px !important;
+  min-width: 0 !important;
+  padding: 8px 12px !important;
+  gap: 4px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(69,230,209,.65) !important;
+  background: linear-gradient(145deg,rgba(13,43,48,.97),rgba(7,18,29,.98)) !important;
+  box-shadow: 0 4px 18px rgba(0,0,0,.25),0 0 12px rgba(69,230,209,.12),inset 0 1px rgba(255,255,255,.07) !important;
+}
+#appScreen #radar-live-clock::before {
+  content: "\2665" !important;
+  position: static !important;
+  inset: auto !important;
+  display: block !important;
+  border: 0 !important;
+  color: #45e6d1 !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  text-shadow: 0 0 9px rgba(69,230,209,.55) !important;
+}
+#appScreen #radar-live-clock .cyber-clock-label {
+  font-size: 7px !important;
+  letter-spacing: .6px !important;
+  line-height: 1.2 !important;
+  text-align: center !important;
+}
+#appScreen #radar-live-clock .cyber-clock-digits {
+  margin: 0 !important;
+  font-size: 19px !important;
+  letter-spacing: 1.5px !important;
+  line-height: 1.2 !important;
+}
+#appScreen #radar-live-clock svg.clock-frame-svg {
+  display: none !important;
+}
+@media(max-width:650px) {
+  #appScreen #radar-live-clock {
+    width: 142px !important;
+    padding: 7px 9px !important;
+  }
+  #appScreen #radar-live-clock .cyber-clock-digits {
+    font-size: 17px !important;
+  }
 }
 </style>

@@ -7,6 +7,9 @@ const path = require("path");
 
 const PORT = process.env.PORT || 3000;
 
+let rangeHunterSampleInFlight = false;
+let rangeHunterNextSampleAt = 0;
+
 const HISTORY_FILE =
     path.join(__dirname, "radar-history.json");
 
@@ -1624,72 +1627,268 @@ if (req.url.startsWith("/api/sniper-4h-live") && req.method === "GET") {
 
 if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
     try {
-        const cacheFile = path.join(__dirname, "4h-gmgn-rank-cache.json");
         const historyFile = path.join(__dirname, "range-hunter-history-v1.json");
-        let cache = { rank: [] };
-        let db = { lastSnapshotAt: 0, tokens: {} };
-        try { cache = JSON.parse(fs.readFileSync(cacheFile, "utf8")); } catch (_) {}
+        let db = { lastSnapshotAt: 0, lastCandidateRefreshAt: 0, candidates: [], tokens: {} };
         try { db = JSON.parse(fs.readFileSync(historyFile, "utf8")); } catch (_) {}
-        if (!db || !db.tokens) db = { lastSnapshotAt: 0, tokens: {} };
-        const now = Math.floor(Date.now() / 1000);
-        const normalizeTimestamp = (v) => { let n = Number(v || 0); if (n > 1000000000000) n = Math.floor(n / 1000); return n; };
-        // Recover listing times for existing Range Hunter records from the GMGN cache.
-        let rangeHunterMetadataUpdated = false;
-        for (const c of (cache.rank || [])) {
-            const address = String(c.address || c.token_address || c.contract_address || c.mint || "");
-            const creationTime = normalizeTimestamp(c.creation_timestamp || c.open_timestamp || 0);
-            if (!address || creationTime <= 0 || !db.tokens[address]) continue;
-            if (!Number(db.tokens[address].creationTime)) {
-                db.tokens[address].creationTime = creationTime;
-                rangeHunterMetadataUpdated = true;
+        if (!db || typeof db !== "object") db = {};
+        if (!db.tokens || typeof db.tokens !== "object") db.tokens = {};
+        if (!Array.isArray(db.candidates)) db.candidates = [];
+
+        const sendResults = (warning) => {
+            const now = Math.floor(Date.now() / 1000);
+            const tokens = [];
+
+            const displayCandidates = new Map();
+            for (const c of db.candidates) {
+                if (c && c.address) displayCandidates.set(String(c.address), c);
             }
-        }
-        if (rangeHunterMetadataUpdated) {
-            fs.writeFileSync(historyFile, JSON.stringify(db));
-        }
-        if (Date.now() - Number(db.lastSnapshotAt || 0) >= 180000) {
-            for (const c of (cache.rank || [])) {
-                const address = String(c.address || c.token_address || c.contract_address || "");
-                const mc = Number(c.market_cap || c.marketCap || c.mc || 0);
-                const holders = Number(c.holder_count || c.holders || c.holderCount || 0);
-                const price = Number(c.price || c.price_usd || c.priceUsd || 0);
-                if (!address || mc < 50000 || holders < 280 || price <= 0) continue;
-                if (!db.tokens[address]) db.tokens[address] = { address, symbol: c.symbol || "?", samples: [] };
+            for (const [address, t] of Object.entries(db.tokens)) {
+                if (!displayCandidates.has(address) && t && Array.isArray(t.samples) && t.samples.length) {
+                    const last = t.samples[t.samples.length - 1];
+                    displayCandidates.set(address, {
+                        address,
+                        symbol: t.symbol || "?",
+                        creationTime: Number(t.creationTime || 0),
+                        marketCap: Number(last.mc || 0),
+                        holders: Number(last.holders || 0)
+                    });
+                }
+            }
+
+            for (const c of displayCandidates.values()) {
+                const address = String(c.address || "");
+                const createdAt = Number(c.creationTime || 0);
+                const ageDays = createdAt > 0 ? (now - createdAt) / 86400 : NaN;
+                const mc = Number(c.marketCap);
+                const holders = Number(c.holders);
+
+                if (!address || !Number.isFinite(ageDays) || ageDays < 3 || ageDays > 7 ||
+                    !Number.isFinite(mc) || mc < 70000 || mc > 500000) continue;
+
                 const t = db.tokens[address];
-                const creationTime = normalizeTimestamp(c.creation_timestamp || c.open_timestamp || 0);
-                if (creationTime > 0) t.creationTime = creationTime;
-                t.samples.push({ time: now, price, mc, holders, volume: Number(c.volume || 0), liquidity: Number(c.liquidity || 0), buys: Number(c.buys || 0), sells: Number(c.sells || 0), swaps: Number(c.swaps || 0) });
-                t.samples = t.samples.filter(x => x.time >= now - 259200).slice(-600);
+                const samples = t && Array.isArray(t.samples)
+                    ? t.samples.filter(x => Number(x.time) >= now - 48 * 3600 && Number(x.price) > 0)
+                        .sort((x, y) => x.time - y.time)
+                    : [];
+                const recent = samples.filter(x => Number(x.time) >= now - 86400);
+                const spanHours = samples.length >= 2
+                    ? (Number(samples[samples.length - 1].time) - Number(samples[0].time)) / 3600
+                    : null;
+                const recentSpanHours = recent.length >= 2
+                    ? (Number(recent[recent.length - 1].time) - Number(recent[0].time)) / 3600
+                    : 0;
+                const enough = spanHours >= 24 && recentSpanHours >= 18 && recent.length >= 12;
+                const prices = recent.map(x => Number(x.price)).filter(x => Number.isFinite(x) && x > 0);
+                const validPrices = enough && prices.length === recent.length && prices.length >= 12;
+                const lo = validPrices ? Math.min(...prices) : null;
+                const hi = validPrices ? Math.max(...prices) : null;
+                const range = validPrices && lo > 0 ? (hi - lo) / lo * 100 : null;
+                const delta = enough
+                    ? Number(recent[recent.length - 1].holders) - Number(recent[0].holders)
+                    : null;
+
+                let status = "Insufficient Data";
+                if (validPrices && range != null) {
+                    if (range > 10) status = "Outside Range";
+                    else if (delta != null && delta < 0 &&
+                        Number(recent[recent.length - 1].price) <= lo * 1.03) status = "Breakdown Risk";
+                    else if (delta != null &&
+                        delta >= Math.max(5, Number(recent[0].holders) * 0.01)) status = "Range Accumulation";
+                    else status = "Quiet/Dead Range";
+                }
+
+                tokens.push({
+                    symbol: c.symbol || "?",
+                    address,
+                    ageDays: +ageDays.toFixed(2),
+                    marketCap: mc,
+                    holders: Number.isFinite(holders) ? holders : null,
+                    holderDelta: delta,
+                    rangePct: range == null ? null : +range.toFixed(2),
+                    spanHours: spanHours == null ? null : +spanHours.toFixed(1),
+                    snapshots: recent.length,
+                    status
+                });
             }
-            db.lastSnapshotAt = Date.now();
-            fs.writeFileSync(historyFile, JSON.stringify(db));
-        }
-        const tokens = [];
-        for (const t of Object.values(db.tokens)) {
-            const listingTime = normalizeTimestamp(t.creationTime);
-            const ageSeconds = now - listingTime;
-            if (!listingTime || ageSeconds < 3 * 86400 || ageSeconds > 15 * 86400) continue;
-            const a = (t.samples || []).filter(x => x.time >= now - 259200).sort((x,y) => x.time-y.time);
-            if (!a.length) continue;
-            const prices = a.map(x => x.price);
-            const lo = Math.min(...prices), hi = Math.max(...prices);
-            const span = (a[a.length-1].time-a[0].time)/3600;
-            const delta = a[a.length-1].holders-a[0].holders;
-            const range = lo > 0 ? (hi-lo)/lo*100 : 999;
-            let status = "Collecting Data";
-            if (a.length >= 3 && span >= 0.15) {
-                if (range > 12) status = "Outside Range";
-                else if (delta < 0 && a[a.length-1].price <= lo * 1.03) status = "Breakdown Risk";
-                else if (delta >= Math.max(5, a[0].holders * 0.01)) status = "Range Accumulation";
-                else status = "Quiet/Dead Range";
+
+            res.writeHead(200, {
+                "Content-Type": "application/json; charset=utf-8",
+                "Cache-Control": "no-store"
+            });
+            res.end(JSON.stringify({
+                ok: true,
+                total: tokens.length,
+                tokens,
+                ...(warning ? { warning } : {})
+            }));
+        };
+
+        if (Date.now() - Number(db.lastCandidateRefreshAt || 0) < 180000) {
+            if (!rangeHunterSampleInFlight && Date.now() >= rangeHunterNextSampleAt) {
+                const current = new Set(db.candidates.map(c => String(c.address || "")));
+                const nowSec = Math.floor(Date.now() / 1000);
+                const eligible = Object.entries(db.tokens)
+                    .filter(([address, t]) => {
+                        const age = t && Number(t.creationTime) > 0
+                            ? (nowSec - Number(t.creationTime)) / 86400 : NaN;
+                        return address && !current.has(address) &&
+                            Number.isFinite(age) && age >= 3 && age <= 7 &&
+                            Array.isArray(t.samples) && t.samples.length > 0;
+                    })
+                    .sort((a, b) => {
+                        const at = Number(a[1].samples[a[1].samples.length - 1].time || 0);
+                        const bt = Number(b[1].samples[b[1].samples.length - 1].time || 0);
+                        return at - bt;
+                    });
+
+                if (eligible.length) {
+                    const [address] = eligible[0];
+                    rangeHunterSampleInFlight = true;
+                    rangeHunterNextSampleAt = Date.now() + 15000;
+
+                    execFile(process.execPath, [
+                        path.join(__dirname, "node_modules/gmgn-cli/dist/index.js"),
+                        "token", "info", "--chain", "sol", "--address", address, "--raw"
+                    ], {
+                        timeout: 20000,
+                        env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY }
+                    }, (error, stdout) => {
+                        try {
+                            if (error) { console.log("Range Hunter token info failed:", error.message); return; }
+                            const parsed = JSON.parse(stdout);
+                            const coin = parsed?.data?.token || parsed?.data || parsed?.token || parsed;
+                            const price = Number(
+                                coin?.price?.price ?? coin?.price ??
+                                coin?.price_usd ?? coin?.priceUsd ?? 0
+                            );
+                            const holders = Number(
+                                coin?.holder_count ?? coin?.holders ??
+                                coin?.holderCount ?? coin?.stat?.holder_count ?? 0
+                            );
+                            if (!(price > 0) || !Number.isFinite(price)) return;
+
+                            const fresh = JSON.parse(fs.readFileSync(historyFile, "utf8"));
+                            if (!fresh.tokens || !fresh.tokens[address]) return;
+                            const t = fresh.tokens[address];
+                            if (!Array.isArray(t.samples)) t.samples = [];
+                            const last = t.samples[t.samples.length - 1] || {};
+                            const sample = {
+                                time: Math.floor(Date.now() / 1000),
+                                price,
+                                mc: Number(last.mc || 0),
+                                holders: Number.isFinite(holders) && holders > 0
+                                    ? holders : Number(last.holders || 0)
+                            };
+                            t.symbol = coin?.symbol || t.symbol || "?";
+                            t.samples.push(sample);
+                            t.samples = t.samples
+                                .filter(x => Number(x.time) >= sample.time - 8 * 86400)
+                                .slice(-2000);
+                            fs.writeFileSync(historyFile, JSON.stringify(fresh));
+                        } catch (e) {
+                            console.log("Range Hunter background sample failed:", e.message);
+                        } finally {
+                            rangeHunterSampleInFlight = false;
+                        }
+                    });
+                }
             }
-            tokens.push({ symbol:t.symbol, address:t.address, ageDays:+(ageSeconds/86400).toFixed(2), marketCap:a[a.length-1].mc, holders:a[a.length-1].holders, holderDelta:delta, rangePct:+range.toFixed(2), spanHours:+span.toFixed(1), snapshots:a.length, status });
+
+            sendResults();
+            return;
         }
-        res.writeHead(200, { "Content-Type":"application/json; charset=utf-8", "Cache-Control":"no-store" });
-        res.end(JSON.stringify({ ok:true, total:tokens.length, tokens }));
-    } catch(e) {
-        res.writeHead(500, { "Content-Type":"application/json; charset=utf-8" });
-        res.end(JSON.stringify({ ok:false, error:e.message, total:0, tokens:[] }));
+
+        db.lastCandidateRefreshAt = Date.now();
+        try { fs.writeFileSync(historyFile, JSON.stringify(db)); } catch (_) {}
+
+        execFile(process.execPath, [
+            path.join(__dirname, "node_modules/gmgn-cli/dist/index.js"),
+            "market", "trending",
+            "--chain", "sol",
+            "--interval", "5m",
+            "--limit", "100",
+            "--min-marketcap", "70000",
+            "--max-marketcap", "500000",
+            "--min-holder-count", "280",
+            "--min-created", "3d",
+            "--max-created", "7d",
+            "--raw"
+        ], {
+            timeout: 30000,
+            env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY }
+        }, (error, stdout) => {
+            if (error) {
+                console.log("Range Hunter GMGN refresh failed:", error.message);
+                return sendResults("GMGN refresh failed");
+            }
+
+            try {
+                const parsed = JSON.parse(stdout);
+                const rank = parsed?.data?.rank || parsed?.rank;
+                if (!Array.isArray(rank)) throw new Error("GMGN rank data missing");
+
+                const now = Math.floor(Date.now() / 1000);
+                const candidates = [];
+
+                for (const c of rank) {
+                    const address = String(c.address || c.token_address || c.contract_address || "");
+                    let createdAt = Number(c.creation_timestamp || c.creationTime || c.create_time || c.open_timestamp || 0);
+                    if (createdAt > 1e12) createdAt = Math.floor(createdAt / 1000);
+
+                    const ageDays = createdAt > 0 ? (now - createdAt) / 86400 : NaN;
+                    const mc = Number(c.market_cap || c.marketCap || c.mc || 0);
+                    const holders = Number(c.holder_count || c.holders || c.holderCount || 0);
+                    const price = Number(c.price || c.price_usd || c.priceUsd || 0);
+
+                    if (!address || !Number.isFinite(ageDays) || ageDays < 3 || ageDays > 7 ||
+                        mc < 70000 || mc > 500000 || holders < 280 || price <= 0) continue;
+
+                    const candidate = {
+                        address,
+                        symbol: c.symbol || "?",
+                        creationTime: createdAt,
+                        marketCap: mc,
+                        holders,
+                        price
+                    };
+                    candidates.push(candidate);
+
+                    if (!db.tokens[address]) {
+                        db.tokens[address] = { address, symbol: candidate.symbol, creationTime: createdAt, samples: [] };
+                    }
+
+                    const t = db.tokens[address];
+                    if (!Array.isArray(t.samples)) t.samples = [];
+                    t.symbol = candidate.symbol;
+                    t.creationTime = createdAt;
+                    t.samples.push({ time: now, price, mc, holders });
+                    t.samples = t.samples
+                        .filter(x => Number(x.time) >= now - 8 * 86400)
+                        .slice(-2000);
+                }
+
+                db.candidates = candidates;
+                db.lastSnapshotAt = Date.now();
+
+                for (const [address, t] of Object.entries(db.tokens)) {
+                    if (!Array.isArray(t.samples)) t.samples = [];
+                    t.samples = t.samples.filter(x => Number(x.time) >= now - 8 * 86400);
+                    if (!t.samples.length && !candidates.some(c => c.address === address)) {
+                        delete db.tokens[address];
+                    }
+                }
+
+                fs.writeFileSync(historyFile, JSON.stringify(db));
+                sendResults();
+            } catch (e) {
+                console.log("Range Hunter response error:", e.message);
+                sendResults("Could not parse GMGN response");
+            }
+        });
+        return;
+    } catch (e) {
+        res.writeHead(500, { "Content-Type": "application/json; charset=utf-8" });
+        res.end(JSON.stringify({ ok: false, error: e.message, total: 0, tokens: [] }));
     }
     return;
 }
@@ -2186,8 +2385,8 @@ res.end(
                                 : 0;
 
                         if (
-                            ageDays < 5 ||
-                            ageDays > 20 ||
+                            ageDays < MIN_AGE_DAYS ||
+                            ageDays > MAX_AGE_DAYS ||
                             marketCap < MIN_MC ||
                             marketCap > MAX_MC ||
                             holders < MIN_HOLDERS ||
@@ -2385,7 +2584,5 @@ setInterval(
 );
 
 takeSnapshot();
-
-
 
 
