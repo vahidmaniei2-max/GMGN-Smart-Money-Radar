@@ -1719,7 +1719,16 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                 ok: true,
                 total: tokens.length,
                 tokens,
-                ...(warning ? { warning } : {})
+                ...(warning ? { warning } : {}),
+                ...(new URL(req.url, "http://localhost").searchParams.get("debug") === "1" ? {
+                    debug: {
+                        candidates: db.candidates.length,
+                        tokens: Object.keys(db.tokens).length,
+                        lastCandidateRefreshAt: db.lastCandidateRefreshAt || 0,
+                        lastSnapshotAt: db.lastSnapshotAt || 0,
+                        historyFileExists: fs.existsSync(historyFile)
+                    }
+                } : {})
             }));
         };
 
@@ -1744,7 +1753,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                 if (eligible.length) {
                     const [address] = eligible[0];
                     rangeHunterSampleInFlight = true;
-                    rangeHunterNextSampleAt = Date.now() + 15000;
+                    rangeHunterNextSampleAt = Date.now() + 120000;
 
                     execFile(process.execPath, [
                         path.join(__dirname, "node_modules/gmgn-cli/dist/index.js"),
@@ -1754,7 +1763,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                         env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY }
                     }, (error, stdout) => {
                         try {
-                            if (error) { console.log("Range Hunter token info failed:", error.message); return; }
+                            if (error) { if (/429|RATE_LIMIT|temporarily banned/i.test(error.message || "")) rangeHunterNextSampleAt = Date.now() + 300000; console.log("Range Hunter token info failed:", error.message); return; }
                             const parsed = JSON.parse(stdout);
                             const coin = parsed?.data?.token || parsed?.data || parsed?.token || parsed;
                             const price = Number(
