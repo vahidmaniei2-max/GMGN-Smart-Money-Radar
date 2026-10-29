@@ -1669,7 +1669,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                 const mc = Number(c.marketCap);
                 const holders = Number(c.holders);
 
-                if (!address || !Number.isFinite(ageDays) || ageDays < 3 || ageDays > 7 ||
+                if (!address || !Number.isFinite(ageDays) || ageDays < 3 || ageDays > 15 ||
                     !Number.isFinite(mc) || mc < 70000 || mc > 500000) continue;
 
                 const t = db.tokens[address];
@@ -1748,7 +1748,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                         const age = t && Number(t.creationTime) > 0
                             ? (nowSec - Number(t.creationTime)) / 86400 : NaN;
                         return address && !current.has(address) &&
-                            Number.isFinite(age) && age >= 3 && age <= 7 &&
+                            Number.isFinite(age) && age >= 3 && age <= 15 &&
                             Array.isArray(t.samples) && t.samples.length > 0;
                     })
                     .sort((a, b) => {
@@ -1827,7 +1827,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
             "--max-marketcap", "500000",
             "--min-holder-count", "280",
             "--min-created", "3d",
-            "--max-created", "7d",
+            "--max-created", "15d",
             "--raw"
         ], {
             timeout: 30000,
@@ -1856,7 +1856,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                     const holders = Number(c.holder_count || c.holders || c.holderCount || 0);
                     const price = Number(c.price || c.price_usd || c.priceUsd || 0);
 
-                    if (!address || !Number.isFinite(ageDays) || ageDays < 3 || ageDays > 7 ||
+                    if (!address || !Number.isFinite(ageDays) || ageDays < 3 || ageDays > 15 ||
                         mc < 70000 || mc > 500000 || holders < 280 || price <= 0) continue;
 
                     const candidate = {
