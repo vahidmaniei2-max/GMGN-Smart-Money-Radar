@@ -1334,6 +1334,120 @@ function sendJson(res, statusCode, data) {
     );
 }
 
+/* RH_SUPABASE_SYNC_V1 */
+let rhSupabaseLastLoadAt = 0;
+let rhSupabaseLoadPromise = null;
+
+function rhSupabaseConfig() {
+    let text = "";
+    try { text = fs.readFileSync(path.join(__dirname, ".env"), "utf8"); } catch (_) {}
+    const get = name => {
+        const envValue = process.env[name];
+        if (envValue) return String(envValue).trim().replace(/^["']|["']$/g, "");
+        const line = text.split(/\r?\n/).find(x => x.trim().startsWith(name + "="));
+        return line ? line.substring(line.indexOf("=") + 1).trim().replace(/^["']|["']$/g, "") : "";
+    };
+    return { url: get("SUPABASE_URL").replace(/\/+$/, ""), key: get("SUPABASE_SECRET_KEY") };
+}
+async function rhLoadSupabaseHistory(tokens, force = false, status = null) {
+    if (status) status.ok = false;
+    if (!force && (Date.now() - rhSupabaseLastLoadAt < 60000)) return false;
+    if (rhSupabaseLoadPromise) {
+        const previousLoadAt = rhSupabaseLastLoadAt;
+        const pending = rhSupabaseLoadPromise;
+        const result = await pending;
+        if (status) status.ok = rhSupabaseLastLoadAt > previousLoadAt;
+        return result;
+    }
+    rhSupabaseLoadPromise = (async () => {
+        const cfg = rhSupabaseConfig();
+        if (!cfg.url || !cfg.key) return false;
+        try {
+            const r = await fetch(cfg.url + "/rest/v1/range_hunter_history?select=address,token_data&limit=1000", { headers: { apikey: cfg.key, "User-Agent": "GMGN-Smart-Money-Radar/1.0" } });
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            const rows = await r.json();
+
+            let changed = false;
+            for (const row of rows) {
+                const remote = row && row.token_data;
+                const address = String((row && row.address) || (remote && remote.address) || "");
+                if (!address || !remote || typeof remote !== "object") continue;
+                const local = tokens[address];
+                if (!local) {
+                    tokens[address] = remote;
+                    if (!Array.isArray(tokens[address].samples)) tokens[address].samples = [];
+                    changed = true;
+                    continue;
+                }
+                if (!Array.isArray(local.samples)) local.samples = [];
+                const before = local.samples.length;
+                const byTime = new Map();
+                for (const x of [...(Array.isArray(remote.samples) ? remote.samples : []), ...local.samples]) {
+                    if (x && Number.isFinite(Number(x.time))) byTime.set(Number(x.time), x);
+                }
+                local.samples = [...byTime.values()].sort((a, b) => Number(a.time) - Number(b.time)).slice(-2000);
+                if (local.samples.length !== before) changed = true;
+                local.symbol = local.symbol || remote.symbol || "?";
+                local.creationTime = local.creationTime || remote.creationTime || 0;
+            }
+            rhSupabaseLastLoadAt = Date.now();
+            if (status) status.ok = true;
+            return changed;
+        } catch (e) {
+            console.log("Range Hunter Supabase read failed; local history retained:", e.message);
+            return false;
+        } finally {
+            rhSupabaseLoadPromise = null;
+        }
+    })();
+    return rhSupabaseLoadPromise;
+}
+
+async function rhSaveSupabaseRows(rows) {
+    const cfg = rhSupabaseConfig();
+    if (!cfg.url || !cfg.key) {
+        console.log("[RH SUPABASE] SAVE SKIPPED: URL or key missing");
+        return false;
+    }
+    if (!Array.isArray(rows) || !rows.length) return false;
+    try {
+        for (let i = 0; i < rows.length; i += 50) {
+            const batch = rows.slice(i, i + 50);
+            const r = await fetch(cfg.url + "/rest/v1/range_hunter_history?on_conflict=address", {
+                method: "POST",
+                headers: {
+                    apikey: cfg.key,
+                    "User-Agent": "GMGN-Smart-Money-Radar/1.0",
+                    "Content-Type": "application/json",
+                    Prefer: "resolution=merge-duplicates,return=minimal"
+                },
+                body: JSON.stringify(batch)
+            });
+            if (!r.ok) {
+                const detail = (await r.text()).slice(0, 500);
+                console.log("[RH SUPABASE] SAVE FAILED:", r.status, detail);
+                return false;
+            }
+            console.log("[RH SUPABASE] SAVE OK:", batch.length, "rows");
+        }
+        return true;
+    } catch (e) {
+        console.log("[RH SUPABASE] SAVE ERROR:", e.message);
+        return false;
+    }
+}
+async function rhSaveSupabaseToken(address, token) {
+    if (!address || !token) return;
+    await rhSaveSupabaseRows([{ address, token_data: token, updated_at: new Date().toISOString() }]);
+}
+
+async function rhSaveSupabaseHistory(tokens) {
+    if (!tokens || typeof tokens !== "object") return;
+    await rhSaveSupabaseRows(Object.entries(tokens).map(([address, token]) => ({
+        address, token_data: token, updated_at: new Date().toISOString()
+    })));
+}
+/* END RH_SUPABASE_SYNC_V1 */
 const server = http.createServer(async (req, res) => {
 
     /* ===============================
@@ -1640,6 +1754,11 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
         if (!db || typeof db !== "object") db = {};
         if (!db.tokens || typeof db.tokens !== "object") db.tokens = {};
         if (!Array.isArray(db.candidates)) db.candidates = [];
+        const rhStatus = { ok: false };
+        const rhMerged = await rhLoadSupabaseHistory(db.tokens, !fs.existsSync(historyFile), rhStatus);
+        if (rhStatus.ok && (rhMerged || !fs.existsSync(historyFile))) {
+            try { fs.writeFileSync(historyFile, JSON.stringify(db)); } catch (_) {}
+        }
 
         const sendResults = (warning) => {
             const now = Math.floor(Date.now() / 1000);
@@ -1801,6 +1920,9 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                                 .filter(x => Number(x.time) >= sample.time - 8 * 86400)
                                 .slice(-2000);
                             fs.writeFileSync(historyFile, JSON.stringify(fresh));
+                            if (fresh.tokens && fresh.tokens[address]) {
+                                void rhSaveSupabaseToken(address, fresh.tokens[address]);
+                            }
                         } catch (e) {
                             console.log("Range Hunter background sample failed:", e.message);
                         } finally {
@@ -1895,6 +2017,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                 }
 
                 fs.writeFileSync(historyFile, JSON.stringify(db));
+                void rhSaveSupabaseHistory(db.tokens);
                 sendResults();
             } catch (e) {
                 console.log("Range Hunter response error:", e.message);
