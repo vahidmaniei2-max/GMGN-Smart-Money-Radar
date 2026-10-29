@@ -1626,83 +1626,6 @@ const server = http.createServer(async (req, res) => {
     }
 
 
-/* 4H_SECOND_CANDLE_SNIPER_EXPERIMENTAL_V1 */
-if (req.url.startsWith("/api/sniper-4h-live") && req.method === "GET") {
-    try {
-        const sniperFile = path.join(
-            __dirname,
-            "4h-second-candle-sniper-history-v1.json"
-        );
-
-        let data = { tokens: {} };
-
-        if (fs.existsSync(sniperFile)) {
-            data = JSON.parse(
-                fs.readFileSync(sniperFile, "utf8")
-            );
-        }
-
-        const tokens = data && data.tokens &&
-            typeof data.tokens === "object"
-            ? Object.values(data.tokens)
-            : [];
-
-        const now = Math.floor(Date.now() / 1000);
-
-        const signals = tokens
-            .filter(t => {
-                if (!t || !t.liveSecondCandleSignal) return false;
-
-                const listing = Number(t.listingTime || 0);
-                if (!listing) return false;
-
-                const ageH = (now - listing) / 3600;
-
-                const signalTime = Number(t.liveSecondCandleSignal.signalTime || 0);
-                const signalAgeH = signalTime > 0 ? (signalTime - listing) / 3600 : -1;
-                return signalAgeH >= 4 && signalAgeH < 8;
-            })
-            .sort((x, y) =>
-                Number((y.liveSecondCandleSignal && y.liveSecondCandleSignal.signalTime) || 0) -
-                Number((x.liveSecondCandleSignal && x.liveSecondCandleSignal.signalTime) || 0)
-            );
-
-        res.writeHead(200, {
-            "Content-Type": "application/json; charset=utf-8",
-            "Cache-Control": "no-store"
-        });
-
-        res.end(JSON.stringify({
-            ok: true,
-            generatedAt: new Date().toISOString(),
-            totalTokens: tokens.length,
-            totalSignals: signals.length,
-            signals: signals.slice(0, 100).map(t => ({
-                address: t.address || "",
-                symbol: t.symbol || "",
-                name: t.name || "",
-                listingTime: t.listingTime || null,
-                signal: t.liveSecondCandleSignal || null,
-                outcomes: t.outcomes || null
-            }))
-        }));
-
-        return;
-    } catch (e) {
-        res.writeHead(500, {
-            "Content-Type": "application/json; charset=utf-8",
-            "Cache-Control": "no-store"
-        });
-
-        res.end(JSON.stringify({
-            ok: false,
-            error: e.message
-        }));
-
-        return;
-    }
-}
-/* END 4H_SECOND_CANDLE_SNIPER_EXPERIMENTAL_V1 */
 
 if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
     try {
@@ -1996,90 +1919,6 @@ if (req.url === "/api/history") {
         return;
     }
 
-    function loadSecondCandleSniper() {
-    try {
-        const file = path.join(
-            __dirname,
-            "4h-second-candle-sniper-history-v1.json"
-        );
-
-        if (!fs.existsSync(file)) {
-            return { tokens: {} };
-        }
-
-        const data = JSON.parse(
-            fs.readFileSync(file, "utf8")
-        );
-
-        return data &&
-            data.tokens &&
-            typeof data.tokens === "object"
-            ? data
-            : { tokens: {} };
-
-    } catch (e) {
-        console.log(
-            "4H Sniper read error:",
-            e.message
-        );
-
-        return { tokens: {} };
-    }
-}
-
-function getSecondCandleSniperState(token) {
-
-    if (!token) {
-        return {
-            state: "NO DATA"
-        };
-    }
-
-    const listing =
-        Number(token.listingTime || 0);
-
-    const now =
-        Math.floor(Date.now() / 1000);
-
-    if (!listing) {
-        return {
-            state: "NO LISTING"
-        };
-    }
-
-    const ageHours =
-        Math.max(
-            0,
-            (now - listing) / 3600
-        );
-
-    if (token.signal) {
-        return {
-            state: "SIGNAL",
-            ageHours: ageHours,
-            signal: token.signal
-        };
-    }
-
-    if (ageHours < 4) {
-        return {
-            state: "CANDLE 1",
-            ageHours: ageHours
-        };
-    }
-
-    if (ageHours < 8) {
-        return {
-            state: "CANDLE 2",
-            ageHours: ageHours
-        };
-    }
-
-    return {
-        state: "WAITING",
-        ageHours: ageHours
-    };
-}
 if (req.url === "/api/pump" || req.url.startsWith("/api/pump?")) {
 
         runGmgn("node", ["node_modules/gmgn-cli/dist/index.js", "market", "trending", "--chain", "sol", "--interval", "5m", "--limit", "100"], { timeout: 30000, env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY } },
@@ -2284,82 +2123,6 @@ coin.snapshotsCount =
 }
 
 
-const sniperHistory =
-    loadSecondCandleSniper();
-
-parsed.data.rank.forEach(coin => {
-
-    if (!coin.address) {
-        return;
-    }
-
-    const sniperToken =
-        sniperHistory.tokens[
-            coin.address
-        ];
-
-    if (!sniperToken) {
-        coin.secondCandleSniper = {
-            state: "NO DATA"
-        };
-        return;
-    }
-
-    const sniperState =
-        getSecondCandleSniperState(
-            sniperToken
-        );
-
-    coin.secondCandleSniper = {
-        address:
-            sniperToken.address ||
-            coin.address,
-
-        symbol:
-            sniperToken.symbol ||
-            coin.symbol ||
-            coin.name ||
-            "-",
-
-        listingTime:
-            Number(
-                sniperToken.listingTime ||
-                sniperToken.creation_timestamp ||
-                sniperToken.open_timestamp ||
-                0
-            ),
-
-        firstCapturedAt:
-            Number(
-                sniperToken.firstCapturedAt ||
-                0
-            ),
-
-        snapshots:
-            Array.isArray(
-                sniperToken.snapshots
-            )
-                ? sniperToken.snapshots.length
-                : 0,
-
-        state:
-            sniperState.state,
-
-        ageHours:
-            Number(
-                sniperState.ageHours || 0
-            ),
-
-        signal:
-            sniperState.signal ||
-            null,
-
-        outcomes:
-            sniperToken.outcomes ||
-            null
-    };
-});
-
 parsed.data.rank.sort((a, b) => {
     return Number(b.accumulationScore || 0) -
            Number(a.accumulationScore || 0);
@@ -2403,7 +2166,8 @@ res.end(
             "Open: http://localhost:" + PORT
         );
     }
-);function takeSnapshot() {
+);
+function takeSnapshot() {
     console.log("Taking automatic GMGN snapshot...");
 
     runGmgn("node", ["node_modules/gmgn-cli/dist/index.js", "market", "trending", "--chain", "sol", "--interval", "5m", "--limit", "100"], { timeout: 30000, env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY } },
