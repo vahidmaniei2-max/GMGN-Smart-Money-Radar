@@ -30,6 +30,11 @@ function runGmgn(file, args, options, callback) {
     const now = Date.now();
     if (now < gmgnCooldownUntil) {
         const wait = Math.ceil((gmgnCooldownUntil - now) / 1000);
+        if (cached && cached.stdout) {
+            console.log("GMGN cooldown: serving stale cache:", Math.floor((now - cached.time) / 1000), "s old");
+            process.nextTick(() => callback(null, cached.stdout, cached.stderr));
+            return;
+        }
         process.nextTick(() => callback(
             new Error("GMGN shared cooldown active (" + wait + "s remaining)"),
             "",
