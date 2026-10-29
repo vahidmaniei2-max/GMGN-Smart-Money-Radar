@@ -11,6 +11,84 @@ const PORT = process.env.PORT || 3000;
 let rangeHunterSampleInFlight = false;
 let rangeHunterNextSampleAt = 0;
 
+let gmgnCooldownUntil = 0;
+const gmgnInFlight = new Map();
+
+const gmgnResultCache = new Map();
+const GMGN_CACHE_TTL_MS = 110000;
+
+function runGmgn(file, args, options, callback) {
+    const key = JSON.stringify([file, args]);
+    const cached = gmgnResultCache.get(key);
+
+    if (cached && Date.now() - cached.time < GMGN_CACHE_TTL_MS) {
+        console.log("GMGN cache hit:", Math.floor((Date.now() - cached.time) / 1000), "s old");
+        process.nextTick(() => callback(null, cached.stdout, cached.stderr));
+        return;
+    }
+
+    const now = Date.now();
+    if (now < gmgnCooldownUntil) {
+        const wait = Math.ceil((gmgnCooldownUntil - now) / 1000);
+        process.nextTick(() => callback(
+            new Error("GMGN shared cooldown active (" + wait + "s remaining)"),
+            "",
+            "GMGN shared cooldown active"
+        ));
+        return;
+    }
+
+    const pending = gmgnInFlight.get(key);
+    if (pending) {
+        pending.push(callback);
+        return;
+    }
+
+    gmgnInFlight.set(key, [callback]);
+    execFile(file, args, options, (error, stdout, stderr) => {
+        const callbacks = gmgnInFlight.get(key) || [];
+        gmgnInFlight.delete(key);
+
+        const details = [error && error.message, stderr]
+            .filter(Boolean).join(" ");
+
+        const errorText = String(error && error.message || "");
+        const stderrText = String(stderr || "");
+        const ratePattern = /429|RATE_LIMIT|temporarily banned/i;
+
+        if (ratePattern.test(details)) {
+            const matchedTerm = details.match(ratePattern);
+            const source = ratePattern.test(errorText) && ratePattern.test(stderrText)
+                ? "error.message + stderr"
+                : ratePattern.test(errorText) ? "error.message" : "stderr";
+            console.log("GMGN cooldown trigger:", source, "| matched:", matchedTerm ? matchedTerm[0] : "unknown");
+            console.log("GMGN error detail:", JSON.stringify({
+                message: errorText,
+                stderr: stderrText,
+                command: file,
+                args: args
+            }));
+            gmgnCooldownUntil = Date.now() + 300000;
+            console.log("GMGN shared cooldown activated for 5 minutes after rate limit.");
+        }
+
+        if (!error && stdout) {
+            gmgnResultCache.set(key, {
+                time: Date.now(),
+                stdout: stdout,
+                stderr: stderr || ""
+            });
+        }
+
+        for (const cb of callbacks) {
+            try {
+                cb(error, stdout, stderr);
+            } catch (e) {
+                console.log("GMGN callback error:", e.message);
+            }
+        }
+    });
+}
 const HISTORY_FILE =
     path.join(__dirname, "radar-history.json");
 
@@ -834,7 +912,7 @@ score += 10;
 
     };
 }
-    
+
 function calculateAccumulationScore(coin, historyToken) {
 
     let score = 0;
@@ -1252,7 +1330,7 @@ function sendJson(res, statusCode, data) {
 }
 
 const server = http.createServer(async (req, res) => {
-    
+
     /* ===============================
        AUTH API
        =============================== */
@@ -1547,7 +1625,7 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    
+
 /* 4H_SECOND_CANDLE_SNIPER_EXPERIMENTAL_V1 */
 if (req.url.startsWith("/api/sniper-4h-live") && req.method === "GET") {
     try {
@@ -1756,7 +1834,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                     rangeHunterSampleInFlight = true;
                     rangeHunterNextSampleAt = Date.now() + 120000;
 
-                    execFile(process.execPath, [
+                    runGmgn(process.execPath, [
                         path.join(__dirname, "node_modules/gmgn-cli/dist/index.js"),
                         "token", "info", "--chain", "sol", "--address", address, "--raw"
                     ], {
@@ -1811,7 +1889,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
         db.lastCandidateRefreshAt = Date.now();
         try { fs.writeFileSync(historyFile, JSON.stringify(db)); } catch (_) {}
 
-        execFile(process.execPath, [
+        runGmgn(process.execPath, [
             path.join(__dirname, "node_modules/gmgn-cli/dist/index.js"),
             "market", "trending",
             "--chain", "sol",
@@ -2004,7 +2082,7 @@ function getSecondCandleSniperState(token) {
 }
 if (req.url === "/api/pump" || req.url.startsWith("/api/pump?")) {
 
-        execFile("node", ["node_modules/gmgn-cli/dist/index.js", "market", "trending", "--chain", "sol", "--interval", "5m", "--limit", "100"], { timeout: 30000, env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY } },
+        runGmgn("node", ["node_modules/gmgn-cli/dist/index.js", "market", "trending", "--chain", "sol", "--interval", "5m", "--limit", "100"], { timeout: 30000, env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY } },
             (error, stdout, stderr) => {
 
                 res.writeHead(200, {
@@ -2328,7 +2406,7 @@ res.end(
 );function takeSnapshot() {
     console.log("Taking automatic GMGN snapshot...");
 
-    execFile("node", ["node_modules/gmgn-cli/dist/index.js", "market", "trending", "--chain", "sol", "--interval", "5m", "--limit", "100"], { timeout: 30000, env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY } },
+    runGmgn("node", ["node_modules/gmgn-cli/dist/index.js", "market", "trending", "--chain", "sol", "--interval", "5m", "--limit", "100"], { timeout: 30000, env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY } },
         (error, stdout, stderr) => {
 
             if (error) {
@@ -2348,21 +2426,7 @@ res.end(
                     loadHistory();
 
 
-                    // 4H SHARED GMGN CACHE â€” raw rank for independent sniper
-                    try {
-                        require('fs').writeFileSync(
-                            require('path').join(__dirname, '4h-gmgn-rank-cache.json'),
-                            JSON.stringify({
-                                updatedAt: Date.now(),
-                                rank: parsed && parsed.data && Array.isArray(parsed.data.rank)
-                                    ? parsed.data.rank
-                                    : []
-                            })
-                        );
-                        console.log('4H SHARED CACHE WRITTEN rank=' + (parsed && parsed.data && Array.isArray(parsed.data.rank) ? parsed.data.rank.length : 0));
-                    } catch (e) {
-                        console.log('4H shared cache write error:', e.message);
-                    }
+
 
                 if (
                     parsed.data &&
@@ -2428,7 +2492,7 @@ res.end(
                                 ),
 
                             holders: holders,
-                            
+
                             market_cap: marketCap,
                             volume:
                                 Number(
@@ -2549,48 +2613,9 @@ saved++;
     );
 }
 
-/* 4H SECOND CANDLE SNIPER â€” MANAGED CHILD PROCESS */
-let fourHSniperProcess = null;
-
-try {
-    const { spawn } = require("child_process");
-
-    fourHSniperProcess = spawn(
-        process.execPath,
-        [require("path").join(__dirname, "4h-second-candle-sniper-v2.js")],
-        {
-            cwd: __dirname,
-            stdio: ["ignore", "pipe", "pipe"]
-        }
-    );
-
-    fourHSniperProcess.stdout.on("data", data => {
-        console.log("[4H SNIPER]", data.toString().trim());
-    });
-
-    fourHSniperProcess.stderr.on("data", data => {
-        console.log("[4H SNIPER ERROR]", data.toString().trim());
-    });
-
-    fourHSniperProcess.on("exit", (code, signal) => {
-        console.log(
-            "[4H SNIPER] child exited",
-            "code=" + code,
-            "signal=" + signal
-        );
-        fourHSniperProcess = null;
-    });
-
-    console.log("[4H SNIPER] collector started");
-} catch (e) {
-    console.log(
-        "[4H SNIPER] startup error:",
-        e.message
-    );
-}
 setInterval(
     takeSnapshot,
-    60 * 1000
+    120 * 1000
 );
 
 takeSnapshot();
