@@ -1662,9 +1662,44 @@ table tbody tr:hover {
      ========================= -->
 
 <div id="loginScreen">
-<div id="login-live-clock" class="cyber-clock" aria-label="Local time">
-  <span class="cyber-clock-label">LOCAL TIME</span>
-  <strong class="cyber-clock-digits">--:--:--</strong>
+<div id="login-live-clock" aria-label="Live analog local time">
+  <div class="gold-clock-caption">LOCAL TIME · SOLANA TERMINAL</div>
+  <svg id="goldRomanClock" viewBox="0 0 410 166" role="img" aria-label="Gold Roman numeral clock">
+    <defs>
+      <radialGradient id="goldFace" cx="50%" cy="38%" r="65%">
+        <stop offset="0%" stop-color="#242019"/>
+        <stop offset="100%" stop-color="#080a0c"/>
+      </radialGradient>
+      <filter id="goldGlow">
+        <feGaussianBlur stdDeviation="2.2" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    
+    <circle cx="205" cy="85" r="63" fill="url(#goldFace)" stroke="#d5ad62" stroke-width="2.2"/>
+    
+    <g fill="#e8c77e" font-family="Georgia,serif" font-size="12" text-anchor="middle">
+      <text x="205" y="39">XII</text>
+      <text x="229" y="46">I</text>
+      <text x="246" y="64">II</text>
+      <text x="252" y="89">III</text>
+      <text x="245" y="112">IV</text>
+      <text x="229" y="130">V</text>
+      <text x="205" y="137">VI</text>
+      <text x="181" y="130">VII</text>
+      <text x="164" y="112">VIII</text>
+      <text x="158" y="89">IX</text>
+      <text x="164" y="64">X</text>
+      <text x="181" y="46">XI</text>
+    </g>
+    <g filter="url(#goldGlow)" stroke-linecap="round">
+      <line id="goldHourHand" x1="205" y1="85" x2="205" y2="57" stroke="#f1d28c" stroke-width="4"/>
+      <line id="goldMinuteHand" x1="205" y1="85" x2="205" y2="43" stroke="#e5bd68" stroke-width="2.5"/>
+      <line id="goldSecondHand" x1="205" y1="94" x2="205" y2="34" stroke="#f0a84a" stroke-width="1.2"/>
+    </g>
+    <circle cx="205" cy="85" r="4" fill="#f4d58f" stroke="#8f672c" stroke-width="1"/>
+    <text x="205" y="160" text-anchor="middle" fill="#b99656" font-size="7" letter-spacing="2">VAHID1989</text>
+  </svg>
 </div>
 
     <div class="loginBox">
@@ -1764,81 +1799,7 @@ table tbody tr:hover {
 #aiAnalyzerPanel input#aiContractInput:focus{border-color:#00e5d4;box-shadow:0 0 0 3px rgba(0,229,212,.09)}
 @media(max-width:600px){#aiAnalyzerPanel .ai-market-strip{padding:11px}#aiAnalyzerPanel .ai-candles{gap:4px}#aiAnalyzerPanel .ai-market-sub{letter-spacing:.7px}}
 </style>
-<div id="aiAnalyzerPanel" style="margin:18px auto; max-width:1200px; padding:20px; border:1px solid rgba(0,255,220,.28); border-radius:16px; background:linear-gradient(135deg,rgba(8,20,30,.96),rgba(10,30,40,.88)); box-shadow:0 0 25px rgba(0,255,220,.08);">
-
-    <div class="ai-market-strip"><div id="radar-live-clock" class="cyber-clock radar-clock" aria-label="Radar local time"><span class="cyber-clock-label">SMART MONEY TERMINAL · LIVE TIME</span><strong class="cyber-clock-digits">--:--:--</strong></div>
-      <div class="ai-market-coin"><span class="ai-btc-mark">₿</span><div>MARKET INTELLIGENCE<div class="ai-market-sub">SMART MONEY · SOLANA RADAR</div></div></div>
-      <div class="ai-candles"><i class="ai-candle" style="--h:15px"></i><i class="ai-candle" style="--h:25px"></i><i class="ai-candle red" style="--h:18px"></i><i class="ai-candle" style="--h:31px"></i><i class="ai-candle" style="--h:22px"></i><i class="ai-candle red" style="--h:13px"></i><i class="ai-candle" style="--h:36px"></i><i class="ai-candle" style="--h:27px"></i><i class="ai-candle" style="--h:40px"></i><i class="ai-candle" style="--h:32px"></i><i class="ai-candle red" style="--h:20px"></i><i class="ai-candle" style="--h:44px"></i></div>
-      <div class="ai-market-signal"><span class="ai-market-dot"></span> RADAR SYSTEM</div>
-    </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:15px;">
-        <div>
-            <div style="font-size:21px;font-weight:700;color:#00ffe0;">
-                🤖 AI TOKEN ANALYZER
-            </div>
-            <div style="font-size:12px;color:#9fb5bd;margin-top:5px;">
-                تحلیل هوشمند توکن بر اساس Contract Address
-            </div>
-        </div>
-
-        <div style="font-size:11px;padding:6px 10px;border-radius:20px;background:rgba(255,193,7,.12);color:#ffd54f;border:1px solid rgba(255,193,7,.25);">
-            AI ENGINE آماده اتصال
-        </div>
-    </div>
-
-    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <input
-            id="aiContractInput"
-            type="text"
-            placeholder="Contract Address را وارد کنید..."
-            autocomplete="off"
-            style="flex:1;min-width:260px;padding:13px 14px;border-radius:10px;border:1px solid rgba(0,255,220,.25);background:rgba(0,0,0,.35);color:#fff;outline:none;"
-        >
-
-        <button
-            type="button"
-            onclick="alert('🤖 موتور AI به‌زودی فعال می‌شود. فعلاً این بخش نمایشی است.')"
-            style="padding:13px 22px;border:0;border-radius:10px;background:linear-gradient(135deg,#00c9a7,#00ffe0);color:#001b19;font-weight:700;cursor:pointer;"
-        >
-            🔍 Analyze
-        </button>
-    </div>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;">
-
-        <div style="padding:13px;border-radius:10px;background:rgba(255,255,255,.035);">
-            <div style="font-size:11px;color:#8da3aa;">وضعیت</div>
-            <div style="margin-top:5px;color:#ffd54f;font-weight:700;">⏳ در انتظار تحلیل</div>
-        </div>
-
-        <div style="padding:13px;border-radius:10px;background:rgba(255,255,255,.035);">
-            <div style="font-size:11px;color:#8da3aa;">Entry Signal</div>
-            <div style="margin-top:5px;color:#aaa;font-weight:700;">—</div>
-        </div>
-
-        <div style="padding:13px;border-radius:10px;background:rgba(255,255,255,.035);">
-            <div style="font-size:11px;color:#8da3aa;">Risk</div>
-            <div style="margin-top:5px;color:#aaa;font-weight:700;">—</div>
-        </div>
-
-        <div style="padding:13px;border-radius:10px;background:rgba(255,255,255,.035);">
-            <div style="font-size:11px;color:#8da3aa;">AI Score</div>
-            <div style="margin-top:5px;color:#aaa;font-weight:700;">— / 100</div>
-        </div>
-
-    </div>
-
-    <div style="margin-top:14px;padding:14px;border-radius:10px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.05);">
-        <div style="font-size:12px;color:#8da3aa;margin-bottom:8px;">🧠 AI Analysis</div>
-        <div style="font-size:13px;color:#b8c7cc;line-height:1.8;">
-            Contract Address را وارد کنید تا تحلیل وضعیت، روند، نقدینگی، هولدرها،
-            Smart Money، ریسک و شرایط احتمالی ورود در این قسمت نمایش داده شود.
-        </div>
-    </div>
-
-</div>
-
-    <div class="header">
+<div class="header">
 <div class="gmgn-robot-profile" aria-label="GMGN robot profile">
   <div class="gmgn-robot-avatar" id="gmgn-human-robot-v1">
   <svg viewBox="0 0 100 100" role="img" aria-label="Neon smartphone with crypto chart">
@@ -2132,7 +2093,11 @@ table tbody tr:hover {
 <div style="font-size:18px;font-weight:700;">🎯 RANGE HUNTER</div>
       <div style="font-size:12px;opacity:.7;margin-top:4px;">رصد رنج قیمت، انباشت هولدر و ریسک شکست · نمونه‌برداری هر ۳ دقیقه</div>
     </div>
-    <div id="sniper4hLiveStatus" style="font-size:12px;opacity:.7;">در انتظار داده...</div>
+    
+    <div id="radar-live-clock" class="cyber-clock radar-clock">
+      <div class="cyber-clock-label">LOCAL TIME</div>
+      <div class="cyber-clock-digits">--:--:--</div>
+    </div>    <div id="sniper4hLiveStatus" style="font-size:12px;opacity:.7;">در انتظار داده...</div>
   </div>
     <div style="overflow-x:auto;">
     <table style="width:100%;min-width:1100px;table-layout:auto;">
@@ -7665,6 +7630,59 @@ el.appendChild(svg);
   }
 }
 </style>
+<style id="persist-login-gold-clock-position">
+#loginScreen #goldRomanClock {
+  outline:none!important;
+  transform:translateY(-30px)!important;
+}
+</style>
+<style id="radar-clock-top-right-fix">
+#appScreen #sniper4hLiveSection #radar-live-clock {
+  position:fixed!important;
+  top:12px!important;
+  right:12px!important;
+  left:auto!important;
+  bottom:auto!important;
+  transform:none!important;
+  z-index:99999!important;
+}
+@media(max-width:600px) {
+  #appScreen #sniper4hLiveSection #radar-live-clock {
+    top:8px!important;
+    right:8px!important;
+  }
+}
+</style>
+<script id="radar-clock-final-persistent">
+(() => {
+  const fixRadarClock = () => {
+    const c = document.querySelector('#radar-live-clock');
+    if (!c) return;
+    document.body.appendChild(c);
+    Object.assign(c.style, {
+      position:'fixed',
+      top:'12px',
+      right:'12px',
+      left:'auto',
+      bottom:'auto',
+      transform:'none',
+      margin:'0',
+      zIndex:'2147483647',
+      border:'0',
+      outline:'0',
+      boxShadow:'none',
+      background:'transparent',
+      padding:'0',
+      borderRadius:'0',
+      width:'auto',
+      minWidth:'0'
+    });
+    c.querySelectorAll('svg.clock-frame-svg').forEach(x => x.style.display='none');
+  };
+  fixRadarClock();
+  document.addEventListener('DOMContentLoaded', fixRadarClock);
+})();
+</script>
 </body>
 </html>
 
@@ -8132,6 +8150,298 @@ input:focus,select:focus,textarea:focus{
   }
   #appScreen #radar-live-clock .cyber-clock-digits {
     font-size: 17px !important;
+  }
+}
+</style>
+
+<style id="login-gold-roman-clock">
+#loginScreen {
+  
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:14px!important;
+  overflow-y:auto!important;
+  padding:22px 16px!important;
+  box-sizing:border-box!important;
+}
+#loginScreen #login-live-clock {
+  position:relative!important;
+  inset:auto!important;
+  transform:none!important;
+  width:410px!important;
+  max-width:calc(100vw - 32px)!important;
+  height:166px!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  display:block!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+#goldRomanClock {display:block;width:100%;height:166px;overflow:visible}
+#loginScreen .gold-clock-caption {
+  position:absolute;top:0;left:0;right:0;text-align:center;
+  color:#c5a15d;font:8px Arial,sans-serif;letter-spacing:2.5px;
+  text-shadow:0 0 9px rgba(220,174,91,.35);
+}
+#loginScreen .loginBox {
+  width:410px!important;
+  max-width:calc(100vw - 32px)!important;
+  margin:0!important;
+  flex:0 0 auto!important;
+}
+@media(max-height:650px) {
+  #loginScreen {justify-content:flex-start!important}
+}
+</style>
+<script id="login-gold-roman-clock-script">
+(function(){
+  function tick(){
+    var d=new Date();
+    var h=(d.getHours()%12+d.getMinutes()/60)*30;
+    var m=(d.getMinutes()+d.getSeconds()/60)*6;
+    var s=d.getSeconds()*6;
+    [["goldHourHand",h],["goldMinuteHand",m],["goldSecondHand",s]].forEach(function(x){
+      var el=document.getElementById(x[0]);
+      if(el)el.setAttribute("transform","rotate("+x[1]+" 205 85)");
+    });
+  }
+  tick();
+  setInterval(tick,1000);
+})();
+</script>
+
+
+<style id="final-independent-clock-layout">
+/* Gold Roman clock: upper-left of login screen */
+#loginScreen #login-live-clock {
+  position:fixed!important;
+  top:12px!important;
+  left:12px!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:none!important;
+  width:250px!important;
+  height:110px!important;
+  max-width:calc(100vw - 24px)!important;
+  margin:0!important;
+  z-index:10000!important;
+}
+
+/* Small digital clock inside Range Hunter header */
+#appScreen #sniper4hLiveSection #radar-live-clock {
+  position:relative!important;
+  inset:auto!important;
+  transform:none!important;
+  display:inline-flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:9px!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:100%!important;
+  height:auto!important;
+  margin:8px 0 0!important;
+  padding:6px 11px!important;
+  border:1px solid rgba(75,255,239,.48)!important;
+  border-radius:8px!important;
+  background:rgba(2,24,35,.75)!important;
+  box-shadow:0 0 12px rgba(0,230,220,.10)!important;
+}
+#appScreen #sniper4hLiveSection #radar-live-clock::before {
+  display:none!important;
+}
+#appScreen #sniper4hLiveSection #radar-live-clock .cyber-clock-label {
+  font-size:8px!important;
+  letter-spacing:1px!important;
+}
+#appScreen #sniper4hLiveSection #radar-live-clock .cyber-clock-digits {
+  margin:0!important;
+  font-size:17px!important;
+  line-height:1.2!important;
+  letter-spacing:1px!important;
+  color:#72ffeb!important;
+}
+@media(max-width:600px) {
+  #loginScreen #login-live-clock {
+    top:8px!important;
+    left:8px!important;
+    width:190px!important;
+    height:82px!important;
+  }
+  #appScreen #sniper4hLiveSection #radar-live-clock {
+    padding:5px 8px!important;
+    gap:6px!important;
+  }
+  #appScreen #sniper4hLiveSection #radar-live-clock .cyber-clock-digits {
+    font-size:15px!important;
+  }
+}
+</style>
+<style id="final-clock-cleanup-and-right-position">
+#loginScreen #login-live-clock svg.clock-frame-svg {
+  display:none!important;
+}
+#loginScreen #login-live-clock {
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+#appScreen #sniper4hLiveSection > div:first-of-type {
+  position:relative!important;
+}
+#appScreen #sniper4hLiveSection #radar-live-clock {
+  position:absolute!important;
+  top:50%!important;
+  right:16px!important;
+  left:auto!important;
+  bottom:auto!important;
+  transform:translateY(-50%)!important;
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  width:auto!important;
+  min-width:0!important;
+  height:auto!important;
+  margin:0!important;
+  padding:7px 12px!important;
+  border:1px solid rgba(75,255,239,.45)!important;
+  border-radius:8px!important;
+  background:#050b10!important;
+  box-shadow:0 0 12px rgba(0,230,220,.12)!important;
+}
+#appScreen #sniper4hLiveSection #radar-live-clock::before {
+  display:none!important;
+  content:none!important;
+}
+#appScreen #sniper4hLiveSection #radar-live-clock .cyber-clock-label {
+  font-size:8px!important;
+  color:#79cfc9!important;
+  letter-spacing:1px!important;
+}
+#appScreen #sniper4hLiveSection #radar-live-clock .cyber-clock-digits {
+  margin:0!important;
+  color:#65ffeb!important;
+  font-size:17px!important;
+  line-height:1.2!important;
+  letter-spacing:1px!important;
+  text-shadow:0 0 8px rgba(0,255,225,.3)!important;
+}
+@media(max-width:600px) {
+  #appScreen #sniper4hLiveSection #radar-live-clock {
+    right:8px!important;
+    padding:5px 7px!important;
+    gap:5px!important;
+  }
+  #appScreen #sniper4hLiveSection #radar-live-clock .cyber-clock-label {
+    font-size:7px!important;
+  }
+  #appScreen #sniper4hLiveSection #radar-live-clock .cyber-clock-digits {
+    font-size:14px!important;
+  }
+}
+</style>
+
+
+<style id="clock-real-layout-fix">
+#sniper4hLiveSection > div:first-of-type {
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  flex-wrap:wrap!important;
+  gap:12px!important;
+}
+#sniper4hLiveSection > div:first-of-type > div:first-child {
+  flex:1 1 320px!important;
+  min-width:0!important;
+}
+#sniper4hLiveSection #radar-live-clock {
+  position:static!important;
+  inset:auto!important;
+  transform:none!important;
+  display:flex!important;
+  flex:0 0 auto!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:auto!important;
+  height:auto!important;
+  min-width:0!important;
+  margin:0 0 0 auto!important;
+  padding:7px 12px!important;
+  border:1px solid rgba(75,255,239,.55)!important;
+  border-radius:8px!important;
+  background:#050b10!important;
+  box-shadow:0 0 12px rgba(0,230,220,.15)!important;
+}
+#sniper4hLiveSection #radar-live-clock::before {
+  display:none!important;
+  content:none!important;
+}
+#sniper4hLiveSection #radar-live-clock .cyber-clock-label {
+  color:#79cfc9!important;
+  font-size:8px!important;
+  letter-spacing:1px!important;
+}
+#sniper4hLiveSection #radar-live-clock .cyber-clock-digits {
+  color:#65ffeb!important;
+  font-size:17px!important;
+  line-height:1.2!important;
+  margin:0!important;
+  text-shadow:0 0 8px rgba(0,255,225,.3)!important;
+}
+@media(max-width:600px) {
+  #sniper4hLiveSection #radar-live-clock {
+    padding:5px 8px!important;
+    margin-left:auto!important;
+  }
+  #sniper4hLiveSection #radar-live-clock .cyber-clock-digits {
+    font-size:14px!important;
+  }
+}
+</style>
+
+<style id="clock-flex-final-override">
+#appScreen #sniper4hLiveSection > div:first-of-type {
+  position:relative!important;
+}
+#appScreen #sniper4hLiveSection #radar-live-clock {
+  position:static!important;
+  top:auto!important;
+  right:auto!important;
+  left:auto!important;
+  bottom:auto!important;
+  transform:none!important;
+  z-index:20!important;
+  margin:0!important;
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  align-items:center!important;
+  gap:8px!important;
+  width:auto!important;
+  height:auto!important;
+  padding:6px 10px!important;
+  border:0!important;
+  outline:0!important;
+  border-radius:7px!important;
+  background:#050b10!important;
+  box-shadow:inset 0 0 0 1px rgba(75,255,239,.25),0 0 10px rgba(0,230,220,.10)!important;
+}
+#appScreen #sniper4hLiveSection #radar-live-clock::before {
+  display:none!important;
+  content:none!important;
+}
+@media(max-width:600px) {
+  #appScreen #sniper4hLiveSection #radar-live-clock {
+    right:8px!important;
   }
 }
 </style>

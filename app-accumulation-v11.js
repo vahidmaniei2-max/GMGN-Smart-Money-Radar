@@ -1788,8 +1788,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                 const mc = Number(c.marketCap);
                 const holders = Number(c.holders);
 
-                if (!address || !Number.isFinite(ageDays) || ageDays < 3 || ageDays > 15 ||
-                    !Number.isFinite(mc) || mc < 70000 || mc > 500000) continue;
+                if (!address || !Number.isFinite(ageDays) || ageDays < 3 || ageDays > 7 || !Number.isFinite(mc) || mc < 50000 || mc > 500000) continue;
 
                 const t = db.tokens[address];
                 const samples = t && Array.isArray(t.samples)
@@ -1867,7 +1866,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                         const age = t && Number(t.creationTime) > 0
                             ? (nowSec - Number(t.creationTime)) / 86400 : NaN;
                         return address && !current.has(address) &&
-                            Number.isFinite(age) && age >= 3 && age <= 15 &&
+                            Number.isFinite(age) && age >= 3 && age <= 7 &&
                             Array.isArray(t.samples) && t.samples.length > 0;
                     })
                     .sort((a, b) => {
@@ -1945,11 +1944,8 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
             "--chain", "sol",
             "--interval", "5m",
             "--limit", "100",
-            "--min-marketcap", "70000",
-            "--max-marketcap", "500000",
-            "--min-holder-count", "280",
-            "--min-created", "3d",
-            "--max-created", "15d",
+           "--min-created", "3d",
+            "--max-created", "7d",
             "--raw"
         ], {
             timeout: 30000,
@@ -1978,8 +1974,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                     const holders = Number(c.holder_count || c.holders || c.holderCount || 0);
                     const price = Number(c.price || c.price_usd || c.priceUsd || 0);
 
-                    if (!address || !Number.isFinite(ageDays) || ageDays < 3 || ageDays > 15 ||
-                        mc < 70000 || mc > 500000 || holders < 280 || price <= 0) continue;
+                    if (!address || !Number.isFinite(ageDays) || ageDays < 3 || ageDays > 7 || !Number.isFinite(mc) || mc < 50000 || mc > 500000 || price <= 0) continue;
 
                     const candidate = {
                         address,
