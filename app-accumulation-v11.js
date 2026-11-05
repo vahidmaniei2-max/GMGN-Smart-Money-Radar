@@ -1746,7 +1746,8 @@ const server = http.createServer(async (req, res) => {
 
 
 
-if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
+if ((req.url.startsWith("/api/range-hunter") || req.url.startsWith("/api/early-range")) && req.method === "GET") {
+        const earlyRangeRequest = req.url.startsWith("/api/early-range");
     try {
         const historyFile = path.join(__dirname, "range-hunter-history-v1.json");
         let db = { lastSnapshotAt: 0, lastCandidateRefreshAt: 0, candidates: [], tokens: {} };
@@ -1788,7 +1789,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                 const mc = Number(c.marketCap);
                 const holders = Number(c.holders);
 
-                if (!address || !Number.isFinite(ageDays) || ageDays < 3 || ageDays > 7 || !Number.isFinite(mc) || mc < 50000 || mc > 500000) continue;
+                if (!address || !Number.isFinite(ageDays) || ((earlyRangeRequest && (ageDays < 1 || ageDays >= 3)) || (!earlyRangeRequest && (ageDays < 3 || ageDays > 10))) || !Number.isFinite(mc) || mc < 50000 || mc > 500000) continue;
 
                 const t = db.tokens[address];
                 const samples = t && Array.isArray(t.samples)
@@ -1866,7 +1867,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                         const age = t && Number(t.creationTime) > 0
                             ? (nowSec - Number(t.creationTime)) / 86400 : NaN;
                         return address && !current.has(address) &&
-                            Number.isFinite(age) && age >= 3 && age <= 7 &&
+                            Number.isFinite(age) && age >= 1 && age <= 10 &&
                             Array.isArray(t.samples) && t.samples.length > 0;
                     })
                     .sort((a, b) => {
@@ -1916,7 +1917,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                             t.symbol = coin?.symbol || t.symbol || "?";
                             t.samples.push(sample);
                             t.samples = t.samples
-                                .filter(x => Number(x.time) >= sample.time - 8 * 86400)
+                                .filter(x => Number(x.time) >= sample.time - 11 * 86400)
                                 .slice(-2000);
                             fs.writeFileSync(historyFile, JSON.stringify(fresh));
                             if (fresh.tokens && fresh.tokens[address]) {
@@ -1944,8 +1945,8 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
             "--chain", "sol",
             "--interval", "5m",
             "--limit", "100",
-           "--min-created", "3d",
-            "--max-created", "7d",
+           "--min-created", "1d",
+            "--max-created", "10d",
             "--raw"
         ], {
             timeout: 30000,
@@ -1974,7 +1975,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                     const holders = Number(c.holder_count || c.holders || c.holderCount || 0);
                     const price = Number(c.price || c.price_usd || c.priceUsd || 0);
 
-                    if (!address || !Number.isFinite(ageDays) || ageDays < 3 || ageDays > 7 || !Number.isFinite(mc) || mc < 50000 || mc > 500000 || price <= 0) continue;
+                    if (!address || !Number.isFinite(ageDays) || (ageDays < 1 || ageDays > 10) || !Number.isFinite(mc) || mc < 50000 || mc > 500000 || price <= 0) continue;
 
                     const candidate = {
                         address,
@@ -1996,7 +1997,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
                     t.creationTime = createdAt;
                     t.samples.push({ time: now, price, mc, holders });
                     t.samples = t.samples
-                        .filter(x => Number(x.time) >= now - 8 * 86400)
+                        .filter(x => Number(x.time) >= now - 11 * 86400)
                         .slice(-2000);
                 }
 
@@ -2005,7 +2006,7 @@ if (req.url.startsWith("/api/range-hunter") && req.method === "GET") {
 
                 for (const [address, t] of Object.entries(db.tokens)) {
                     if (!Array.isArray(t.samples)) t.samples = [];
-                    t.samples = t.samples.filter(x => Number(x.time) >= now - 8 * 86400);
+                    t.samples = t.samples.filter(x => Number(x.time) >= now - 11 * 86400);
                     if (!t.samples.length && !candidates.some(c => c.address === address)) {
                         delete db.tokens[address];
                     }

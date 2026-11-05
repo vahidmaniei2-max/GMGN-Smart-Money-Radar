@@ -1786,7 +1786,7 @@ table tbody tr:hover {
 <path d="M33 72H67" stroke="#53e8d8" stroke-width=".8" opacity=".7"/>
 <circle cx="37" cy="78" r="1.5" fill="#39e8b0"/><path d="M42 78H55" stroke="#b6d8e1" stroke-width="1.2" stroke-linecap="round"/><path d="M59 78H66" stroke="#39e8b0" stroke-width="1.5" stroke-linecap="round"/>
 </svg>
-</div>
+<div class="gmgn-btc-emblem" aria-label="Bitcoin"><svg viewBox="0 0 100 100" role="img" aria-label="Gold Bitcoin coin"><defs><radialGradient id="goldNew" cx="32%" cy="25%"><stop stop-color="#fff8d8"/><stop offset=".4" stop-color="#ffd45b"/><stop offset=".78" stop-color="#d99519"/><stop offset="1" stop-color="#75400a"/></radialGradient><filter id="goldGlowNew"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="50" cy="50" r="47" fill="#5b3509" stroke="#f5c65b" stroke-width="1.5"/><circle cx="50" cy="50" r="42.5" fill="url(#goldNew)" stroke="#fff0ae" stroke-width="2" filter="url(#goldGlowNew)"/><circle cx="50" cy="50" r="35.5" fill="none" stroke="#9c610e" stroke-width="1.5"/><circle cx="50" cy="50" r="32.5" fill="none" stroke="#fff0ae" stroke-width=".8" opacity=".8"/><text x="50" y="67" text-anchor="middle" font-family="Arial,sans-serif" font-size="49" font-weight="bold" fill="#75450b" stroke="#fff0ae" stroke-width=".7">B</text></svg></div></div>
   <div class="gmgn-robot-identity"><span>SMART MONEY TERMINAL</span><strong>VAHID1989</strong><small>SOLANA RADAR OPERATOR</small></div>
   <div class="gmgn-wallet-card"><span class="gmgn-wallet-icon" aria-label="Wallet" title="Wallet">
 <svg viewBox="0 0 32 32" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -2022,7 +2022,184 @@ table tbody tr:hover {
 
 
 
-    <!-- RANGE HUNTER PANEL -->
+    <!-- EARLY RANGE PANEL -->
+<style id="early-range-pink-style">
+#earlyRangeSection {
+  margin-top:24px;padding:16px;background:linear-gradient(145deg,#100b16,#080a12);
+  border:1px solid rgba(255,65,160,.38);border-radius:16px;
+  box-shadow:0 0 24px rgba(255,40,145,.09),inset 0 0 22px rgba(255,40,145,.035);
+  color:#f8eaf3;overflow:hidden
+}
+#earlyRangeSection .er-head {
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  flex-wrap:wrap;border-bottom:1px solid rgba(255,80,170,.2);padding-bottom:13px;margin-bottom:12px
+}
+#earlyRangeSection .er-title {
+  color:#ff69b4;font-size:19px;font-weight:900;letter-spacing:1.5px;
+  text-shadow:0 0 12px rgba(255,70,160,.5)
+}
+#earlyRangeSection .er-sub {font-size:11px;color:#b99bad;margin-top:5px}
+#earlyRangeSection .er-status {font-size:11px;color:#ff9acb;text-align:right}
+#earlyRangeSection .er-table-wrap {width:100%;overflow-x:auto}
+#earlyRangeSection table {width:100%;min-width:780px;border-collapse:collapse;font-size:12px}
+#earlyRangeSection th {
+  color:#ff9acb;background:rgba(255,70,160,.08);padding:11px 8px;
+  border-bottom:1px solid rgba(255,80,170,.2);white-space:nowrap
+}
+#earlyRangeSection td {
+  padding:11px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.055);
+  color:#e9dce5;white-space:nowrap
+}
+#earlyRangeSection tr:hover td {background:rgba(255,70,160,.045)}
+#earlyRangeSection .er-lamp {
+  position:relative;display:inline-block!important;width:23px!important;height:23px!important;
+  vertical-align:middle;border:2px solid #ffc0e4;border-radius:50% 50% 44% 44%;
+  background:radial-gradient(circle at 35% 28%,#fff 0%,#ffd9ef 16%,#ff66bd 48%,#a90068 100%);
+  box-shadow:0 0 8px #ff4fa3,0 0 18px #ff4fa3,0 0 30px rgba(255,79,163,.55),inset 0 0 7px #fff;
+  animation:erPinkPulse 1.5s ease-in-out infinite
+}
+#earlyRangeSection .er-lamp::after {
+  content:"";position:absolute;width:10px;height:5px;left:4px;bottom:-7px;
+  border-radius:2px;background:linear-gradient(90deg,#9e286d,#ffd0ed,#9e286d);
+  border:1px solid #ff9bd0
+}
+#earlyRangeSection th:nth-child(3),#earlyRangeSection td:nth-child(3) {
+  width:48px!important;min-width:48px!important;text-align:center
+}
+#earlyRangeSection th:nth-child(4),#earlyRangeSection td:nth-child(4) {
+  width:126px!important;min-width:126px!important;text-align:center
+}
+#earlyRangeSection table {min-width:820px!important}
+@keyframes erPinkPulse {
+  0%,100% {opacity:1;box-shadow:0 0 7px #ff4fa3,0 0 15px #ff4fa3}
+  50% {opacity:.55;box-shadow:0 0 3px #ff4fa3,0 0 7px #ff4fa3}
+}
+#earlyRangeSection .er-copy {
+  border:1px solid rgba(255,100,180,.35);background:rgba(255,70,160,.08);
+  color:#ff9acb;border-radius:6px;padding:5px 8px;cursor:pointer;font-size:10px
+}
+#earlyRangeSection .er-empty {padding:22px!important;color:#b99bad!important}
+@media(max-width:600px) {
+  #earlyRangeSection {padding:11px}
+  #earlyRangeSection .er-title {font-size:16px}
+}
+</style>
+
+<section id="earlyRangeSection">
+  <div class="er-head">
+    <div>
+      <div class="er-title">◉ EARLY RANGE</div>
+      <div class="er-sub">1–3 DAYS · MC $50K–$500K · ACCUMULATION TRACKING</div>
+    </div>
+    <div id="earlyRangeStatus" class="er-status">INITIALIZING...</div>
+  </div>
+  <div class="er-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>TOKEN</th><th>COPY</th><th>AGE SIGNAL</th><th>AGE</th>
+          <th>MARKET CAP</th><th>HOLDERS</th><th>HOLDER Δ</th>
+          <th>RANGE</th><th>SNAPSHOTS</th>
+        </tr>
+      </thead>
+      <tbody id="earlyRangeBody">
+        <tr><td colspan="10" class="er-empty">Scanning early accumulation ranges...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+(function () {
+  const body = document.getElementById("earlyRangeBody");
+  const status = document.getElementById("earlyRangeStatus");
+  if (!body || !status) return;
+
+  const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[ch]));
+
+  const money = value => "$" + Number(value || 0).toLocaleString("en-US", {
+    maximumFractionDigits: 0
+  });
+
+  async function loadEarlyRange() {
+    try {
+      const response = await fetch("/api/early-range?t=" + Date.now(), {
+        cache: "no-store"
+      });
+      if (!response.ok) throw new Error("HTTP " + response.status);
+
+      const data = await response.json();
+      if (!data || data.ok !== true) throw new Error("Invalid API response");
+
+      const tokens = Array.isArray(data.tokens) ? data.tokens : [];
+      const mainAddresses = new Set(
+        Array.from(document.querySelectorAll("#coins tr[data-address]"))
+          .map(row => String(row.getAttribute("data-address") || "").trim().toLowerCase())
+      );
+
+      const upperAddresses = new Set(
+        Array.from(document.querySelectorAll("#sniper4hLiveBody [data-address]"))
+          .map(el => String(el.getAttribute("data-address") || "").trim().toLowerCase())
+      );
+
+      const filtered = tokens.filter(token => {
+        const age = Number(token.ageDays);
+        const mc = Number(token.marketCap);
+        const address = String(token.address || "").trim().toLowerCase();
+        return age >= 1 && age < 3 &&
+          mc >= 50000 && mc <= 500000 &&
+          !mainAddresses.has(address) &&
+          !upperAddresses.has(address);
+      });
+
+      status.textContent = filtered.length + " ACTIVE ACCUMULATION";
+      if (!filtered.length) {
+        body.innerHTML = '<tr><td colspan="10" class="er-empty">No qualified early accumulation range found</td></tr>';
+        return;
+      }
+
+      body.innerHTML = filtered.map((token, index) => {
+        const address = esc(token.address);
+        const delta = Number(token.holderDelta);
+        return `<tr>
+          <td>${index + 1}</td>
+          <td><strong>${esc(token.symbol)}</strong></td>
+          <td><button class="er-copy" data-address="${address}" title="Copy contract">⧉</button></td><td class="er-signal-cell"><span class="er-lamp"></span></td>
+          <td>${Number(token.ageDays).toFixed(2)}d</td>
+          <td>${money(token.marketCap)}</td>
+          <td>${Number(token.holders || 0).toLocaleString("en-US")}</td>
+          <td>${Number.isFinite(delta) ? (delta > 0 ? "+" : "") + delta : "—"}</td>
+          <td>${token.rangePct == null ? "—" : Number(token.rangePct).toFixed(2) + "%"}</td>
+          <td>${Number(token.snapshots || 0)}</td>
+
+        </tr>`;
+      }).join("");
+    } catch (error) {
+      status.textContent = "CONNECTION ERROR";
+      body.innerHTML = '<tr><td colspan="10" class="er-empty">Unable to load Early Range data</td></tr>';
+      console.error("Early Range:", error);
+    }
+  }
+
+  body.addEventListener("click", async event => {
+    const button = event.target.closest(".er-copy");
+    if (!button) return;
+    try {
+      await navigator.clipboard.writeText(button.dataset.address || "");
+      button.textContent = "COPIED";
+      setTimeout(() => { button.textContent = "COPY"; }, 1200);
+    } catch (_) {
+      button.textContent = "COPY FAILED";
+    }
+  });
+
+  loadEarlyRange();
+  setInterval(loadEarlyRange, 30000);
+})();
+</script>
+<!-- RANGE HUNTER PANEL -->
 <style id="range-hunter-pink-lamp-style">
 #sniper4hLiveSection .rh-copy-btn{margin-inline-start:6px;padding:4px 8px;border:1px solid rgba(255,114,220,.7);border-radius:7px;background:rgba(255,45,180,.12);color:#ff9be8;cursor:pointer;font-size:11px;font-weight:700}
 #sniper4hLiveSection .rh-copy-btn:hover{background:rgba(255,45,180,.28);box-shadow:0 0 12px rgba(255,80,200,.35)}
@@ -8407,3 +8584,10 @@ input:focus,select:focus,textarea:focus{
   }
 }
 </style>
+<style id="early-range-lamp-off-v1">#earlyRangeSection .er-lamp{animation:none!important;opacity:.16!important;filter:grayscale(1) brightness(.45)!important}</style>
+<style id="radar-clock-fixed-v1">#appScreen #sniper4hLiveSection #radar-live-clock{position:fixed!important;top:12px!important;right:12px!important;left:auto!important;z-index:10020!important;}</style>
+
+<style id="gmgn-bitcoin-emblem-v1">#appScreen .gmgn-robot-profile .gmgn-robot-avatar{display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:center!important;gap:0!important;height:164px!important;flex-basis:110px!important;overflow:visible!important}#appScreen .gmgn-robot-profile .gmgn-robot-avatar>svg:first-child{width:96px!important;height:96px!important;flex:none!important}#appScreen .gmgn-btc-emblem{width:58px;height:58px;flex:none;filter:drop-shadow(0 0 7px rgba(255,190,55,.6))}#appScreen .gmgn-btc-emblem svg{display:block;width:100%;height:100%}@media(max-width:650px){#appScreen .gmgn-robot-profile .gmgn-robot-avatar{height:140px!important;flex-basis:94px!important}#appScreen .gmgn-robot-profile .gmgn-robot-avatar>svg:first-child{width:80px!important;height:80px!important}#appScreen .gmgn-btc-emblem{width:50px;height:50px}}</style>
+<style id='gmgn-bitcoin-position-v2'>#appScreen .gmgn-robot-profile .gmgn-robot-avatar{height:204px!important}#appScreen .gmgn-btc-emblem{margin-top:40px!important}@media(max-width:650px){#appScreen .gmgn-robot-profile .gmgn-robot-avatar{height:180px!important}}</style>
+
+<style id='gmgn-bitcoin-final-position-v1'>#appScreen .gmgn-btc-emblem{margin-top:40px!important;transform:translateY(114px)!important}</style>
