@@ -1786,8 +1786,15 @@ table tbody tr:hover {
 <path d="M33 72H67" stroke="#53e8d8" stroke-width=".8" opacity=".7"/>
 <circle cx="37" cy="78" r="1.5" fill="#39e8b0"/><path d="M42 78H55" stroke="#b6d8e1" stroke-width="1.2" stroke-linecap="round"/><path d="M59 78H66" stroke="#39e8b0" stroke-width="1.5" stroke-linecap="round"/>
 </svg>
-<div class="gmgn-btc-emblem" aria-label="Bitcoin"><svg viewBox="0 0 100 100" role="img" aria-label="Gold Bitcoin coin"><defs><radialGradient id="goldNew" cx="32%" cy="25%"><stop stop-color="#fff8d8"/><stop offset=".4" stop-color="#ffd45b"/><stop offset=".78" stop-color="#d99519"/><stop offset="1" stop-color="#75400a"/></radialGradient><filter id="goldGlowNew"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="50" cy="50" r="47" fill="#5b3509" stroke="#f5c65b" stroke-width="1.5"/><circle cx="50" cy="50" r="42.5" fill="url(#goldNew)" stroke="#fff0ae" stroke-width="2" filter="url(#goldGlowNew)"/><circle cx="50" cy="50" r="35.5" fill="none" stroke="#9c610e" stroke-width="1.5"/><circle cx="50" cy="50" r="32.5" fill="none" stroke="#fff0ae" stroke-width=".8" opacity=".8"/><text x="50" y="67" text-anchor="middle" font-family="Arial,sans-serif" font-size="49" font-weight="bold" fill="#75450b" stroke="#fff0ae" stroke-width=".7">B</text></svg></div></div>
+</div>
   <div class="gmgn-robot-identity"><span>SMART MONEY TERMINAL</span><strong>VAHID1989</strong><small>SOLANA RADAR OPERATOR</small></div>
+  <div class="gmgn-center-gold-coin" title="Bitcoin" aria-label="Bitcoin">
+    <svg viewBox="0 0 40 40" aria-hidden="true">
+      <circle cx="20" cy="20" r="18" fill="#17130a" stroke="#e7b94f" stroke-width="1.8"/>
+      <circle cx="20" cy="20" r="15" fill="none" stroke="#9b762e" stroke-width=".7"/>
+      <text x="20" y="27" text-anchor="middle" font-family="Arial,sans-serif" font-size="23" font-weight="bold" fill="#f4ce72">₿</text>
+    </svg>
+  </div>
   <div class="gmgn-wallet-card"><span class="gmgn-wallet-icon" aria-label="Wallet" title="Wallet">
 <svg viewBox="0 0 32 32" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <path d="M5 9.5A3.5 3.5 0 0 1 8.5 6H25a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
@@ -7822,7 +7829,11 @@ el.appendChild(svg);
   document.addEventListener('DOMContentLoaded', fixRadarClock);
 })();
 </script>
-</body>
+<style id="gmgn-center-gold-coin-style">
+.gmgn-center-gold-coin{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;filter:drop-shadow(0 0 7px rgba(231,185,79,.28))}
+.gmgn-center-gold-coin svg{width:100%;height:100%;display:block}
+@media(max-width:650px){.gmgn-center-gold-coin{width:30px;height:30px;flex-basis:30px}}
+</style></body>
 </html>
 
 
@@ -8586,58 +8597,3 @@ input:focus,select:focus,textarea:focus{
 </style>
 <style id="early-range-lamp-off-v1">#earlyRangeSection .er-lamp{animation:none!important;opacity:.16!important;filter:grayscale(1) brightness(.45)!important}</style>
 <style id="radar-clock-fixed-v1">#appScreen #sniper4hLiveSection #radar-live-clock{position:fixed!important;top:12px!important;right:12px!important;left:auto!important;z-index:10020!important;}</style>
-
-<style id="gmgn-bitcoin-emblem-v1">#appScreen .gmgn-robot-profile .gmgn-robot-avatar{display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:center!important;gap:0!important;height:164px!important;flex-basis:110px!important;overflow:visible!important}#appScreen .gmgn-robot-profile .gmgn-robot-avatar>svg:first-child{width:96px!important;height:96px!important;flex:none!important}#appScreen .gmgn-btc-emblem{width:58px;height:58px;flex:none;filter:drop-shadow(0 0 7px rgba(255,190,55,.6))}#appScreen .gmgn-btc-emblem svg{display:block;width:100%;height:100%}@media(max-width:650px){#appScreen .gmgn-robot-profile .gmgn-robot-avatar{height:140px!important;flex-basis:94px!important}#appScreen .gmgn-robot-profile .gmgn-robot-avatar>svg:first-child{width:80px!important;height:80px!important}#appScreen .gmgn-btc-emblem{width:50px;height:50px}}</style>
-<style id='gmgn-bitcoin-position-v2'>#appScreen .gmgn-robot-profile .gmgn-robot-avatar{height:204px!important}#appScreen .gmgn-btc-emblem{margin-top:40px!important}@media(max-width:650px){#appScreen .gmgn-robot-profile .gmgn-robot-avatar{height:180px!important}}</style>
-
-<style id='gmgn-bitcoin-final-position-v1'>#appScreen .gmgn-btc-emblem{margin-top:40px!important;transform:translateY(114px)!important}</style>
-
-<style id="gmgn-bitcoin-mobile-fix-v1">
-@media(max-width:650px){
-  #appScreen .gmgn-robot-profile .gmgn-robot-avatar{
-    height:112px!important;
-    flex-basis:94px!important;
-    overflow:visible!important;
-  }
-  #appScreen .gmgn-robot-profile .gmgn-robot-avatar>svg:first-child{
-    width:80px!important;
-    height:80px!important;
-  }
-  #appScreen .gmgn-btc-emblem{
-    width:25px!important;
-    height:25px!important;
-    margin-top:2px!important;
-    transform:none!important;
-    flex:none!important;
-  }
-}
-</style>
-
-<style id="gmgn-mobile-phone-bitcoin-final-v1">
-@media(max-width:650px){
-  #appScreen .gmgn-robot-avatar > svg:first-child{
-    width:125px!important;
-    height:125px!important;
-    min-width:125px!important;
-    min-height:125px!important;
-    flex:0 0 125px!important;
-    transform:translate(-5px,7px)!important;
-  }
-  #appScreen .gmgn-robot-avatar .gmgn-btc-emblem{
-    width:32px!important;
-    height:32px!important;
-    min-width:32px!important;
-    min-height:32px!important;
-    max-width:32px!important;
-    max-height:32px!important;
-    flex:0 0 32px!important;
-    position:relative!important;
-    top:38px!important;
-    transform:none!important;
-  }
-  #appScreen .gmgn-btc-emblem svg{
-    width:100%!important;
-    height:100%!important;
-  }
-}
-</style>
