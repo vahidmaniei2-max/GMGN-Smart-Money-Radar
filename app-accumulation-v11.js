@@ -94,6 +94,144 @@ function runGmgn(file, args, options, callback) {
         }
     });
 }
+const rangeCandleCache = new Map();
+const rangeCandleQueue = [];
+let rangeCandleInFlight = false;
+let rangeCandleActiveKey = "";
+let rangeCandleNextRequestAt = 0;
+const RANGE_CANDLE_CACHE_TTL_MS = 10 * 60 * 1000;
+const RANGE_CANDLE_REQUEST_GAP_MS = 2500;
+
+function evaluateRangeCandles(rawList, creationTime, resolution) {
+    const periodMs = resolution === "1h" ? 3600000 : 14400000;
+    const nowMs = Date.now();
+    const candles = Array.isArray(rawList) ? rawList : [];
+    let complete = 0;
+    let accepted = 0;
+    let pumpCandles = 0;
+    let latest = null;
+
+    for (const candle of candles) {
+        const time = Number(candle.time);
+        const open = Number(candle.open);
+        const high = Number(candle.high);
+        const low = Number(candle.low);
+        const close = Number(candle.close);
+
+        if (![time, open, high, low, close].every(Number.isFinite)) continue;
+        const candleTimeMs = time < 1e12 ? time * 1000 : time;
+
+        if (candleTimeMs < Number(creationTime) * 1000 ||
+            candleTimeMs + periodMs > nowMs) continue;
+        if (open <= 0 || low <= 0 || high < low ||
+            high < open || high < close || low > open || low > close) continue;
+
+        complete++;
+        const volatility = (high - low) / open * 100;
+        const isPump = close / open >= 1.10;
+
+        if (isPump) pumpCandles++;
+        else if (volatility >= 2 && volatility <= 15) accepted++;
+
+        if (!latest || candleTimeMs > latest.time) {
+            latest = {
+                time: candleTimeMs,
+                volatility,
+                isPump
+            };
+        }
+    }
+
+    const ratio = complete > 0 ? accepted / complete : 0;
+    const lampState = !latest ? "normal" :
+        latest.isPump ? "pump" :
+        latest.volatility > 15 ? "severe" : "normal";
+
+    return {
+        ready: complete > 0,
+        passed: complete > 0 && ratio >= (resolution === "1h" ? 0.30 : 0.05),
+        completeCandles: complete,
+        acceptedCandles: accepted,
+        pumpCandles,
+        ratio: Number((ratio * 100).toFixed(1)),
+        lampState,
+        latestCandleTime: latest ? latest.time : null,
+        latestCandleVolatility: latest ? Number(latest.volatility.toFixed(2)) : null
+    };
+}
+function pumpRangeCandleQueue() {
+    if (rangeCandleInFlight || !rangeCandleQueue.length) return;
+    const wait = rangeCandleNextRequestAt - Date.now();
+    if (wait > 0) {
+        setTimeout(pumpRangeCandleQueue, wait);
+        return;
+    }
+
+    const job = rangeCandleQueue.shift();
+    rangeCandleInFlight = true;
+    rangeCandleActiveKey = job.key;
+    const cli = path.join(__dirname, "node_modules/gmgn-cli/dist/index.js");
+
+    runGmgn(process.execPath, [
+        cli, "market", "kline",
+        "--chain", "sol",
+        "--address", job.address,
+        "--resolution", job.resolution,
+        "--from", String(job.from),
+        "--to", String(job.to),
+        "--raw"
+    ], {
+        timeout: 30000,
+        env: { ...process.env, GMGN_API_KEY: process.env.GMGN_API_KEY }
+    }, (error, stdout) => {
+        try {
+            if (error) throw error;
+            const parsed = JSON.parse(stdout);
+            const list = parsed?.list || parsed?.data?.list ||
+                parsed?.data?.items || [];
+            const result = evaluateRangeCandles(list, job.creationTime, job.resolution);
+            rangeCandleCache.set(job.key, {
+                time: Date.now(),
+                result
+            });
+        } catch (e) {
+            console.log("Range candle request failed:", job.address, e.message);
+            rangeCandleCache.set(job.key, {
+                time: Date.now(),
+                result: { ready: false, passed: false, completeCandles: 0, acceptedCandles: 0, ratio: 0, error: true }
+            });
+        } finally {
+            rangeCandleInFlight = false;
+            rangeCandleActiveKey = "";
+            rangeCandleNextRequestAt = Date.now() + RANGE_CANDLE_REQUEST_GAP_MS;
+            setTimeout(pumpRangeCandleQueue, RANGE_CANDLE_REQUEST_GAP_MS);
+        }
+    });
+}
+
+function getRangeCandleResult(candidate, resolution, nowSec) {
+    const address = String(candidate.address || "");
+    const creationTime = Number(candidate.creationTime || 0);
+    if (!address || !Number.isFinite(creationTime) || creationTime <= 0) return null;
+
+    const periodSec = resolution === "1h" ? 3600 : 14400;
+    const from = Math.floor(creationTime / periodSec) * periodSec;
+    const to = Math.floor(nowSec / periodSec) * periodSec;
+    const key = address + "|" + resolution + "|" + creationTime;
+    const cached = rangeCandleCache.get(key);
+
+    if (cached && Date.now() - cached.time < RANGE_CANDLE_CACHE_TTL_MS) {
+        return cached.result;
+    }
+
+    if (!rangeCandleQueue.some(job => job.key === key) && rangeCandleActiveKey !== key) {
+        rangeCandleQueue.push({
+            key, address, resolution, creationTime, from, to
+        });
+        pumpRangeCandleQueue();
+    }
+    return null;
+}
 const HISTORY_FILE =
     path.join(__dirname, "radar-history.json");
 
@@ -1764,6 +1902,17 @@ if ((req.url.startsWith("/api/range-hunter") || req.url.startsWith("/api/early-r
         const sendResults = (warning) => {
             const now = Math.floor(Date.now() / 1000);
             const tokens = [];
+            const candleDiagnostics = [];
+            const debugCounts = {
+                ageMcEligible: 0,
+                currentCandidates: 0,
+                notCurrentCandidate: 0,
+                candlePending: 0,
+                candleErrors: 0,
+                candleNoComplete: 0,
+                candleRejected: 0,
+                candlePassed: 0
+            };
 
             const displayCandidates = new Map();
             for (const c of db.candidates) {
@@ -1789,7 +1938,59 @@ if ((req.url.startsWith("/api/range-hunter") || req.url.startsWith("/api/early-r
                 const mc = Number(c.marketCap);
                 const holders = Number(c.holders);
 
-                if (!address || !Number.isFinite(ageDays) || ((earlyRangeRequest && (ageDays < 1 || ageDays >= 3)) || (!earlyRangeRequest && (ageDays < 3 || ageDays > 10))) || !Number.isFinite(mc) || mc < 50000 || mc > 500000) continue;
+                if (!address || !Number.isFinite(ageDays) || ((earlyRangeRequest && (ageDays < (15 / 24) || ageDays >= 3)) || (!earlyRangeRequest && (ageDays < 3 || ageDays > 10))) || !Number.isFinite(mc) || mc < 50000 || mc > 500000) continue;
+
+                debugCounts.ageMcEligible++;
+                const isCurrentCandidate = db.candidates.some(x => String(x.address || "") === address);
+                if (isCurrentCandidate) debugCounts.currentCandidates++;
+                else {
+                    debugCounts.notCurrentCandidate++;
+                    continue;
+                }
+
+                const candleResolution = earlyRangeRequest ? "1h" : "4h";
+                const candleResult = getRangeCandleResult(c, candleResolution, now);
+
+                if (!candleResult) {
+                    debugCounts.candlePending++;
+                    candleDiagnostics.push({
+                        symbol: c.symbol || "?",
+                        address,
+                        ageDays: +ageDays.toFixed(2),
+                        marketCap: mc,
+                        resolution: candleResolution,
+                        state: "pending"
+                    });
+                    continue;
+                }
+
+                candleDiagnostics.push({
+                    symbol: c.symbol || "?",
+                    address,
+                    ageDays: +ageDays.toFixed(2),
+                    marketCap: mc,
+                    resolution: candleResolution,
+                    state: candleResult.error ? "error" :
+                        !candleResult.ready ? "no_complete_candles" :
+                        candleResult.passed ? "passed" : "rejected",
+                    completeCandles: candleResult.completeCandles,
+                    acceptedCandles: candleResult.acceptedCandles,
+                    pumpCandles: candleResult.pumpCandles,
+                    ratio: candleResult.ratio
+                });
+                if (candleResult.error) {
+                    debugCounts.candleErrors++;
+                    continue;
+                }
+                if (!candleResult.ready) {
+                    debugCounts.candleNoComplete++;
+                    continue;
+                }
+                if (!candleResult.passed) {
+                    debugCounts.candleRejected++;
+                    continue;
+                }
+                debugCounts.candlePassed++;
 
                 const t = db.tokens[address];
                 const samples = t && Array.isArray(t.samples)
@@ -1833,6 +2034,13 @@ if ((req.url.startsWith("/api/range-hunter") || req.url.startsWith("/api/early-r
                     rangePct: range == null ? null : +range.toFixed(2),
                     spanHours: spanHours == null ? null : +spanHours.toFixed(1),
                     snapshots: recent.length,
+                    candleResolution,
+                    candleRatio: candleResult.ratio,
+                    completeCandles: candleResult.completeCandles,
+                    acceptedCandles: candleResult.acceptedCandles,
+                    candleLampState: candleResult.lampState,
+                    candleLastTime: candleResult.latestCandleTime,
+                    candleVolatilityPct: candleResult.latestCandleVolatility,
                     status
                 });
             }
@@ -1850,9 +2058,11 @@ if ((req.url.startsWith("/api/range-hunter") || req.url.startsWith("/api/early-r
                     debug: {
                         candidates: db.candidates.length,
                         tokens: Object.keys(db.tokens).length,
+                        filterCounts: debugCounts,
                         lastCandidateRefreshAt: db.lastCandidateRefreshAt || 0,
                         lastSnapshotAt: db.lastSnapshotAt || 0,
-                        historyFileExists: fs.existsSync(historyFile)
+                        historyFileExists: fs.existsSync(historyFile),
+                    candleDiagnostics
                     }
                 } : {})
             }));
@@ -1870,14 +2080,34 @@ if ((req.url.startsWith("/api/range-hunter") || req.url.startsWith("/api/early-r
                             Number.isFinite(age) && age >= 1 && age <= 10 &&
                             Array.isArray(t.samples) && t.samples.length > 0;
                     })
-                    .sort((a, b) => {
-                        const at = Number(a[1].samples[a[1].samples.length - 1].time || 0);
-                        const bt = Number(b[1].samples[b[1].samples.length - 1].time || 0);
-                        return at - bt;
-                    });
+                    .map(([address, t]) => {
+                        const samples = t.samples
+                            .filter(x => Number(x.time) >= nowSec - 48 * 3600 && Number(x.price) > 0)
+                            .sort((a, b) => Number(a.time) - Number(b.time));
+                        const last = samples[samples.length - 1];
+                        const mc = Number(last?.mc || 0);
+                        const recent = samples.filter(x => Number(x.time) >= nowSec - 86400);
+                        const recentSpanHours = recent.length >= 2
+                            ? (Number(recent[recent.length - 1].time) - Number(recent[0].time)) / 3600
+                            : 0;
+                        const priority = recent.length < 12 ? 0 : recentSpanHours < 18 ? 1 : 2;
+                        return {
+                            address,
+                            priority,
+                            recentCount: recent.length,
+                            lastSampleAt: Number(last?.time || 0),
+                            mc
+                        };
+                    })
+                    .filter(x => x.mc >= 50000 && x.mc <= 500000)
+                    .sort((a, b) =>
+                        a.priority - b.priority ||
+                        (a.priority === 0 ? a.recentCount - b.recentCount : 0) ||
+                        a.lastSampleAt - b.lastSampleAt
+                    );
 
                 if (eligible.length) {
-                    const [address] = eligible[0];
+                    const address = eligible[0].address;
                     rangeHunterSampleInFlight = true;
                     rangeHunterNextSampleAt = Date.now() + 120000;
 
@@ -1945,7 +2175,7 @@ if ((req.url.startsWith("/api/range-hunter") || req.url.startsWith("/api/early-r
             "--chain", "sol",
             "--interval", "5m",
             "--limit", "100",
-           "--min-created", "1d",
+           "--min-created", "15h",
             "--max-created", "10d",
             "--raw"
         ], {
@@ -1975,7 +2205,7 @@ if ((req.url.startsWith("/api/range-hunter") || req.url.startsWith("/api/early-r
                     const holders = Number(c.holder_count || c.holders || c.holderCount || 0);
                     const price = Number(c.price || c.price_usd || c.priceUsd || 0);
 
-                    if (!address || !Number.isFinite(ageDays) || (ageDays < 1 || ageDays > 10) || !Number.isFinite(mc) || mc < 50000 || mc > 500000 || price <= 0) continue;
+                    if (!address || !Number.isFinite(ageDays) || (ageDays < (15 / 24) || ageDays > 10) || !Number.isFinite(mc) || mc < 50000 || mc > 500000 || price <= 0) continue;
 
                     const candidate = {
                         address,

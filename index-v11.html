@@ -2173,7 +2173,7 @@ table tbody tr:hover {
         return `<tr>
           <td>${index + 1}</td>
           <td><strong>${esc(token.symbol)}</strong></td>
-          <td><button class="er-copy" data-address="${address}" title="Copy contract">⧉</button></td><td class="er-signal-cell"><span class="er-lamp"></span></td>
+          <td><button class="er-copy" data-address="${address}" title="Copy contract">⧉</button></td><td class="er-signal-cell"><span class="er-lamp er-lamp--${["pump","severe"].includes(token.candleLampState) ? token.candleLampState : "normal"}"></span></td>
           <td>${Number(token.ageDays).toFixed(2)}d</td>
           <td>${money(token.marketCap)}</td>
           <td>${Number(token.holders || 0).toLocaleString("en-US")}</td>
@@ -2260,25 +2260,8 @@ table tbody tr:hover {
   const status = document.getElementById("sniper4hLiveStatus");
   const esc = v => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const fmt = v => v == null || v === "" || !Number.isFinite(Number(v)) ? "—" : Number(v).toLocaleString("en-US", {maximumFractionDigits: 2});
-  const pumpChangeLamp = document.getElementById("rhPumpChangeLamp");
-  const pumpChangeStatus = document.getElementById("rhPumpChangeStatus");
-  let previousPumpTokens = null;
-  let pumpLampTimer = null;
-  function pulsePumpChangeLamp(message) {
-    if (!pumpChangeLamp || !pumpChangeStatus) return;
-    pumpChangeLamp.classList.add("is-active");
-    pumpChangeStatus.textContent = message;
-    if (pumpLampTimer) clearTimeout(pumpLampTimer);
-    pumpLampTimer = setTimeout(() => {
-      pumpChangeLamp.classList.remove("is-active");
-      pumpChangeStatus.textContent = "Monitoring Range Hunter activity";
-      pumpLampTimer = null;
-    }, 10000);
-  }
   async function loadRangeHunter() {
     try {
-      body.querySelectorAll(".rh-pump-lamp").forEach(l => l.classList.remove("rh-refresh-flash"));
-      document.getElementById("sniper4hLiveSection").classList.add("rh-is-refreshing");
       const r = await fetch("/api/range-hunter?t=" + Date.now(), {cache:"no-store"});
       if (!r.ok) throw new Error("HTTP " + r.status);
       const d = await r.json();
@@ -2291,39 +2274,22 @@ table tbody tr:hover {
       const displayTokens = tokens.filter(t =>
         !mainAddresses.has(String(t.address || "").trim().toLowerCase())
       );
-      let significantChange = false;
-      const currentPumpTokens = new Map();
-      for (const t of tokens) {
-        const key = String(t.address || t.symbol || "");
-        if (!key) continue;
-        const old = previousPumpTokens && previousPumpTokens.get(key);
-        t._rhChanged = false;
-        if (old) {
-          const oldMc = Number(old.marketCap || 0), newMc = Number(t.marketCap || 0);
-          const oldH = Number(old.holders || 0), newH = Number(t.holders || 0);
-          const oldRange = Number(old.rangePct || 0), newRange = Number(t.rangePct || 0);
-          t._rhChanged = (oldMc > 0 && Math.abs(newMc-oldMc)/oldMc >= 0.05) || Math.abs(newH-oldH) >= Math.max(25,oldH*0.02) || Math.abs(newRange-oldRange) >= 3 || old.status !== t.status;
-          if (t._rhChanged) significantChange = true;
-        }
-        currentPumpTokens.set(key,t);
-      }
-      previousPumpTokens = currentPumpTokens;
-      if (significantChange) pulsePumpChangeLamp("Significant token changes detected");      status.textContent = "تعداد: " + tokens.length + " · بروزرسانی " + new Date().toLocaleTimeString();
+      status.textContent = "تعداد: " + tokens.length + " · بروزرسانی " + new Date().toLocaleTimeString();
       if (!displayTokens.length) {
         body.innerHTML = '<tr><td colspan="9">هنوز داده‌ای جمع نشده است.</td></tr>';
         return;
       }
-      body.querySelectorAll(".rh-refresh-flash").forEach(l => l.classList.remove("rh-refresh-flash"));
       body.innerHTML = displayTokens.map((t,i) => {
         const pumpSignal = t.status === "Range Accumulation";
         const color = pumpSignal ? "#ff72dc" :
           t.status === "Breakdown Risk" ? "#ff7070" :
           t.status === "Quiet/Dead Range" ? "#ffd166" : "#9ca3af";
+        const lampState = ["pump","severe"].includes(t.candleLampState) ? t.candleLampState : "normal";
         const lamp = '<svg class="rh-pump-lamp" viewBox="0 0 100 100" aria-label="Range accumulation"><defs><radialGradient id="rhGlow"><stop offset="0" stop-color="#20e6d2" stop-opacity=".65"/><stop offset="1" stop-color="#20e6d2" stop-opacity="0"/></radialGradient><linearGradient id="rhGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d6fffb"/><stop offset=".55" stop-color="#20e6d2"/><stop offset="1" stop-color="#075e63"/></linearGradient></defs><circle cx="50" cy="43" r="42" fill="url(#rhGlow)"/><path d="M34 57 C22 45 25 25 40 19 C55 11 73 23 72 40 C72 49 66 54 62 61 L61 69 L39 69 L38 61 Z" fill="url(#rhGlass)" stroke="#9bfff5" stroke-width="2"/><path d="M39 73 L61 73 M40 79 L60 79 M44 85 L56 85" stroke="#899b3a" stroke-width="5" stroke-linecap="round"/><path d="M39 31 Q44 24 51 26" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M49 50 L49 38 L60 38 M49 50 L59 44" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
         return "<tr>" +
           "<td>"+(i+1)+"</td>" +
           '<td>'+esc(t.symbol)+' <button type="button" class="rh-copy-btn" data-address="'+esc(t.address)+'" title="Copy contract">⧉</button></td>' +
-          '<td class="rh-lamp-cell">'+(t._rhChanged ? lamp.replace('rh-pump-lamp','rh-pump-lamp is-active') : lamp)+'</td>' +
+          '<td class="rh-lamp-cell">'+lamp.replace('rh-pump-lamp','rh-pump-lamp lamp-' + lampState)+'</td>' +
           '<td class="rh-age-cell">'+(t.ageDays != null && t.ageDays !== "" && Number.isFinite(Number(t.ageDays)) ? Number(t.ageDays).toFixed(1)+'d' : '-')+'</td>' +
           '<td class="rh-status-cell" style="color:'+color+'"><span>'+esc(t.status)+'</span></td>' +
           "<td>$"+fmt(t.marketCap)+"</td>" +
@@ -8597,3 +8563,65 @@ input:focus,select:focus,textarea:focus{
 </style>
 <style id="early-range-lamp-off-v1">#earlyRangeSection .er-lamp{animation:none!important;opacity:.16!important;filter:grayscale(1) brightness(.45)!important}</style>
 <style id="radar-clock-fixed-v1">#appScreen #sniper4hLiveSection #radar-live-clock{position:fixed!important;top:12px!important;right:12px!important;left:auto!important;z-index:10020!important;}</style>
+
+
+<style id="candle-driven-lamps-v1">
+/* Base states: dim, steady section colors */
+#earlyRangeSection .er-lamp.er-lamp--normal {
+  opacity:.48!important; filter:none!important; animation:none!important;
+  background:radial-gradient(circle at 35% 30%,#ffd6ee 0%,#ff4fa3 48%,#8d174f 100%);
+  box-shadow:0 0 5px rgba(255,79,163,.38);
+}
+#sniper4hLiveSection .rh-pump-lamp.lamp-normal {
+  opacity:.58!important; filter:drop-shadow(0 0 4px rgba(32,230,210,.45))!important;
+  animation:none!important;
+}
+/* Severe candle range: orange blink */
+#earlyRangeSection .er-lamp.er-lamp--severe,
+#sniper4hLiveSection .rh-pump-lamp.lamp-severe {
+  opacity:1!important; filter:drop-shadow(0 0 10px #ff9d22)!important;
+  animation:candleOrangeBlink .72s ease-in-out infinite!important;
+}
+/* Bullish pump candle: red blink; higher priority than severe */
+#earlyRangeSection .er-lamp.er-lamp--pump,
+#sniper4hLiveSection .rh-pump-lamp.lamp-pump {
+  opacity:1!important; filter:drop-shadow(0 0 12px #ff2525)!important;
+  animation:candleRedBlink .48s ease-in-out infinite!important;
+}
+@keyframes candleOrangeBlink {
+  0%,100%{opacity:.55;filter:drop-shadow(0 0 3px #ff9d22)}
+  50%{opacity:1;filter:drop-shadow(0 0 13px #ff9d22) drop-shadow(0 0 5px #ff6a00)}
+}
+@keyframes candleRedBlink {
+  0%,100%{opacity:.58;filter:drop-shadow(0 0 4px #ff2525)}
+  50%{opacity:1;filter:drop-shadow(0 0 15px #ff2525) drop-shadow(0 0 7px #ff0000)}
+}
+</style>
+
+<style id="candle-lamp-body-colors-v1">
+/* EARLY RANGE: orange and red glass */
+#earlyRangeSection .er-lamp.er-lamp--severe {
+  background:radial-gradient(circle at 35% 28%,#fff0c2 0%,#ffad32 48%,#9b4b00 100%)!important;
+  border-color:#ffd18a!important;
+  box-shadow:0 0 10px #ff9d22,0 0 20px rgba(255,157,34,.65)!important;
+}
+#earlyRangeSection .er-lamp.er-lamp--pump {
+  background:radial-gradient(circle at 35% 28%,#ffd0d0 0%,#ff3333 48%,#850000 100%)!important;
+  border-color:#ffaaaa!important;
+  box-shadow:0 0 12px #ff2525,0 0 24px rgba(255,37,37,.7)!important;
+}
+/* RANGE HUNTER: recolor actual SVG glass and glow */
+#sniper4hLiveSection .rh-pump-lamp.lamp-severe #rhGlass stop:nth-child(1) {stop-color:#fff0c2!important}
+#sniper4hLiveSection .rh-pump-lamp.lamp-severe #rhGlass stop:nth-child(2) {stop-color:#ffad32!important}
+#sniper4hLiveSection .rh-pump-lamp.lamp-severe #rhGlass stop:nth-child(3) {stop-color:#9b4b00!important}
+#sniper4hLiveSection .rh-pump-lamp.lamp-severe #rhGlow stop {stop-color:#ff9d22!important}
+#sniper4hLiveSection .rh-pump-lamp.lamp-severe path[stroke="#9bfff5"] {stroke:#ffd18a!important}
+#sniper4hLiveSection .rh-pump-lamp.lamp-severe path[stroke="#899b3a"] {stroke:#a65a12!important}
+
+#sniper4hLiveSection .rh-pump-lamp.lamp-pump #rhGlass stop:nth-child(1) {stop-color:#ffd0d0!important}
+#sniper4hLiveSection .rh-pump-lamp.lamp-pump #rhGlass stop:nth-child(2) {stop-color:#ff3333!important}
+#sniper4hLiveSection .rh-pump-lamp.lamp-pump #rhGlass stop:nth-child(3) {stop-color:#850000!important}
+#sniper4hLiveSection .rh-pump-lamp.lamp-pump #rhGlow stop {stop-color:#ff2525!important}
+#sniper4hLiveSection .rh-pump-lamp.lamp-pump path[stroke="#9bfff5"] {stroke:#ffaaaa!important}
+#sniper4hLiveSection .rh-pump-lamp.lamp-pump path[stroke="#899b3a"] {stroke:#9b2020!important}
+</style>
