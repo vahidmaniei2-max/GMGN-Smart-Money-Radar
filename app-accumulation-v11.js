@@ -149,7 +149,7 @@ function evaluateRangeCandles(rawList, creationTime, resolution) {
 
     return {
         ready: complete > 0,
-        passed: complete > 0 && ratio >= (resolution === "1h" ? 0.30 : 0.05),
+        passed: complete > 0 && ratio >= 0.05,
         completeCandles: complete,
         acceptedCandles: accepted,
         pumpCandles,
@@ -1083,7 +1083,7 @@ function calculateAccumulationScore(coin, historyToken) {
         Number(coin.sells || 0);
 
     // ===============================
-    // HOLDER GROWTH ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 20 POINTS
+    // HOLDER GROWTH ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â 20 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -1117,7 +1117,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // MARKET CAP GROWTH ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 15 POINTS
+    // MARKET CAP GROWTH ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â 15 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -1151,7 +1151,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // BUY / SELL PRESSURE ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 15 POINTS
+    // BUY / SELL PRESSURE ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â 15 POINTS
     // ===============================
 
     if (currentBuys > 0) {
@@ -1177,7 +1177,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // VOLUME GROWTH ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 10 POINTS
+    // VOLUME GROWTH ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â 10 POINTS
     // ===============================
 
     if (snapshots.length >= 2) {
@@ -1211,7 +1211,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // SMART DEGEN ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 10 POINTS
+    // SMART DEGEN ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â 10 POINTS
     // ===============================
 
     const smartDegen =
@@ -1231,7 +1231,7 @@ function calculateAccumulationScore(coin, historyToken) {
     }
 
     // ===============================
-    // RADAR TIME ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 5 POINTS
+    // RADAR TIME ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â 5 POINTS
     // ===============================
 
     if (
@@ -1941,13 +1941,6 @@ if ((req.url.startsWith("/api/range-hunter") || req.url.startsWith("/api/early-r
                 if (!address || !Number.isFinite(ageDays) || ((earlyRangeRequest && (ageDays < (15 / 24) || ageDays >= 3)) || (!earlyRangeRequest && (ageDays < 3 || ageDays > 10))) || !Number.isFinite(mc) || mc < 50000 || mc > 500000) continue;
 
                 debugCounts.ageMcEligible++;
-                const isCurrentCandidate = db.candidates.some(x => String(x.address || "") === address);
-                if (isCurrentCandidate) debugCounts.currentCandidates++;
-                else {
-                    debugCounts.notCurrentCandidate++;
-                    continue;
-                }
-
                 const candleResolution = earlyRangeRequest ? "1h" : "4h";
                 const candleResult = getRangeCandleResult(c, candleResolution, now);
 
@@ -1961,36 +1954,27 @@ if ((req.url.startsWith("/api/range-hunter") || req.url.startsWith("/api/early-r
                         resolution: candleResolution,
                         state: "pending"
                     });
-                    continue;
-                }
+                } else {
+                    candleDiagnostics.push({
+                        symbol: c.symbol || "?",
+                        address,
+                        ageDays: +ageDays.toFixed(2),
+                        marketCap: mc,
+                        resolution: candleResolution,
+                        state: candleResult.error ? "error" :
+                            !candleResult.ready ? "no_complete_candles" :
+                            candleResult.passed ? "passed" : "rejected",
+                        completeCandles: candleResult.completeCandles,
+                        acceptedCandles: candleResult.acceptedCandles,
+                        pumpCandles: candleResult?.pumpCandles ?? 0,
+                        ratio: candleResult?.ratio ?? null
+                    });
 
-                candleDiagnostics.push({
-                    symbol: c.symbol || "?",
-                    address,
-                    ageDays: +ageDays.toFixed(2),
-                    marketCap: mc,
-                    resolution: candleResolution,
-                    state: candleResult.error ? "error" :
-                        !candleResult.ready ? "no_complete_candles" :
-                        candleResult.passed ? "passed" : "rejected",
-                    completeCandles: candleResult.completeCandles,
-                    acceptedCandles: candleResult.acceptedCandles,
-                    pumpCandles: candleResult.pumpCandles,
-                    ratio: candleResult.ratio
-                });
-                if (candleResult.error) {
-                    debugCounts.candleErrors++;
-                    continue;
+                    if (candleResult.error) debugCounts.candleErrors++;
+                    else if (!candleResult.ready) debugCounts.candleNoComplete++;
+                    else if (!candleResult.passed) debugCounts.candleRejected++;
+                    else debugCounts.candlePassed++;
                 }
-                if (!candleResult.ready) {
-                    debugCounts.candleNoComplete++;
-                    continue;
-                }
-                if (!candleResult.passed) {
-                    debugCounts.candleRejected++;
-                    continue;
-                }
-                debugCounts.candlePassed++;
 
                 const t = db.tokens[address];
                 const samples = t && Array.isArray(t.samples)
@@ -2035,12 +2019,12 @@ if ((req.url.startsWith("/api/range-hunter") || req.url.startsWith("/api/early-r
                     spanHours: spanHours == null ? null : +spanHours.toFixed(1),
                     snapshots: recent.length,
                     candleResolution,
-                    candleRatio: candleResult.ratio,
-                    completeCandles: candleResult.completeCandles,
-                    acceptedCandles: candleResult.acceptedCandles,
-                    candleLampState: candleResult.lampState,
-                    candleLastTime: candleResult.latestCandleTime,
-                    candleVolatilityPct: candleResult.latestCandleVolatility,
+                    candleRatio: candleResult?.ratio ?? null,
+                    completeCandles: candleResult?.completeCandles ?? 0,
+                    acceptedCandles: candleResult?.acceptedCandles ?? 0,
+                    candleLampState: candleResult?.lampState || "normal",
+                    candleLastTime: candleResult?.latestCandleTime ?? null,
+                    candleVolatilityPct: candleResult?.latestCandleVolatility ?? null,
                     status
                 });
             }
@@ -2705,7 +2689,7 @@ saved++;
 
                     saveHistory(history);
 
-                    // PRE-PUMP TRAJECTORY SHADOW Ã¢â‚¬â€ READ ONLY ANALYSIS
+                    // PRE-PUMP TRAJECTORY SHADOW ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â READ ONLY ANALYSIS
                     try {
                         runTrajectoryShadow();
                     } catch (e) {

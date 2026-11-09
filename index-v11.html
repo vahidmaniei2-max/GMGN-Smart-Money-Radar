@@ -2173,7 +2173,7 @@ table tbody tr:hover {
         return `<tr>
           <td>${index + 1}</td>
           <td><strong>${esc(token.symbol)}</strong></td>
-          <td><button class="er-copy" data-address="${address}" title="Copy contract">⧉</button></td><td class="er-signal-cell"><span class="er-lamp er-lamp--${["pump","severe"].includes(token.candleLampState) ? token.candleLampState : "normal"}"></span></td>
+          <td><button class="er-copy" data-address="${address}" title="Copy contract">⧉</button></td><td class="er-signal-cell"><svg class="er-svg-lamp er-lamp--${["pump","severe"].includes(token.candleLampState) ? token.candleLampState : "normal"}" viewBox="0 0 100 100" aria-label="Radar signal"><circle cx="50" cy="43" r="42" fill="${token.candleLampState === "pump" ? "#ff3333" : token.candleLampState === "severe" ? "#ffad32" : "#ff4fa3"}" opacity=".2"/><path d="M34 57 C22 45 25 25 40 19 C55 11 73 23 72 40 C72 49 66 54 62 61 L61 69 L39 69 L38 61 Z" fill="${token.candleLampState === "pump" ? "#ff3333" : token.candleLampState === "severe" ? "#ffad32" : "#ff4fa3"}" stroke="#ffffff" stroke-width="2"/><path d="M39 73 L61 73 M40 79 L60 79 M44 85 L56 85" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/><path d="M39 31 Q44 24 51 26" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M49 50 L49 38 L60 38 M49 50 L59 44" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
           <td>${Number(token.ageDays).toFixed(2)}d</td>
           <td>${money(token.marketCap)}</td>
           <td>${Number(token.holders || 0).toLocaleString("en-US")}</td>
@@ -7799,7 +7799,17 @@ el.appendChild(svg);
 .gmgn-center-gold-coin{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;filter:drop-shadow(0 0 7px rgba(231,185,79,.28))}
 .gmgn-center-gold-coin svg{width:100%;height:100%;display:block}
 @media(max-width:650px){.gmgn-center-gold-coin{width:30px;height:30px;flex-basis:30px}}
-</style></body>
+</style>
+<style id="gmgn-font-restore-app-v1">
+#appScreen,
+#appScreen button,
+#appScreen input,
+#appScreen select,
+#appScreen textarea {
+  font-family: Tahoma, Arial, sans-serif !important;
+}
+</style>
+</body>
 </html>
 
 
@@ -8624,4 +8634,25 @@ input:focus,select:focus,textarea:focus{
 #sniper4hLiveSection .rh-pump-lamp.lamp-pump #rhGlow stop {stop-color:#ff2525!important}
 #sniper4hLiveSection .rh-pump-lamp.lamp-pump path[stroke="#9bfff5"] {stroke:#ffaaaa!important}
 #sniper4hLiveSection .rh-pump-lamp.lamp-pump path[stroke="#899b3a"] {stroke:#9b2020!important}
+</style>
+
+<style id="early-range-svg-main-radar-lamp-v1">
+#earlyRangeSection .er-svg-lamp{
+ width:38px!important;height:38px!important;
+ vertical-align:middle;overflow:visible;flex-shrink:0;
+ opacity:.55;filter:drop-shadow(0 0 4px #ff4fa3);
+ animation:none!important;
+}
+#earlyRangeSection .er-svg-lamp.er-lamp--severe{
+ opacity:1!important;
+ filter:drop-shadow(0 0 10px #ff9d22)!important;
+ animation:erMainOrange .72s ease-in-out infinite!important;
+}
+#earlyRangeSection .er-svg-lamp.er-lamp--pump{
+ opacity:1!important;
+ filter:drop-shadow(0 0 12px #ff2525)!important;
+ animation:erMainRed .48s ease-in-out infinite!important;
+}
+@keyframes erMainOrange{0%,100%{transform:scale(.94);opacity:.65}50%{transform:scale(1.08);opacity:1}}
+@keyframes erMainRed{0%,100%{transform:scale(.94);opacity:.65}50%{transform:scale(1.1);opacity:1}}
 </style>
